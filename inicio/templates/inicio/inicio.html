@@ -1,0 +1,55 @@
+{% extends "core/core.html" %}
+
+{% block title %}Inicio - WebDev Blog{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <h1>Bienvenido a WebDev Blog</h1>
+    <p>
+      Descubre el camino para convertirte en un desarrollador web de élite:
+      Aprende con tutoriales, explora guías detalladas y accede a recursos profesionales.
+    </p>
+  </section>
+  
+  <!-- Featured Posts Section -->
+  <section class="featured-posts" id="tutoriales">
+    <h2 class="section-title">Artículos Destacados</h2>
+    <div class="posts-grid">
+      <article class="post-card">
+        <img src="https://via.placeholder.com/400x250" alt="Guía Completa de React 2023">
+        <div class="post-content">
+          <h3>Guía Completa de React 2023</h3>
+          <p>Aprende React desde cero con esta guía práctica y actualizada.</p>
+          <a href="#" class="read-more">Leer más →</a>
+        </div>
+      </article>
+      <article class="post-card">
+        <img src="https://via.placeholder.com/400x250" alt="Optimización Web">
+        <div class="post-content">
+          <h3>Optimización Web</h3>
+          <p>Técnicas avanzadas para mejorar el rendimiento de tus aplicaciones.</p>
+          <a href="#" class="read-more">Leer más →</a>
+        </div>
+      </article>
+      <article class="post-card">
+        <img src="https://via.placeholder.com/400x250" alt="TypeScript para Principiantes">
+        <div class="post-content">
+          <h3>TypeScript para Principiantes</h3>
+          <p>Domina TypeScript y lleva tu JavaScript al siguiente nivel.</p>
+          <a href="#" class="read-more">Leer más →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+  
+  <!-- Newsletter Section -->
+  <section class="newsletter" id="suscripcion">
+    <h2>Suscríbete a nuestro Newsletter</h2>
+    <p>Suscríbete para recibir contenido exclusivo, novedades y las últimas tendencias en desarrollo web.</p>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Tu correo electrónico" required>
+      <button type="submit">Suscribirse</button>
+    </form>
+  </section>
+{% endblock %}
