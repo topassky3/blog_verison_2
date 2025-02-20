@@ -41,6 +41,12 @@ INSTALLED_APPS = [
     'inicio',
     'tutoriales',
     'guias',
+    'podcast',
+    'suscripcion',
+    'contacto',
+    'login',
+    'registrarse',
+    'olvidar_contraseña'
 ]
 
 MIDDLEWARE = [

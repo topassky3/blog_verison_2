@@ -1,0 +1,123 @@
+{% extends "core/core.html" %}
+
+{% block title %}Podcast | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  {# Aquí puedes incluir estilos CSS adicionales específicos para la página de podcast, si lo deseas #}
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <h1>Podcast de WebDev Blog</h1>
+    <p>Escucha entrevistas, debates y tips de desarrollo web para inspirarte y aprender de los mejores.</p>
+  </section>
+  
+  <!-- Podcast Filter -->
+  <section class="podcast-filter">
+    <div class="filter-options">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="entrevista">Entrevistas</button>
+      <button class="filter-btn" data-filter="noticias">Noticias</button>
+      <button class="filter-btn" data-filter="debate">Debates</button>
+      <button class="filter-btn" data-filter="tips">Tips</button>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Buscar podcasts...">
+      <button type="submit">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+  
+  <!-- Podcast Grid -->
+  <section class="podcast-grid">
+    <article class="podcast-card" data-category="entrevista">
+      <div class="podcast-header">
+        <span class="category-badge">Entrevistas</span>
+        <img src="https://via.placeholder.com/400x250" alt="Podcast 1" class="podcast-image">
+      </div>
+      <div class="podcast-content">
+        <h3>Entrevista con Expertos en DevOps</h3>
+        <p class="podcast-meta">Duración: 45 min | Episodio 5</p>
+        <p>Descubre las mejores prácticas y consejos de líderes en DevOps en esta entrevista exclusiva.</p>
+        <div class="podcast-footer">
+          <a href="#" class="read-more">Escuchar Podcast →</a>
+          <div class="rating">
+            <span class="stars">★★★★☆</span>
+            <span class="votes">(75)</span>
+          </div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="podcast-card" data-category="noticias">
+      <div class="podcast-header">
+        <span class="category-badge">Noticias</span>
+        <img src="https://via.placeholder.com/400x250" alt="Podcast 2" class="podcast-image">
+      </div>
+      <div class="podcast-content">
+        <h3>Actualizaciones del Mundo Tech</h3>
+        <p class="podcast-meta">Duración: 30 min | Episodio 12</p>
+        <p>Mantente al día con las últimas noticias y tendencias del sector tecnológico en este episodio.</p>
+        <div class="podcast-footer">
+          <a href="#" class="read-more">Escuchar Podcast →</a>
+          <div class="rating">
+            <span class="stars">★★★☆☆</span>
+            <span class="votes">(50)</span>
+          </div>
+        </div>
+      </div>
+    </article>
+    
+    {# Agrega más tarjetas de podcast según sea necesario #}
+  </section>
+  
+  <!-- Pagination -->
+  <section class="pagination">
+    <button class="page-btn" disabled>Anterior</button>
+    <div class="page-numbers">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <span>...</span>
+      <button class="page-btn">10</button>
+    </div>
+    <button class="page-btn">Siguiente</button>
+  </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    // Funcionalidad de Filtrado de Podcast
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const podcastCards = document.querySelectorAll('.podcast-card');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const filter = button.dataset.filter;
+        podcastCards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+    
+    // Funcionalidad de Búsqueda de Podcast
+    const searchBox = document.querySelector('.search-box input');
+    searchBox.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      podcastCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = title.includes(searchTerm) ? 'block' : 'none';
+      });
+    });
+  </script>
+{% endblock %}

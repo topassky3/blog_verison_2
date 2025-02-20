@@ -1,0 +1,38 @@
+{% extends "core/core.html" %}
+
+{% block title %}Contacto | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  {# Si necesitas incluir estilos adicionales específicos para el contacto, puedes enlazarlos aquí #}
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <h1>Contáctanos</h1>
+    <p>¿Tienes alguna duda o sugerencia? Estamos aquí para ayudarte. Escríbenos y te responderemos a la brevedad.</p>
+  </section>
+  
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <!-- Información de Contacto -->
+    <div class="contact-info">
+      <h2>Información de Contacto</h2>
+      <p><strong>Correo:</strong> contacto@webdevblog.com</p>
+      <p><strong>Teléfono:</strong> +34 912 345 678</p>
+      <p><strong>Dirección:</strong> Calle Ejemplo 123, Ciudad, País</p>
+      <p><strong>Horario:</strong> Lunes a Viernes, 9:00 - 18:00</p>
+    </div>
+    <!-- Formulario de Contacto -->
+    <div class="contact-form">
+      <h2>Envíanos un Mensaje</h2>
+      <form action="#" method="POST">
+        <input type="text" name="nombre" placeholder="Tu Nombre" required>
+        <input type="email" name="email" placeholder="Tu Correo Electrónico" required>
+        <input type="text" name="asunto" placeholder="Asunto" required>
+        <textarea name="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+        <button type="submit">Enviar Mensaje</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}
