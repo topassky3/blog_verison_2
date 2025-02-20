@@ -1,0 +1,125 @@
+{% extends "core/core.html" %}
+
+{% block title %}Guías | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  {# Si deseas agregar estilos adicionales específicos para las guías, puedes incluirlos aquí #}
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <h1>Guías de Desarrollo Web</h1>
+    <p>Descubre guías completas y detalladas para mejorar tus habilidades y llevar tus proyectos al siguiente nivel.</p>
+  </section>
+  
+  <!-- Guías Filter -->
+  <section class="guias-filter">
+    <div class="filter-options">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="html">HTML/CSS</button>
+      <button class="filter-btn" data-filter="js">JavaScript</button>
+      <button class="filter-btn" data-filter="backend">Backend</button>
+      <button class="filter-btn" data-filter="seo">SEO</button>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Buscar guías...">
+      <button type="submit">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+  
+  <!-- Guías Grid -->
+  <section class="guias-grid">
+    <article class="guia-card" data-category="html">
+      <div class="guia-header">
+        <span class="category-badge">HTML/CSS</span>
+        <img src="https://via.placeholder.com/400x250" alt="Guía 1" class="guia-image">
+      </div>
+      <div class="guia-content">
+        <h3>Guía de HTML y CSS</h3>
+        <p class="guia-meta">Duración: 3 horas | Nivel: Principiante</p>
+        <p>Aprende los fundamentos de HTML y CSS para crear sitios web responsivos y atractivos.</p>
+        <div class="guia-footer">
+          <a href="#" class="read-more">Ver Guía →</a>
+          <div class="rating">
+            <span class="stars">★★★★☆</span>
+            <span class="votes">(98)</span>
+          </div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="guia-card" data-category="js">
+      <div class="guia-header">
+        <span class="category-badge">JavaScript</span>
+        <img src="https://via.placeholder.com/400x250" alt="Guía 2" class="guia-image">
+      </div>
+      <div class="guia-content">
+        <h3>Guía Avanzada de JavaScript</h3>
+        <p class="guia-meta">Duración: 5 horas | Nivel: Avanzado</p>
+        <p>Domina JavaScript y aprende a utilizar librerías y frameworks para crear aplicaciones dinámicas.</p>
+        <div class="guia-footer">
+          <a href="#" class="read-more">Ver Guía →</a>
+          <div class="rating">
+            <span class="stars">★★★★★</span>
+            <span class="votes">(150)</span>
+          </div>
+        </div>
+      </div>
+    </article>
+    
+    {# Agrega más tarjetas de guías según sea necesario #}
+  </section>
+  
+  <!-- Pagination -->
+  <section class="pagination">
+    <button class="page-btn" disabled>Anterior</button>
+    <div class="page-numbers">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <span>...</span>
+      <button class="page-btn">10</button>
+    </div>
+    <button class="page-btn">Siguiente</button>
+  </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    // Funcionalidad de Filtrado de Guías
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const guiaCards = document.querySelectorAll('.guia-card');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Quitar la clase active de todos los botones
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        // Agregar clase active al botón clicado
+        button.classList.add('active');
+        const filter = button.dataset.filter;
+        guiaCards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+    
+    // Funcionalidad de Búsqueda de Guías
+    const searchBox = document.querySelector('.search-box input');
+    searchBox.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      guiaCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = title.includes(searchTerm) ? 'block' : 'none';
+      });
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "core/core.html" %}
+
+{% block title %}Tutoriales | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  {# Si necesitas agregar estilos CSS adicionales exclusivos para esta página, puedes enlazarlos o escribirlos aquí #}
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <h1>Tutoriales de Desarrollo Web</h1>
+    <p>Aprende con nuestros tutoriales prácticos y paso a paso.</p>
+  </section>
+
+  <!-- Tutorials Filter -->
+  <section class="tutorials-filter">
+    <div class="filter-options">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="frontend">Frontend</button>
+      <button class="filter-btn" data-filter="backend">Backend</button>
+      <button class="filter-btn" data-filter="fullstack">Fullstack</button>
+      <button class="filter-btn" data-filter="devops">DevOps</button>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Buscar tutoriales...">
+      <button type="submit">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- Tutorials Grid -->
+  <section class="tutorials-grid">
+    <article class="tutorial-card" data-category="frontend">
+      <div class="tutorial-header">
+        <span class="category-badge">Frontend</span>
+        <img src="https://via.placeholder.com/400x250" alt="Tutorial 1" class="tutorial-image">
+      </div>
+      <div class="tutorial-content">
+        <h3>React desde Cero</h3>
+        <p class="tutorial-meta">Duración: 4 horas | Nivel: Principiante</p>
+        <p>Aprende los fundamentos de React y construye tu primera aplicación.</p>
+        <div class="tutorial-footer">
+          <a href="#" class="read-more">Ver Tutorial →</a>
+          <div class="rating">
+            <span class="stars">★★★★☆</span>
+            <span class="votes">(128)</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="tutorial-card" data-category="backend">
+      <div class="tutorial-header">
+        <span class="category-badge">Backend</span>
+        <img src="https://via.placeholder.com/400x250" alt="Tutorial 2" class="tutorial-image">
+      </div>
+      <div class="tutorial-content">
+        <h3>Node.js Avanzado</h3>
+        <p class="tutorial-meta">Duración: 6 horas | Nivel: Intermedio</p>
+        <p>Domina Node.js y construye APIs escalables y eficientes.</p>
+        <div class="tutorial-footer">
+          <a href="#" class="read-more">Ver Tutorial →</a>
+          <div class="rating">
+            <span class="stars">★★★★★</span>
+            <span class="votes">(256)</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    {# Agrega más tarjetas de tutoriales según sea necesario #}
+  </section>
+
+  <!-- Pagination -->
+  <section class="pagination">
+    <button class="page-btn" disabled>Anterior</button>
+    <div class="page-numbers">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <span>...</span>
+      <button class="page-btn">10</button>
+    </div>
+    <button class="page-btn">Siguiente</button>
+  </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    // Funcionalidad de Filtrado de Tutoriales
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const tutorialCards = document.querySelectorAll('.tutorial-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const filter = button.dataset.filter;
+        tutorialCards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Funcionalidad de Búsqueda de Tutoriales
+    const searchBox = document.querySelector('.search-box input');
+    searchBox.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      tutorialCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = title.includes(searchTerm) ? 'block' : 'none';
+      });
+    });
+  </script>
+{% endblock %}
