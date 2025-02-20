@@ -11,9 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Archivo CSS -->
   <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
-  {% block extra_head %}
-  <!-- Bloque para agregar elementos extra en el head -->
-  {% endblock %}
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
   <!-- Header / Navbar -->
@@ -34,18 +32,26 @@
           <li><a href="#suscripcion" class="nav-link nav-cta">Suscripción</a></li>
           <li><a href="#contacto" class="nav-link">Contacto</a></li>
         </ul>
+        <!-- Bloque de Login -->
+        <div class="login-container">
+          {% if user.is_authenticated %}
+            <div class="user-info">
+              <span>Bienvenido, {{ user.username }}</span>
+              <a href="{% url 'logout' %}">Cerrar sesión</a>
+            </div>
+          {% else %}
+            <button id="openLoginModal" class="login-btn">Iniciar Sesión</button>
+          {% endif %}
+        </div>
+        <!-- Fin bloque de Login -->
       </div>
     </nav>
-    {% block header %}
-    <!-- Bloque opcional para agregar elementos adicionales al header -->
-    {% endblock %}
+    {% block header %}{% endblock %}
   </header>
 
   <!-- Contenido Principal -->
   <main>
-    {% block content %}
-    <!-- Aquí se insertará el contenido específico de cada página -->
-    {% endblock %}
+    {% block content %}{% endblock %}
   </main>
 
   <!-- Footer -->
@@ -96,12 +102,29 @@
     </div>
   </footer>
 
+  <!-- Modal de Login -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Iniciar Sesión</h2>
+      <form method="post" action="{% url 'login' %}" class="login-form">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </div>
+  <!-- Fin Modal de Login -->
+
   <!-- Archivo JavaScript -->
   <script src="{% static 'core/js/main.js' %}"></script>
-  {% block extra_js %}
-  <!-- Bloque para agregar scripts adicionales -->
-  {% endblock %}
+  {% block extra_js %}{% endblock %}
   <!-- FontAwesome (kit) -->
   <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+  <!-- Lógica para el modal de Login -->
+  <script>
+
+  </script>
 </body>
 </html>

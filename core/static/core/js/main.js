@@ -32,3 +32,26 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 
+// Abrir modal de login
+    const loginModal = document.getElementById('loginModal');
+    const openLoginModalBtn = document.getElementById('openLoginModal');
+    const closeBtn = document.querySelector('.modal .close-btn');
+
+    if (openLoginModalBtn) {
+      openLoginModalBtn.addEventListener('click', () => {
+        loginModal.style.display = 'block';
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+      });
+    }
+
+    // Cerrar modal al hacer clic fuera del contenido
+    window.addEventListener('click', (e) => {
+      if (e.target === loginModal) {
+        loginModal.style.display = 'none';
+      }
+    });
