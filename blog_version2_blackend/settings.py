@@ -85,8 +85,12 @@ WSGI_APPLICATION = 'blog_version2_blackend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'basededatos_blog',
+        'USER': 'postgres',
+        'PASSWORD': 'Kamejo23.',
+        'HOST': '51.222.159.144',
+        'PORT': '5433',
     }
 }
 

@@ -153,3 +153,83 @@ body {
 .login-footer a:hover {
   color: var(--secondary);
 }
+
+
+/* Estilos para mensajes de alerta */
+.messages {
+  list-style: none;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Mensaje de éxito */
+.alert-success {
+  background-color: #d1e7dd; /* Color de fondo suave para éxito */
+  color: #0f5132;            /* Color de texto para éxito */
+  border: 1px solid #badbcc;
+}
+
+/* Mensaje de error */
+.alert-error {
+  background-color: #f8d7da; /* Color de fondo suave para error */
+  color: #842029;            /* Color de texto para error */
+  border: 1px solid #f5c2c7;
+}
+
+/* Modal de alerta */
+.modal {
+  position: fixed;
+  z-index: 3000; /* Mayor que el resto para bloquear la interacción */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6); /* Overlay oscuro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--background);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: var(--shadow);
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-content p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.modal-content button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+  background-color: var(--secondary);
+}
