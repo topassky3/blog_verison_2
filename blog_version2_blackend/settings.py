@@ -137,3 +137,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+LANGUAGE_CODE = 'es'  # Establece el idioma predeterminado en español
+USE_I18N = True       # Habilita la internacionalización
+USE_L10N = True       # Habilita la localización

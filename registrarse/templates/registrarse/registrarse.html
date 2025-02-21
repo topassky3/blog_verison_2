@@ -69,21 +69,22 @@
     </div>
   </div>
 
-  {% if alert_message %}
+    {% if alert_message %}
     <!-- Modal de alerta -->
     <div id="alertModal" class="modal">
       <div class="modal-content">
-        <p>{{ alert_message }}</p>
+        <!-- El estilo inline "white-space: pre-wrap" permite mostrar saltos de línea -->
+        <p style="white-space: pre-wrap;">{{ alert_message }}</p>
         <button id="acceptButton">Aceptar</button>
       </div>
     </div>
 
     <script>
-      // Bloquea la interacción con el resto de la página (el modal ya lo hace con el overlay)
       document.getElementById('acceptButton').addEventListener('click', function() {
           window.location.href = "{{ redirect_url }}";
       });
     </script>
   {% endif %}
+
 </body>
 </html>

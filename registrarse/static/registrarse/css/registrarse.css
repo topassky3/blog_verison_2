@@ -214,10 +214,9 @@ body {
 }
 
 .modal-content p {
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-  color: var(--text);
+  white-space: pre-wrap;
 }
+
 
 .modal-content button {
   background-color: var(--primary);
