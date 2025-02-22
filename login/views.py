@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
+from django.contrib.auth.views import LogoutView
 
 
 class CustomLoginView(LoginView):
@@ -40,3 +41,8 @@ class CustomLoginView(LoginView):
         # Puedes definir una URL de redirección o dejar que el usuario lo corrija en el mismo formulario
         context['redirect_url'] = self.request.path  # redirige al mismo login para que se intente nuevamente
         return self.render_to_response(context)
+
+
+
+class CustomLogoutView(LogoutView):
+    http_method_names = ['get', 'post']

@@ -1084,4 +1084,86 @@ img {
 .contact-form button:hover {
   background-color: var(--secondary);
 }
+/* Contenedor principal del captcha */
+.captcha-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
 
+/* Imagen de placeholder para el captcha */
+.captcha-container img {
+  width: 200px;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  margin-bottom: 0.5rem;
+}
+
+/* Campo de texto para ingresar el código */
+.captcha-container input {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+.captcha-container input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.recaptcha-fake-container {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;  /* Ajusta si quieres otro ancho */
+  background-color: #fff;
+  box-shadow: var(--shadow);
+  text-align: left;
+  margin: 1.5rem auto; /* Centra el widget horizontalmente */
+}
+
+.recaptcha-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recaptcha-checkbox-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.fake-recaptcha-label {
+  font-size: 0.95rem;
+  color: #444;
+  cursor: pointer;
+}
+
+.recaptcha-footer {
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--gray-200);
+  padding-top: 0.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.recaptcha-footer strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.recaptcha-footer small {
+  color: #999;
+}
