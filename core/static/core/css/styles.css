@@ -1167,3 +1167,17 @@ img {
 .recaptcha-footer small {
   color: #999;
 }
+.logout-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: var(--secondary);
+}

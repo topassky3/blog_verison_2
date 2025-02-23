@@ -28,5 +28,6 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('registrarse/', include('registrarse.urls')),
     path('olvidar_contraseña/', include('olvidar_contraseña.urls')),
+    path('accounts/', include('allauth.urls')),
 ]
 

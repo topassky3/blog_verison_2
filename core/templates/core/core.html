@@ -41,6 +41,7 @@
                   {% csrf_token %}
                   <button type="submit" class="logout-btn">Cerrar sesión</button>
                 </form>
+
               </div>
             {% else %}
               <a href="{% url 'login:login' %}" class="login-btn">Iniciar Sesión</a>

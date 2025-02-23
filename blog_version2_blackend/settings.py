@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-$t5c5-h-c@)_^k3b%^5@4ds#zj-#)&&)pa6rx&3$ez!4_sl8+q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["10.0.0.6"]
+ALLOWED_HOSTS = ["10.0.0.6", "localhost"]
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'core',
     'inicio',
     'tutoriales',
@@ -46,18 +47,33 @@ INSTALLED_APPS = [
     'contacto',
     'login',
     'registrarse',
-    'olvidar_contraseña'
+    'olvidar_contraseña',
+    # Aplicaciones de allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'blog_version2_blackend.urls'
 
@@ -142,3 +158,9 @@ USE_I18N = True       # Habilita la internacionalización
 USE_L10N = True       # Habilita la localización
 
 LOGOUT_REDIRECT_URL = 'inicio_home'
+
+LOGIN_REDIRECT_URL = 'http://localhost:8000'
+
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = 'http://localhost:8000'
+
+SOCIALACCOUNT_LOGIN_ON_GET = True

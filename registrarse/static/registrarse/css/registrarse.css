@@ -232,3 +232,25 @@ body {
 .modal-content button:hover {
   background-color: var(--secondary);
 }
+
+.social-btn.google {
+  background-color: #db4437;
+}
+.social-btn.google:hover {
+  background-color: #c33d2e;
+}
+
+.social-btn.linkedin {
+  background-color: #0077B5;
+}
+.social-btn.linkedin:hover {
+  background-color: #005582;
+}
+
+.social-btn.github {
+  background-color: #333;
+}
+.social-btn.github:hover {
+  background-color: #242424;
+}
+

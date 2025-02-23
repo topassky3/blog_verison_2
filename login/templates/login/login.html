@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
 <head>
@@ -38,7 +39,7 @@
       <!-- Bloque "captcha" falso, solo diseño -->
       <div class="recaptcha-fake-container">
         <div class="recaptcha-checkbox-container">
-          <input type="checkbox" id="fake-recaptcha">
+          <input type="checkbox" id="fake-recaptcha" name="fake_recaptcha">
           <label for="fake-recaptcha" class="fake-recaptcha-label">I'm not a robot</label>
         </div>
         <div class="recaptcha-footer">
@@ -55,19 +56,20 @@
 
     <!-- Botones sociales -->
     <div class="social-login">
-      <button class="social-btn google">
-        <i class="fab fa-google"></i> Continuar con Google
+      <a href="{% provider_login_url 'google' %}" class="social-btn google">
+            <i class="fab fa-google"></i> Continuar con Google
+        </a>
+      <button class="social-btn linkedin">
+        <i class="fab fa-linkedin-in"></i> Continuar con LinkedIn
       </button>
-      <button class="social-btn facebook">
-        <i class="fab fa-facebook-f"></i> Continuar con Facebook
-      </button>
-      <button class="social-btn twitter">
-        <i class="fab fa-twitter"></i> Continuar con Twitter
+      <button class="social-btn github">
+        <i class="fab fa-github"></i> Continuar con GitHub
       </button>
     </div>
 
+
     <div class="login-footer">
-      <p>¿No tienes una cuenta? <a href="#">Regístrate</a></p>
+      <p>¿No tienes una cuenta? <a href="{% url 'registrarse_home' %}">Regístrate</a></p>
       <p><a href="#">¿Olvidaste tu contraseña?</a></p>
     </div>
   </div>
