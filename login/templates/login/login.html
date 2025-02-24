@@ -59,13 +59,18 @@
       <a href="{% provider_login_url 'google' %}" class="social-btn google">
         <i class="fab fa-google"></i> Continuar con Google
       </a>
-      <a class="social-btn linkedin">
+        <!--
+      <a href="{% provider_login_url 'linkedin_oauth2' %}" class="social-btn linkedin">
         <i class="fab fa-linkedin-in"></i> Continuar con LinkedIn
       </a>
-      <a class="social-btn github">
-        <i class="fab fa-github"></i> Continuar con GitHub
-      </a>
+      -->
+      <!-- Botón de GitHub -->
+        <a href="{% provider_login_url 'github' %}" class="social-btn github">
+          <i class="fab fa-github"></i> Continuar con GitHub
+        </a>
+
     </div>
+
 
     <div class="login-footer">
       <p>¿No tienes una cuenta? <a href="{% url 'registrarse_home' %}">Regístrate</a></p>

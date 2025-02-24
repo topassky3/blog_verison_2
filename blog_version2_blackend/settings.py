@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.linkedin_oauth2',
+    'allauth.socialaccount.providers.github',
 ]
 
 SITE_ID = 1
@@ -133,12 +135,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'es'
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -153,14 +152,23 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-LANGUAGE_CODE = 'es'  # Establece el idioma predeterminado en español
-USE_I18N = True       # Habilita la internacionalización
-USE_L10N = True       # Habilita la localización
-
+# Configuración de redirección y allauth
 LOGOUT_REDIRECT_URL = 'inicio_home'
-
 LOGIN_REDIRECT_URL = 'http://localhost:8000'
-
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = 'http://localhost:8000'
-
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# Configuración específica para los proveedores de redes sociales
+SOCIALACCOUNT_PROVIDERS = {
+    'linkedin_oauth2': {
+        'SCOPE': ['openid', 'profile', 'email'],
+        'PROFILE_FIELDS': [
+            'id',
+            'firstName',
+            'lastName',
+            'profilePicture(displayImage~:playableStreams)',
+            'emailAddress',
+        ],
+    },
+    # Aquí puedes agregar o modificar la configuración para otros proveedores si es necesario.
+}
