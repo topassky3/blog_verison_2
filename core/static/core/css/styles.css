@@ -1181,3 +1181,47 @@ img {
 .logout-btn:hover {
   background-color: var(--secondary);
 }
+
+/* Sección de Buscador Mejorado */
+.search {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.search-container {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: var(--gray-100);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.search-form {
+  display: flex;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.search-form input[type="text"] {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--gray-200);
+  border-right: none;
+  font-size: 1rem;
+  border-radius: var(--radius) 0 0 var(--radius);
+  outline: none;
+}
+
+.search-form button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: var(--primary);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.search-form button:hover {
+  background-color: var(--secondary);
+}

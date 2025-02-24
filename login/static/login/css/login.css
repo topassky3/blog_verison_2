@@ -1,312 +1,209 @@
 /* ===================== */
-    /* Variables y Dark Mode */
-    /* ===================== */
-    :root {
-      --primary: #2563eb;
-      --secondary: #3b82f6;
-      --text: #1e293b;
-      --background: #ffffff;
-      --gray-100: #f1f5f9;
-      --gray-200: #e2e8f0;
-      --radius: 8px;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    [data-theme="dark"] {
-      --primary: #60a5fa;
-      --secondary: #3b82f6;
-      --text: #f8fafc;
-      --background: #0f172a;
-      --gray-100: #1e293b;
-      --gray-200: #334155;
-    }
-
-    /* ============== */
-    /* Reset global   */
-    /* ============== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      background-color: var(--background);
-      line-height: 1.6;
-      transition: background-color 0.3s, color 0.3s;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 1rem;
-    }
-    img {
-      max-width: 100%;
-      display: block;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* ================= */
-    /* Contenedor Login  */
-    /* ================= */
-    .login-container {
-      background-color: var(--background);
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      max-width: 400px;
-      width: 100%;
-      padding: 2rem;
-    }
-    .login-container h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: var(--primary);
-      font-size: 1.8rem;
-    }
-
-    /* ============== */
-    /* Formulario     */
-    /* ============== */
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-    .form-group label {
-      font-weight: 500;
-      font-size: 0.95rem;
-    }
-    .form-group input {
-      padding: 0.75rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      font-size: 1rem;
-      background-color: var(--background);
-      color: var(--text);
-      transition: border-color 0.3s;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-    }
-    .login-form button {
-      padding: 0.75rem;
-      background-color: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: background-color 0.3s;
-    }
-    .login-form button:hover {
-      background-color: var(--secondary);
-    }
-
-    /* ================== */
-    /* Simulación reCAPTCHA */
-    /* ================== */
-    .recaptcha-fake-container {
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      padding: 0.75rem;
-      display: inline-block;
-      width: 100%;
-      max-width: 300px; /* Ajusta el ancho deseado */
-      background-color: #fff;
-      box-shadow: var(--shadow);
-      margin: 1rem auto;
-      text-align: left;
-    }
-    .recaptcha-checkbox-container {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .recaptcha-checkbox-container input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      /* Para navegadores que soporten accent-color: */
-      accent-color: #4285f4;
-    }
-    .fake-recaptcha-label {
-      font-size: 0.95rem;
-      color: #444;
-      cursor: pointer;
-    }
-    .recaptcha-footer {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: #666;
-      border-top: 1px solid var(--gray-200);
-      padding-top: 0.5rem;
-    }
-    .recaptcha-footer strong {
-      font-weight: 600;
-      color: #333;
-    }
-    .recaptcha-footer small {
-      color: #999;
-    }
-
-    /* ================ */
-    /* Separador visual */
-    /* ================ */
-    .separator {
-      text-align: center;
-      margin: 2rem 0 1rem;
-      position: relative;
-      font-size: 1rem;
-      color: var(--text);
-    }
-    .separator::before,
-    .separator::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      width: 35%;
-      height: 1px;
-      background-color: var(--text);
-      opacity: 0.3;
-    }
-    .separator::before {
-      left: 0;
-    }
-    .separator::after {
-      right: 0;
-    }
-
-    /* ================== */
-    /* Botones sociales   */
-    /* ================== */
-    .social-login {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-    .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.75rem;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 1rem;
-      color: #fff;
-      transition: background-color 0.3s;
-    }
-    .social-btn.google {
-      background-color: #db4437;
-    }
-    .social-btn.google:hover {
-      background-color: #c33d2e;
-    }
-    .social-btn.facebook {
-      background-color: #3b5998;
-    }
-    .social-btn.facebook:hover {
-      background-color: #334b87;
-    }
-    .social-btn.twitter {
-      background-color: #1da1f2;
-    }
-    .social-btn.twitter:hover {
-      background-color: #1a94da;
-    }
-
-    /* ================== */
-    /* Footer del login   */
-    /* ================== */
-    .login-footer {
-      text-align: center;
-      font-size: 0.9rem;
-    }
-    .login-footer a {
-      color: var(--primary);
-      transition: color 0.3s;
-    }
-    .login-footer a:hover {
-      color: var(--secondary);
-    }
-
-    /* ================== */
-    /* Modal de alerta    */
-    /* ================== */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    .modal-content {
-      background-color: var(--background);
-      margin: 10% auto;
-      padding: 2rem;
-      border-radius: var(--radius);
-      max-width: 400px;
-      position: relative;
-      text-align: center;
-    }
-    .modal-content button {
-      margin-top: 1rem;
-      background-color: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-    }
-    .modal-content button:hover {
-      background-color: var(--secondary);
-    }
-
-    .social-btn.google {
-  background-color: #db4437;
+/* Variables y Dark Mode */
+/* ===================== */
+:root {
+  --primary: #2563eb;
+  --secondary: #3b82f6;
+  --text: #1e293b;
+  --background: #ffffff;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --radius: 8px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
-.social-btn.google:hover {
-  background-color: #c33d2e;
+[data-theme="dark"] {
+  --primary: #60a5fa;
+  --secondary: #3b82f6;
+  --text: #f8fafc;
+  --background: #0f172a;
+  --gray-100: #1e293b;
+  --gray-200: #334155;
 }
 
-.social-btn.linkedin {
-  background-color: #0077B5;
+/* ============== */
+/* Reset global   */
+/* ============== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.social-btn.linkedin:hover {
-  background-color: #005582;
-}
-
-.social-btn.github {
-  background-color: #333;
-}
-.social-btn.github:hover {
-  background-color: #242424;
-}
-.social-btn {
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background-color: var(--background);
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ================= */
+/* Contenedor Login  */
+/* ================= */
+.login-container {
+  background-color: var(--background);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+}
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--primary);
+  font-size: 1.8rem;
+}
+
+/* ============== */
+/* Formulario     */
+/* ============== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.form-group label {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+.form-group input {
+  padding: 0.75rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background-color: var(--background);
+  color: var(--text);
+  transition: border-color 0.3s;
+}
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+.login-form button {
+  padding: 0.75rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+.login-form button:hover {
+  background-color: var(--secondary);
+}
+
+/* ================== */
+/* Simulación reCAPTCHA */
+/* ================== */
+.recaptcha-fake-container {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  display: inline-block;
+  width: 100%;
+  max-width: 300px; /* Ajusta el ancho deseado */
+  background-color: #fff;
+  box-shadow: var(--shadow);
+  margin: 1rem auto;
+  text-align: left;
+}
+.recaptcha-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.recaptcha-checkbox-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  /* Para navegadores que soporten accent-color: */
+  accent-color: #4285f4;
+}
+.fake-recaptcha-label {
+  font-size: 0.95rem;
+  color: #444;
+  cursor: pointer;
+}
+.recaptcha-footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #666;
+  border-top: 1px solid var(--gray-200);
+  padding-top: 0.5rem;
+}
+.recaptcha-footer strong {
+  font-weight: 600;
+  color: #333;
+}
+.recaptcha-footer small {
+  color: #999;
+}
+
+/* ================ */
+/* Separador visual */
+/* ================ */
+.separator {
+  text-align: center;
+  margin: 2rem 0 1rem;
+  position: relative;
+  font-size: 1rem;
+  color: var(--text);
+}
+.separator::before,
+.separator::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background-color: var(--text);
+  opacity: 0.3;
+}
+.separator::before {
+  left: 0;
+}
+.separator::after {
+  right: 0;
+}
+
+/* ================== */
+/* Botones sociales   */
+/* ================== */
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+/* Normalizamos la presentación de botones sociales para <a> y <button> */
+.social-btn,
+.social-login a.social-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
@@ -316,16 +213,81 @@
   cursor: pointer;
   font-size: 1rem;
   color: #fff;
-  text-decoration: none; /* Quita el subrayado del enlace */
+  text-decoration: none;
   transition: background-color 0.3s;
-  width: 100%; /* Opcional: para que el botón ocupe todo el ancho disponible */
+  width: 100%;           /* Asegura que ocupen el mismo ancho */
+  box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
-/* Estilos específicos para el botón de Google */
+/* Estilos específicos para cada proveedor */
 .social-btn.google {
   background-color: #db4437;
 }
-
 .social-btn.google:hover {
   background-color: #c33d2e;
+}
+.social-btn.linkedin {
+  background-color: #0077B5;
+}
+.social-btn.linkedin:hover {
+  background-color: #005582;
+}
+.social-btn.github {
+  background-color: #333;
+}
+.social-btn.github:hover {
+  background-color: #242424;
+}
+
+/* ================== */
+/* Footer del login   */
+/* ================== */
+.login-footer {
+  text-align: center;
+  font-size: 0.9rem;
+}
+.login-footer a {
+  color: var(--primary);
+  transition: color 0.3s;
+}
+.login-footer a:hover {
+  color: var(--secondary);
+}
+
+/* ================== */
+/* Modal de alerta    */
+/* ================== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background-color: var(--background);
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: var(--radius);
+  max-width: 400px;
+  position: relative;
+  text-align: center;
+}
+.modal-content button {
+  margin-top: 1rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+.modal-content button:hover {
+  background-color: var(--secondary);
 }
