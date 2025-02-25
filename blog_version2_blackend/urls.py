@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from core.views import confirmar_email
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +30,6 @@ urlpatterns = [
     path('registrarse/', include('registrarse.urls')),
     path('olvidar_contraseña/', include('olvidar_contraseña.urls')),
     path('accounts/', include('allauth.urls')),
+    path('confirmar-email/<uidb64>/<token>/', confirmar_email, name='confirmar_email'),
 ]
 

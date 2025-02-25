@@ -1,15 +1,15 @@
+# login/views.py
 from django.contrib.auth import login
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LogoutView
-from .forms import CustomAuthenticationForm
-
+import requests
+from allauth.socialaccount.models import SocialToken
 
 from .forms import CustomAuthenticationForm
 
 class CustomLoginView(LoginView):
     template_name = 'login/login.html'
-    form_class = CustomAuthenticationForm  # Usa el formulario personalizado
+    form_class = CustomAuthenticationForm
     success_url = reverse_lazy('inicio_home')
 
     def get_success_url(self):
@@ -36,26 +36,17 @@ class CustomLoginView(LoginView):
         context['redirect_url'] = self.request.path
         return self.render_to_response(context)
 
-
-
-
-import requests
-from django.contrib.auth.views import LogoutView
-from allauth.socialaccount.models import SocialToken
-
 class CustomLogoutView(LogoutView):
     http_method_names = ['get', 'post']
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             try:
-                # Buscamos si el usuario tiene autenticación social con Google
+                # Si el usuario tiene autenticación social con Google, revocamos el token
                 token_obj = SocialToken.objects.get(account__user=request.user, account__provider='google')
                 token = token_obj.token
                 revoke_url = "https://accounts.google.com/o/oauth2/revoke"
-                # Revocamos el token realizando una petición GET a la URL de Google
                 requests.get(revoke_url, params={'token': token})
             except SocialToken.DoesNotExist:
-                pass  # Si el usuario no tiene token de Google, simplemente continúa
+                pass  # Continúa si no existe el token
         return super().dispatch(request, *args, **kwargs)
-

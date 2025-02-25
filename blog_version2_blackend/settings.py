@@ -172,3 +172,12 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     # Aquí puedes agregar o modificar la configuración para otros proveedores si es necesario.
 }
+# Configuración de envío de correos (Gmail en este ejemplo)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'orozjuanfelipe@gmail.com'
+EMAIL_HOST_PASSWORD = 'xkev zjye wmbn tfut'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
