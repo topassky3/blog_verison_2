@@ -10,20 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
+import environ
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Definir la ruta base
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Inicializar environ y leer el archivo .env
+env = environ.Env(
+    # Puedes definir valores por defecto y castear los valores
+    DEBUG=(bool, False)
+)
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$t5c5-h-c@)_^k3b%^5@4ds#zj-#)&&)pa6rx&3$ez!4_sl8+q'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Asignar las variables a las configuraciones
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS = ["10.0.0.6", "localhost"]
 
@@ -101,14 +104,15 @@ WSGI_APPLICATION = 'blog_version2_blackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# Configuración de la base de datos
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'basededatos_blog',
-        'USER': 'postgres',
-        'PASSWORD': 'Kamejo23.',
-        'HOST': '51.222.159.144',
-        'PORT': '5433',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
 
@@ -172,13 +176,12 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     # Aquí puedes agregar o modificar la configuración para otros proveedores si es necesario.
 }
-# Configuración de envío de correos (Gmail en este ejemplo)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'orozjuanfelipe@gmail.com'
-EMAIL_HOST_PASSWORD = 'xkev zjye wmbn tfut'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
