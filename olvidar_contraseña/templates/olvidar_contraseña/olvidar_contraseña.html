@@ -9,7 +9,6 @@
   <!-- Fuente Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Variables y configuración base */
     :root {
       --primary: #2563eb;
       --secondary: #3b82f6;
@@ -29,7 +28,6 @@
       min-height: 100vh;
       padding: 1rem;
     }
-    /* Contenedor de la recuperación */
     .password-reset-container {
       background-color: var(--background);
       border-radius: var(--radius);
@@ -50,7 +48,6 @@
       color: var(--primary);
       font-size: 2rem;
     }
-    /* Estilos del formulario */
     .password-reset-form {
       display: flex;
       flex-direction: column;
@@ -87,17 +84,6 @@
     .password-reset-form button:hover {
       background-color: var(--secondary);
     }
-    /* Mensaje de confirmación */
-    .message {
-      background-color: #e6ffed;
-      border: 1px solid #a1e9a7;
-      padding: 1rem;
-      border-radius: var(--radius);
-      color: #2a662a;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    /* Estilos para el enlace de regreso al login */
     .login-footer {
       text-align: center;
       margin-top: 1rem;
@@ -111,14 +97,50 @@
     .login-footer a:hover {
       color: var(--secondary);
     }
+    /* Estilos para el modal de alerta */
+    .modal {
+      display: block; /* se mostrará solo si hay alerta */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: var(--white);
+      margin: 15% auto;
+      padding: 2rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .modal-content p {
+      margin-bottom: 1rem;
+    }
+    .modal-content button {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .modal-content button:hover {
+      background-color: var(--secondary);
+    }
   </style>
 </head>
 <body>
   <div class="password-reset-container">
     <h2>Recuperar Contraseña</h2>
-    <!-- Aquí se mostraría el mensaje de confirmación (inicialmente oculto) -->
-    <div class="message" style="display: none;">Se han enviado las instrucciones a tu correo.</div>
-    <form class="password-reset-form">
+    <form class="password-reset-form" method="post">
+      {% csrf_token %}
       <div class="form-group">
         <label for="email">Ingresa tu correo electrónico</label>
         <input type="email" id="email" name="email" placeholder="tuemail@ejemplo.com" required>
@@ -129,13 +151,26 @@
       <p>¿Ya tienes una cuenta? <a href="{% url 'login:login' %}">Iniciar Sesión</a></p>
     </div>
   </div>
-  <!-- Opcional: Script para mostrar el mensaje de confirmación al enviar el formulario -->
+
+  {% if alert_message %}
+    <!-- Modal de alerta -->
+    <div id="alertModal" class="modal">
+      <div class="modal-content">
+        <p style="white-space: pre-wrap;">{{ alert_message }}</p>
+        <button id="acceptButton">Aceptar</button>
+      </div>
+    </div>
+    <script>
+      document.getElementById('acceptButton').addEventListener('click', function() {
+          window.location.href = "{{ redirect_url }}";
+      });
+    </script>
+  {% endif %}
+
   <script>
+    // Opcional: lógica para AJAX u otras interacciones
     document.querySelector('.password-reset-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Aquí se podría agregar lógica para enviar el formulario vía AJAX.
-      // Por el momento, simulamos que se envió correctamente.
-      document.querySelector('.message').style.display = 'block';
+      // e.preventDefault(); // Descomenta si deseas enviar mediante AJAX
     });
   </script>
 </body>

@@ -16,19 +16,23 @@ def generar_token_confirmacion(user):
 def enviar_correo_confirmacion(request, user):
     uid, token = generar_token_confirmacion(user)
     dominio = get_current_site(request).domain
-    # Construimos la URL de confirmación (asegúrate de que la ruta exista en urls.py)
     url_confirmacion = f"http://{dominio}/confirmar-email/{uid}/{token}/"
 
     subject = "Confirma tu correo electrónico"
-    message = render_to_string("emails/confirmacion_email.html", {
+    # Renderizamos el contenido HTML
+    html_content = render_to_string("emails/confirmacion_email.html", {
         "user": user,
         "url_confirmacion": url_confirmacion
     })
+    # Mensaje en texto plano como respaldo
+    plain_text = f"Hola {user.first_name},\n\nGracias por registrarte. Confirma tu correo haciendo clic en el siguiente enlace:\n{url_confirmacion}\n\nSi no solicitaste este registro, ignora este mensaje."
 
     send_mail(
         subject,
-        message,
-        settings.EMAIL_HOST_USER,  # o DEFAULT_FROM_EMAIL
+        plain_text,  # Mensaje de respaldo en texto plano
+        settings.EMAIL_HOST_USER,  # O DEFAULT_FROM_EMAIL
         [user.email],
         fail_silently=False,
+        html_message=html_content,  # Aquí se envía el HTML
     )
+

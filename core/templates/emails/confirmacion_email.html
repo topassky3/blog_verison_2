@@ -1,4 +1,73 @@
-<p>Hola {{ user.first_name }},</p>
-<p>Gracias por registrarte. Para confirmar tu correo, haz clic en el siguiente enlace:</p>
-<p><a href="{{ url_confirmacion }}">Confirmar correo electrónico</a></p>
-<p>Si no solicitaste este registro, ignora este mensaje.</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirma tu correo electrónico</title>
+  <style>
+    /* Estilos generales */
+    body {
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2563eb;
+      margin-bottom: 20px;
+    }
+    p {
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    /* Estilos mejorados para el botón */
+    .button {
+      background-color: #2563eb;
+      color: #ffffff !important;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .button:hover {
+      background-color: #1e40af;
+      transform: scale(1.05);
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Bienvenido a WebDev Blog</h1>
+    <p>Hola {{ user.first_name }},</p>
+    <p>Gracias por registrarte. Para confirmar tu correo, por favor haz clic en el siguiente botón:</p>
+    <p style="text-align: center;">
+      <a class="button" href="{{ url_confirmacion }}">Confirmar correo electrónico</a>
+    </p>
+    <p>Si no solicitaste este registro, ignora este mensaje.</p>
+  </div>
+  <div class="footer">
+    <p>© 2023 WebDev Blog. Todos los derechos reservados.</p>
+  </div>
+</body>
+</html>

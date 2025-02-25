@@ -181,3 +181,4 @@ EMAIL_HOST_USER = 'orozjuanfelipe@gmail.com'
 EMAIL_HOST_PASSWORD = 'xkev zjye wmbn tfut'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+
