@@ -36,12 +36,12 @@
         <div class="login-container">
           {% if user.is_authenticated %}
               <div class="user-info">
-                <span>Bienvenido, {{ user.username }}</span>
-                <form method="post" action="{% url 'login:logout' %}" style="display:inline;">
-                  {% csrf_token %}
-                  <button type="submit" class="logout-btn">Cerrar sesión</button>
-                </form>
-              </div>
+                  <a href="{% url 'profile' %}">Bienvenido, {{ user.username }}</a>
+                  <form method="post" action="{% url 'login:logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Cerrar sesión</button>
+                  </form>
+                </div>
             {% else %}
               <a href="{% url 'login:login' %}" class="login-btn">Iniciar Sesión</a>
             {% endif %}

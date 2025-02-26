@@ -20,3 +20,4 @@ def confirmar_email(request, uidb64, token):
         return render(request, "emails/confirmacion_exitosa.html", {"user": user})
     else:
         return render(request, "emails/confirmacion_fallida.html")
+

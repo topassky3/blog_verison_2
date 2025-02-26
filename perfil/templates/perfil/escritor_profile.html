@@ -1,0 +1,296 @@
+{% extends "core/core.html" %}
+{% block title %}Perfil Escritor | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  <style>
+    /* Variables para el panel de administración */
+    :root {
+      --primary: #2563eb;
+      --secondary: #3b82f6;
+      --text: #1e293b;
+      --background: #ffffff;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-text: #4b5563; /* Texto para párrafos y elementos secundarios */
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"] {
+      --primary: #60a5fa;
+      --secondary: #3b82f6;
+      --text: #f8fafc;
+      --background: #0f172a;
+      --gray-100: #1e293b;
+      --gray-200: #334155;
+      --gray-text: #d1d5db;
+    }
+
+    /* Estilos generales para el panel */
+    .admin-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      display: flex;
+      gap: 2rem;
+      padding: 0 1rem;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: var(--gray-100);
+      padding: 1.5rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar li {
+      margin-bottom: 1rem;
+    }
+    .sidebar li a {
+      display: block;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      color: var(--text);
+      font-weight: 500;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .sidebar li a:hover,
+    .sidebar li a.active {
+      background-color: var(--gray-200);
+    }
+    /* Área principal */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background-color: var(--background);
+    }
+    /* Secciones del panel */
+    .content-section {
+      display: none;
+    }
+    .content-section.active {
+      display: block;
+    }
+    .section-info h2 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.5rem;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .content-card {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      background-color: var(--background);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .content-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+    }
+    .content-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .content-card p {
+      font-size: 0.95rem;
+      color: var(--gray-text);
+      line-height: 1.4;
+    }
+    /* Botón de actualización */
+    .update-btn {
+      background-color: var(--primary);
+      color: #f8f9fa;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    .update-btn:hover {
+      background-color: var(--secondary);
+    }
+    /* Formularios dentro del panel */
+    .profile-form .form-group {
+      margin-bottom: 1rem;
+    }
+    .profile-form label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .profile-form input,
+    .profile-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      color: var(--text);
+      background-color: var(--background);
+      transition: border-color 0.3s;
+    }
+    .profile-form input:focus,
+    .profile-form textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero" id="inicio" style="text-align: center; margin-bottom: 2rem;">
+    <h1 style="font-size: 2.75rem; color: var(--text);">Panel de Administración</h1>
+    <p style="font-size: 1.125rem; color: var(--gray-text);">
+      Accede a tu información personal y revisa los contenidos que has subido, además de ver el estado del sitio.
+    </p>
+  </section>
+
+  <!-- Panel de Administración -->
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <ul>
+        <li><a href="#" class="tab-link active" data-tab="info">Información Personal</a></li>
+        <li><a href="#" class="tab-link" data-tab="tutorials">Tutoriales Subidos</a></li>
+        <li><a href="#" class="tab-link" data-tab="guides">Guías Subidas</a></li>
+        <li><a href="#" class="tab-link" data-tab="podcasts">Podcasts Subidos</a></li>
+        <li><a href="#" class="tab-link" data-tab="stats">Estadísticas del Sitio</a></li>
+      </ul>
+    </aside>
+
+    <!-- Área principal -->
+    <main class="main-content">
+      <!-- Sección: Información Personal -->
+      <section id="info" class="content-section active section-info">
+        <h2>Información Personal</h2>
+        <p style="font-size: 1rem; color: var(--gray-text);">
+          Aquí puedes ver y actualizar tus datos personales.
+        </p>
+        <div style="display: flex; gap: 1rem; align-items: center; margin: 1.5rem 0;">
+          <img src="https://via.placeholder.com/120" alt="Avatar" style="width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--primary);">
+          <div>
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.25rem; color: var(--text);">{{ user.get_full_name|default:user.username }}</h3>
+            <p style="font-size: 1rem; color: var(--gray-text);">{{ user.email }}</p>
+          </div>
+        </div>
+        <form class="profile-form" id="adminProfileForm" method="post" action="#">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="adminName">Nombre</label>
+            <input type="text" id="adminName" name="adminName" value="{{ user.get_full_name|default:user.username }}" required>
+          </div>
+          <div class="form-group">
+            <label for="adminEmail">Correo Electrónico</label>
+            <input type="email" id="adminEmail" name="adminEmail" value="{{ user.email }}" required>
+          </div>
+          <div class="form-group">
+            <label for="adminBio">Biografía</label>
+            <textarea id="adminBio" name="adminBio" rows="4" placeholder="Escribe una breve biografía...">{% if user.profile.bio %}{{ user.profile.bio }}{% endif %}</textarea>
+          </div>
+          <button type="submit" class="update-btn">Actualizar Perfil</button>
+        </form>
+      </section>
+
+      <!-- Sección: Tutoriales Subidos -->
+      <section id="tutorials" class="content-section section-tutorials">
+        <h2>Tutoriales Subidos</h2>
+        <div class="content-grid">
+          <!-- Tarjetas de ejemplo -->
+          <div class="content-card">
+            <h3>React desde Cero</h3>
+            <p>Publicado: 15 Feb 2025</p>
+          </div>
+          <div class="content-card">
+            <h3>Introducción a Node.js</h3>
+            <p>Publicado: 20 Ene 2025</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección: Guías Subidas -->
+      <section id="guides" class="content-section section-guides">
+        <h2>Guías Subidas</h2>
+        <div class="content-grid">
+          <div class="content-card">
+            <h3>Guía de CSS Moderno</h3>
+            <p>Publicado: 10 Mar 2025</p>
+          </div>
+          <div class="content-card">
+            <h3>Accesibilidad Web</h3>
+            <p>Publicado: 05 Abr 2025</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección: Podcasts Subidos -->
+      <section id="podcasts" class="content-section section-podcasts">
+        <h2>Podcasts Subidos</h2>
+        <div class="content-grid">
+          <div class="content-card">
+            <h3>Episodio 1: Desarrollo Web</h3>
+            <p>Publicado: 15 Feb 2025</p>
+          </div>
+          <div class="content-card">
+            <h3>Episodio 2: JavaScript Avanzado</h3>
+            <p>Publicado: 22 Feb 2025</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección: Estadísticas del Sitio -->
+      <section id="stats" class="content-section section-stats">
+        <h2>Estadísticas del Sitio</h2>
+        <p style="font-size: 1rem; color: var(--gray-text);">
+          Aquí se muestran algunos datos relevantes del sitio.
+        </p>
+        <ul style="list-style: disc; margin-left: 1.5rem; color: var(--gray-text);">
+          <li>Total de usuarios: 1,250</li>
+          <li>Tutoriales publicados: 75</li>
+          <li>Guías publicadas: 45</li>
+          <li>Podcasts publicados: 30</li>
+          <li>Visitas mensuales: 15,000</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Lógica para cambiar entre secciones del panel
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const contentSections = document.querySelectorAll('.content-section');
+
+    tabLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const tab = this.dataset.tab;
+        tabLinks.forEach(link => link.classList.remove('active'));
+        contentSections.forEach(section => section.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById(tab).classList.add('active');
+      });
+    });
+
+    // Simulación de actualización de perfil
+    document.getElementById('adminProfileForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Perfil actualizado exitosamente (simulación).');
+    });
+  </script>
+{% endblock %}

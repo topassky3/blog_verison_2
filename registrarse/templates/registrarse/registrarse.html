@@ -8,7 +8,6 @@
   <title>Registrarse | WebDev Blog</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Fuente Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   {% block extra_head %}
       <link rel="stylesheet" href="{% static 'registrarse/css/registrarse.css' %}">
@@ -19,7 +18,6 @@
   <div class="login-container">
     <h2>Registrarse</h2>
 
-    <!-- Mostrar errores generales del formulario -->
     {% if form.non_field_errors %}
       <ul class="messages">
         {% for error in form.non_field_errors %}
@@ -30,10 +28,15 @@
 
     <form class="login-form" method="post">
       {% csrf_token %}
-      <!-- Campo Nombre Completo -->
+      <!-- Campo Nombres -->
       <div class="form-group">
-        <label for="id_fullname">Nombre Completo</label>
-        <input type="text" id="id_fullname" name="fullname" placeholder="Tu nombre completo" required value="{{ form.fullname.value|default_if_none:'' }}">
+        <label for="id_first_name">Nombres</label>
+        <input type="text" id="id_first_name" name="first_name" placeholder="Tus nombres" required value="{{ form.first_name.value|default_if_none:'' }}">
+      </div>
+      <!-- Campo Apellidos -->
+      <div class="form-group">
+        <label for="id_last_name">Apellidos</label>
+        <input type="text" id="id_last_name" name="last_name" placeholder="Tus apellidos" required value="{{ form.last_name.value|default_if_none:'' }}">
       </div>
       <!-- Campo Email -->
       <div class="form-group">
@@ -58,16 +61,13 @@
     </div>
   </div>
 
-    {% if alert_message %}
-    <!-- Modal de alerta -->
+  {% if alert_message %}
     <div id="alertModal" class="modal">
       <div class="modal-content">
-        <!-- El estilo inline "white-space: pre-wrap" permite mostrar saltos de línea -->
         <p style="white-space: pre-wrap;">{{ alert_message }}</p>
         <button id="acceptButton">Aceptar</button>
       </div>
     </div>
-
     <script>
       document.getElementById('acceptButton').addEventListener('click', function() {
           window.location.href = "{{ redirect_url }}";

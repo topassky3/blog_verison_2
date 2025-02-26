@@ -28,7 +28,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG')
 
-ALLOWED_HOSTS = ["10.0.0.6", "localhost"]
+ALLOWED_HOSTS = ["10.0.0.6", "localhost", "192.168.47.225"]
 
 
 # Application definition
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.linkedin_oauth2',
     'allauth.socialaccount.providers.github',
+    'perfil',
 ]
 
 SITE_ID = 1

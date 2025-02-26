@@ -31,5 +31,6 @@ urlpatterns = [
     path('olvidar_contraseña/', include('olvidar_contraseña.urls')),
     path('accounts/', include('allauth.urls')),
     path('confirmar-email/<uidb64>/<token>/', confirmar_email, name='confirmar_email'),
+    path('perfil/', include('perfil.urls')),
 ]
 

@@ -1,0 +1,116 @@
+{% extends "core/core.html" %}
+{% block title %}Perfil Lector | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  <style>
+    /* Estilos específicos para la página de perfil */
+    .profile-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background-color: var(--background);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary);
+    }
+    .profile-info {
+      flex: 1;
+    }
+    .profile-info h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .profile-info p {
+      font-size: 1rem;
+      color: var(--gray-200);
+    }
+    .profile-form {
+      display: grid;
+      gap: 1rem;
+    }
+    .profile-form .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .profile-form .form-group label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .profile-form .form-group input,
+    .profile-form .form-group textarea {
+      padding: 0.75rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: 1rem;
+    }
+    .profile-form .form-group textarea {
+      resize: vertical;
+    }
+    .update-btn {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      align-self: flex-start;
+    }
+    .update-btn:hover {
+      background-color: var(--secondary);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <h1>Mi Perfil</h1>
+    <p>Visualiza y actualiza la información de tu cuenta.</p>
+  </section>
+
+  <!-- Contenedor del Perfil -->
+  <section class="profile-container">
+    <div class="profile-header">
+      <img src="https://via.placeholder.com/120" alt="Avatar del Usuario" class="profile-avatar">
+      <div class="profile-info">
+        <h2>{{ user.get_full_name|default:user.username }}</h2>
+        <p>{{ user.email }}</p>
+      </div>
+    </div>
+    <!-- Formulario para actualizar el perfil -->
+    <form class="profile-form" id="profileForm" method="post" action="#">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="userName">Nombre</label>
+        <input type="text" id="userName" name="userName" value="{{ user.get_full_name|default:user.username }}" required>
+      </div>
+      <div class="form-group">
+        <label for="userEmail">Correo Electrónico</label>
+        <input type="email" id="userEmail" name="userEmail" value="{{ user.email }}" required>
+      </div>
+      <div class="form-group">
+        <label for="userBio">Biografía</label>
+        <textarea id="userBio" name="userBio" rows="4" placeholder="Escribe una breve biografía...">
+{% if user.profile.bio %}{{ user.profile.bio }}{% endif %}
+        </textarea>
+      </div>
+      <button type="submit" class="update-btn">Actualizar Perfil</button>
+    </form>
+  </section>
+{% endblock %}
