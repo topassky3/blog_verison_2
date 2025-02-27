@@ -318,25 +318,25 @@
       </section>
 
       <!-- Sección: Tutoriales Subidos -->
+      <!-- Sección: Tutoriales Subidos -->
         <section id="tutorials" class="content-section section-tutorials">
           <h2>Tutoriales Subidos</h2>
           <div class="content-grid">
-            <!-- Tarjetas existentes de tutoriales -->
-            <div class="content-card">
-              <h3>React desde Cero</h3>
-              <p>Publicado: 15 Feb 2025</p>
-            </div>
-            <div class="content-card">
-              <h3>Introducción a Node.js</h3>
-              <p>Publicado: 20 Ene 2025</p>
-            </div>
+            {% for tutorial in tutorials %}
+              <div class="content-card">
+                <h3>{{ tutorial.title }}</h3>
+                <p>Publicado: {{ tutorial.created_at|date:"d M Y" }}</p>
+              </div>
+            {% empty %}
+              <p>No tienes tutoriales subidos.</p>
+            {% endfor %}
             <!-- Tarjeta para agregar nuevo tutorial -->
             <div class="content-card add-new">
               <a href="{% url 'tutorial_create' %}" class="add-new-btn">&#43; Agregar Nuevo Tutorial</a>
             </div>
           </div>
 
-          <!-- Bloque de Paginación -->
+          <!-- Bloque de Paginación (opcional) -->
           <div class="pagination">
             <button class="page-btn" disabled>&laquo; Anterior</button>
             <button class="page-btn active">1</button>
@@ -345,6 +345,7 @@
             <button class="page-btn">Siguiente &raquo;</button>
           </div>
         </section>
+
 
 
       <!-- Sección: Guías Subidas -->

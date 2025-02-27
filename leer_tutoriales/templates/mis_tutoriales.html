@@ -1,0 +1,20 @@
+{% extends "core/core.html" %}
+{% block title %}Mis Tutoriales{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Mis Tutoriales</h1>
+    {% if tutorials %}
+      <ul>
+        {% for tutorial in tutorials %}
+          <li>
+            <a href="{% url 'tutorial_detail' tutorial.pk %}">{{ tutorial.title }}</a>
+            - {{ tutorial.duration }} - {{ tutorial.level }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No tienes tutoriales creados aún.</p>
+    {% endif %}
+  </div>
+{% endblock %}

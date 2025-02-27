@@ -5,15 +5,16 @@ from .forms import ProfileForm
 @login_required
 def profile_view(request):
     user = request.user
-
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            # Puedes agregar un mensaje de éxito o redirigir a otra vista
             return redirect('profile')
     else:
         form = ProfileForm(instance=user)
+
+    # Obtener los tutoriales del usuario
+    tutorials = user.tutorials.all()
 
     # Seleccionar la plantilla según el grupo del usuario
     if user.groups.filter(name="Escritor").exists():
@@ -21,4 +22,4 @@ def profile_view(request):
     else:
         template_name = 'perfil/lector_profile.html'
 
-    return render(request, template_name, {'form': form})
+    return render(request, template_name, {'form': form, 'tutorials': tutorials})

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'perfil',
     'crear_tutoriales',
+    'leer_tutoriales',
 ]
 
 SITE_ID = 1

@@ -35,6 +35,7 @@ urlpatterns = [
     path('confirmar-email/<uidb64>/<token>/', confirmar_email, name='confirmar_email'),
     path('perfil/', include('perfil.urls')),
     path('crear_tutoriales/', include('crear_tutoriales.urls')),
+    path('tutoriales/', include('leer_tutoriales.urls')),
 ]
 
 if settings.DEBUG:
