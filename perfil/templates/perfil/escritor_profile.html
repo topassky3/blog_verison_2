@@ -24,6 +24,7 @@
       --gray-200: #334155;
       --gray-text: #d1d5db;
     }
+
     /* Estilos generales para el panel */
     .admin-container {
       max-width: 1200px;
@@ -32,6 +33,7 @@
       gap: 2rem;
       padding: 0 1rem;
     }
+
     /* Sidebar */
     .sidebar {
       width: 250px;
@@ -59,6 +61,7 @@
     .sidebar li a.active {
       background-color: var(--gray-200);
     }
+
     /* Área principal */
     .main-content {
       flex: 1;
@@ -67,6 +70,7 @@
       border-radius: var(--radius);
       background-color: var(--background);
     }
+
     /* Secciones del panel */
     .content-section {
       display: none;
@@ -81,6 +85,7 @@
       border-bottom: 2px solid var(--primary);
       padding-bottom: 0.5rem;
     }
+
     .profile-form .form-group {
       margin-bottom: 1rem;
     }
@@ -106,6 +111,7 @@
       outline: none;
       border-color: var(--primary);
     }
+
     /* Botón de actualización */
     .update-btn {
       background-color: var(--primary);
@@ -121,6 +127,7 @@
     .update-btn:hover {
       background-color: var(--secondary);
     }
+
     /* Estilos para el avatar */
     .profile-avatar {
       width: 120px;
@@ -132,84 +139,122 @@
       border: 3px solid var(--primary);
       object-fit: cover;
     }
+
     /* Estilos para la grilla de contenidos */
-.content-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
 
-/* Estilos para las tarjetas de tutoriales */
-.content-card {
-  background-color: var(--background);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  padding: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.content-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-}
+    /* Estilos para las tarjetas de tutoriales */
+    .content-card {
+      background-color: var(--background);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .content-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+    }
 
-/* Tarjeta para agregar nuevo tutorial */
-.content-card.add-new {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed var(--primary);
-  background-color: var(--gray-100);
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-.content-card.add-new:hover {
-  background-color: var(--gray-200);
-}
-.add-new-btn {
-  background-color: var(--primary);
-  color: #f8fafc;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 1rem;
-}
-.add-new-btn:hover {
-  background-color: var(--secondary);
-}
+    /* Tarjeta para agregar nuevo tutorial */
+    .content-card.add-new {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--primary);
+      background-color: var(--gray-100);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .content-card.add-new:hover {
+      background-color: var(--gray-200);
+    }
+    .add-new-btn {
+      background-color: var(--primary);
+      color: #f8fafc;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+    }
+    .add-new-btn:hover {
+      background-color: var(--secondary);
+    }
 
-/* Bloque de Paginación */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-}
-.page-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  color: var(--text);
-}
-.page-btn:hover:not(:disabled) {
-  background-color: var(--gray-100);
-}
-.page-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.page-btn.active {
-  background-color: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-}
+    /* Bloque de Paginación */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+    .page-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background-color: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .page-btn:hover:not(:disabled) {
+      background-color: var(--gray-100);
+    }
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .page-btn.active {
+      background-color: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
 
+    /* ================== */
+    /* Modal de alerta    */
+    /* ================== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+      background-color: var(--background);
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: var(--radius);
+      max-width: 400px;
+      position: relative;
+      text-align: center;
+    }
+    .modal-content button {
+      margin-top: 1rem;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+    .modal-content button:hover {
+      background-color: var(--secondary);
+    }
   </style>
 {% endblock %}
 
@@ -245,9 +290,8 @@
         </p>
         <div style="display: flex; gap: 1rem; align-items: center; margin: 1.5rem 0;">
           {% if user.profile_image %}
-              <img src="{{ user.profile_image.url }}" alt="Imagen de perfil" class="profile-avatar">
+            <img src="{{ user.profile_image.url }}" alt="Imagen de perfil" class="profile-avatar">
           {% else %}
-
             <!-- Si no hay imagen, se muestra el SVG por defecto -->
             <svg class="profile-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
               <defs>
@@ -271,7 +315,6 @@
         <!-- Formulario de actualización de perfil con carga de archivos -->
         <form class="profile-form" method="post" enctype="multipart/form-data">
           {% csrf_token %}
-
           <div class="form-group">
             <label for="{{ form.first_name.id_for_label }}">Nombre</label>
             {{ form.first_name }}
@@ -279,7 +322,6 @@
               <div class="error">{{ form.first_name.errors }}</div>
             {% endif %}
           </div>
-
           <div class="form-group">
             <label for="{{ form.last_name.id_for_label }}">Apellido</label>
             {{ form.last_name }}
@@ -287,7 +329,6 @@
               <div class="error">{{ form.last_name.errors }}</div>
             {% endif %}
           </div>
-
           <div class="form-group">
             <label for="{{ form.email.id_for_label }}">Correo Electrónico</label>
             {{ form.email }}
@@ -295,7 +336,6 @@
               <div class="error">{{ form.email.errors }}</div>
             {% endif %}
           </div>
-
           <div class="form-group">
             <label for="{{ form.bio.id_for_label }}">Biografía</label>
             {{ form.bio }}
@@ -303,7 +343,6 @@
               <div class="error">{{ form.bio.errors }}</div>
             {% endif %}
           </div>
-
           <!-- Campo para actualizar la imagen de perfil -->
           <div class="form-group">
             <label for="{{ form.profile_image.id_for_label }}">Imagen de Perfil</label>
@@ -312,49 +351,43 @@
               <div class="error">{{ form.profile_image.errors }}</div>
             {% endif %}
           </div>
-
           <button type="submit" class="update-btn">Actualizar Perfil</button>
         </form>
       </section>
 
-    <!-- Sección: Tutoriales Subidos -->
-    <section id="tutorials" class="content-section section-tutorials">
-      <h2>Tutoriales Subidos</h2>
-      <div class="content-grid">
-        {% for tutorial in tutorials %}
-          <div class="content-card">
-            <a href="{% url 'tutorial_update' tutorial.pk %}" style="text-decoration:none; color:inherit;">
-              <h3>{{ tutorial.title }}</h3>
-              <p>Publicado: {{ tutorial.created_at|date:"d M Y" }}</p>
-            </a>
-            <!-- Enlace para eliminar -->
-            <a href="{% url 'tutorial_delete' tutorial.pk %}"
-               onclick="return confirm('¿Estás seguro de eliminar este tutorial?');"
-               style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
-              Eliminar
-            </a>
+      <!-- Sección: Tutoriales Subidos -->
+      <section id="tutorials" class="content-section section-tutorials">
+        <h2>Tutoriales Subidos</h2>
+        <div class="content-grid">
+          {% for tutorial in tutorials %}
+            <div class="content-card">
+              <a href="{% url 'tutorial_update' tutorial.pk %}" style="text-decoration:none; color:inherit;">
+                <h3>{{ tutorial.title }}</h3>
+                <p>Publicado: {{ tutorial.created_at|date:"d M Y" }}</p>
+              </a>
+              <!-- Enlace para eliminar con confirmación modal personalizada -->
+              <a href="{% url 'tutorial_delete' tutorial.pk %}" class="delete-tutorial"
+                 style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
+                Eliminar
+              </a>
+            </div>
+          {% empty %}
+            <p>No tienes tutoriales subidos.</p>
+          {% endfor %}
+          <!-- Tarjeta para agregar nuevo tutorial -->
+          <div class="content-card add-new">
+            <a href="{% url 'tutorial_create' %}" class="add-new-btn">&#43; Agregar Nuevo Tutorial</a>
           </div>
-        {% empty %}
-          <p>No tienes tutoriales subidos.</p>
-        {% endfor %}
-        <!-- Tarjeta para agregar nuevo tutorial -->
-        <div class="content-card add-new">
-          <a href="{% url 'tutorial_create' %}" class="add-new-btn">&#43; Agregar Nuevo Tutorial</a>
         </div>
-      </div>
-
-      <!-- Bloque de Paginación (opcional) -->
-      <div class="pagination">
-        <button class="page-btn" disabled>&laquo; Anterior</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">Siguiente &raquo;</button>
-      </div>
-    </section>
-
-
-
+        <!-- Bloque de Paginación (opcional) -->
+        <div class="pagination">
+          <button class="page-btn" disabled>&laquo; Anterior</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">Siguiente &raquo;</button>
+        </div>
+      </section>
 
       <!-- Sección: Guías Subidas -->
       <section id="guides" class="content-section section-guides">
@@ -403,11 +436,93 @@
     </main>
   </div>
 
+  <!-- Modal de alerta (para mensajes enviados desde el servidor) -->
+  {% if alert_message %}
+    <div id="alertModal" class="modal" style="display:block;">
+      <div class="modal-content">
+        <p>{{ alert_message }}</p>
+        <button id="acceptButton">Aceptar</button>
+      </div>
+    </div>
+    <script>
+      document.getElementById('acceptButton').addEventListener('click', function() {
+        window.location.href = "{{ redirect_url }}";
+      });
+    </script>
+  {% endif %}
+
   <script>
-    // Lógica para cambiar entre secciones del panel
+    // -- CONFIRMACIÓN PERSONALIZADA --
+    // Función que muestra un modal (confirmModal) y retorna true o false
+    // según el usuario haga clic en "Sí" o "No".
+    function showConfirmModal(message) {
+      return new Promise((resolve) => {
+        let modal = document.getElementById('confirmModal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'confirmModal';
+          modal.className = 'modal';
+          modal.innerHTML = `
+            <div class="modal-content">
+              <p>${message}</p>
+              <button id="confirmYes">Sí</button>
+              <button id="confirmNo">No</button>
+            </div>
+          `;
+          document.body.appendChild(modal);
+        }
+        // Actualizar texto por si se reutiliza
+        const modalContent = modal.querySelector('.modal-content p');
+        modalContent.textContent = message;
+
+        // Mostrar modal
+        modal.style.display = 'block';
+
+        // Botones
+        const yesBtn = modal.querySelector('#confirmYes');
+        const noBtn = modal.querySelector('#confirmNo');
+
+        // Aseguramos que los antiguos listeners (si existen) se eliminen:
+        yesBtn.replaceWith(yesBtn.cloneNode(true));
+        noBtn.replaceWith(noBtn.cloneNode(true));
+
+        // Referencia a los nuevos nodos (clonados)
+        const newYesBtn = modal.querySelector('#confirmYes');
+        const newNoBtn = modal.querySelector('#confirmNo');
+
+        // Escucha de eventos
+        newYesBtn.addEventListener('click', function() {
+          modal.style.display = 'none';
+          resolve(true);
+        });
+        newNoBtn.addEventListener('click', function() {
+          modal.style.display = 'none';
+          resolve(false);
+        });
+      });
+    }
+
+    // -- ENLACES DE ELIMINACIÓN --
+    // Asigna confirmación personalizada a todos los enlaces con clase "delete-tutorial"
+    document.querySelectorAll('.delete-tutorial').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const url = this.href;
+        // Mostramos la confirmación
+        showConfirmModal('¿Estás seguro de eliminar este tutorial?')
+          .then(confirmed => {
+            if (confirmed) {
+              // Si el usuario confirmó, redireccionamos
+              window.location.href = url;
+            }
+          });
+      });
+    });
+
+    // -- LÓGICA DE TABS --
+    // Cambiar entre secciones del panel
     const tabLinks = document.querySelectorAll('.tab-link');
     const contentSections = document.querySelectorAll('.content-section');
-
     tabLinks.forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
