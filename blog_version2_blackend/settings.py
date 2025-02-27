@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.linkedin_oauth2',
     'allauth.socialaccount.providers.github',
     'perfil',
+    'crear_tutoriales',
 ]
 
 SITE_ID = 1

@@ -132,6 +132,84 @@
       border: 3px solid var(--primary);
       object-fit: cover;
     }
+    /* Estilos para la grilla de contenidos */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Estilos para las tarjetas de tutoriales */
+.content-card {
+  background-color: var(--background);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.content-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+
+/* Tarjeta para agregar nuevo tutorial */
+.content-card.add-new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--primary);
+  background-color: var(--gray-100);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.content-card.add-new:hover {
+  background-color: var(--gray-200);
+}
+.add-new-btn {
+  background-color: var(--primary);
+  color: #f8fafc;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+}
+.add-new-btn:hover {
+  background-color: var(--secondary);
+}
+
+/* Bloque de Paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+.page-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.page-btn:hover:not(:disabled) {
+  background-color: var(--gray-100);
+}
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.page-btn.active {
+  background-color: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
   </style>
 {% endblock %}
 
@@ -240,19 +318,34 @@
       </section>
 
       <!-- Sección: Tutoriales Subidos -->
-      <section id="tutorials" class="content-section section-tutorials">
-        <h2>Tutoriales Subidos</h2>
-        <div class="content-grid">
-          <div class="content-card">
-            <h3>React desde Cero</h3>
-            <p>Publicado: 15 Feb 2025</p>
+        <section id="tutorials" class="content-section section-tutorials">
+          <h2>Tutoriales Subidos</h2>
+          <div class="content-grid">
+            <!-- Tarjetas existentes de tutoriales -->
+            <div class="content-card">
+              <h3>React desde Cero</h3>
+              <p>Publicado: 15 Feb 2025</p>
+            </div>
+            <div class="content-card">
+              <h3>Introducción a Node.js</h3>
+              <p>Publicado: 20 Ene 2025</p>
+            </div>
+            <!-- Tarjeta para agregar nuevo tutorial -->
+            <div class="content-card add-new">
+              <a href="{% url 'tutorial_create' %}" class="add-new-btn">&#43; Agregar Nuevo Tutorial</a>
+            </div>
           </div>
-          <div class="content-card">
-            <h3>Introducción a Node.js</h3>
-            <p>Publicado: 20 Ene 2025</p>
+
+          <!-- Bloque de Paginación -->
+          <div class="pagination">
+            <button class="page-btn" disabled>&laquo; Anterior</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">Siguiente &raquo;</button>
           </div>
-        </div>
-      </section>
+        </section>
+
 
       <!-- Sección: Guías Subidas -->
       <section id="guides" class="content-section section-guides">

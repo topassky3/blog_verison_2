@@ -1,0 +1,184 @@
+{% extends "core/core.html" %}
+{% block title %}Crear Nuevo Tutorial{% endblock %}
+
+{% block extra_head %}
+  <style>
+    /* Variables y configuración base */
+    :root {
+      --primary: #2563eb;
+      --secondary: #3b82f6;
+      --text: #1e293b;
+      --background: #ffffff;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    /* Estilos generales heredados (puedes complementar tus estilos globales) */
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    /* Contenedor del Editor */
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    /* Toolbar de Bloques */
+    .toolbar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .toolbar button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--radius);
+      background-color: var(--primary);
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .toolbar button:hover {
+      background-color: var(--secondary);
+    }
+    /* Editor de Bloques */
+    #editor {
+      border: 1px solid var(--gray-200);
+      padding: 1rem;
+      border-radius: var(--radius);
+      background-color: var(--gray-100);
+      min-height: 300px;
+    }
+    /* Bloques Genéricos */
+    .editor-block {
+      border: 1px solid var(--gray-200);
+      background-color: #fff;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: var(--radius);
+      cursor: move;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    .editor-block.dragging {
+      opacity: 0.5;
+      background-color: var(--gray-200);
+    }
+    /* Bloque de Texto */
+    .block-text {
+      /* Puedes personalizarlo si lo deseas */
+    }
+    /* Bloque de LaTeX */
+    .block-latex {
+      background-color: #fef9c3;
+      font-family: 'Times New Roman', serif;
+      padding: 1rem;
+      border-left: 4px solid var(--primary);
+    }
+    /* Bloque de Código */
+    .block-code {
+      background-color: #f3f4f6;
+      font-family: monospace;
+      padding: 1rem;
+      border-left: 4px solid var(--secondary);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <!-- Toolbar para seleccionar el tipo de bloque a agregar -->
+    <div class="toolbar">
+      <button data-type="text">Agregar Texto</button>
+      <button data-type="latex">Agregar LaTeX</button>
+      <button data-type="code">Agregar Código</button>
+    </div>
+
+    <!-- Área del Editor -->
+    <div id="editor">
+      <!-- Bloques iniciales de ejemplo -->
+      <div class="editor-block block-text" draggable="true" contenteditable="true">
+        Escribe tu contenido aquí...
+      </div>
+      <div class="editor-block block-latex" draggable="true" contenteditable="true">
+        $$E=mc^2$$
+      </div>
+      <div class="editor-block block-code" draggable="true" contenteditable="true">
+        console.log("Hola, mundo!");
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const editor = document.getElementById('editor');
+    let draggedBlock = null;
+
+    // Asigna eventos de arrastrar a un bloque
+    function assignDragEvents(block) {
+      block.addEventListener('dragstart', () => {
+        draggedBlock = block;
+        block.classList.add('dragging');
+      });
+      block.addEventListener('dragend', () => {
+        block.classList.remove('dragging');
+        draggedBlock = null;
+      });
+    }
+
+    // Asigna eventos a los bloques existentes
+    document.querySelectorAll('.editor-block').forEach(assignDragEvents);
+
+    // Manejo del dragover en el contenedor
+    editor.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const afterElement = getDragAfterElement(editor, e.clientY);
+      if (!afterElement) {
+        editor.appendChild(draggedBlock);
+      } else {
+        editor.insertBefore(draggedBlock, afterElement);
+      }
+    });
+
+    // Función para determinar la posición del cursor
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.editor-block:not(.dragging)')];
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        }
+        return closest;
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    // Agregar nuevos bloques según el tipo seleccionado
+    const toolbarButtons = document.querySelectorAll('.toolbar button');
+    toolbarButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const type = button.dataset.type;
+        const newBlock = document.createElement('div');
+        newBlock.classList.add('editor-block');
+        newBlock.setAttribute('draggable', 'true');
+        newBlock.setAttribute('contenteditable', 'true');
+        if (type === 'text') {
+          newBlock.classList.add('block-text');
+          newBlock.textContent = 'Nuevo bloque de texto...';
+        } else if (type === 'latex') {
+          newBlock.classList.add('block-latex');
+          newBlock.textContent = 'Inserta tu código LaTeX aquí...';
+        } else if (type === 'code') {
+          newBlock.classList.add('block-code');
+          newBlock.textContent = '// Escribe tu código aquí...';
+        }
+        assignDragEvents(newBlock);
+        editor.appendChild(newBlock);
+      });
+    });
+  </script>
+{% endblock %}
