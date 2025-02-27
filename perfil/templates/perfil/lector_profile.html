@@ -3,7 +3,28 @@
 
 {% block extra_head %}
   <style>
-    /* Estilos específicos para la página de perfil */
+    /* Variables para modo claro y oscuro */
+    :root {
+      --primary: #2563eb;
+      --secondary: #3b82f6;
+      --text: #1e293b;
+      --background: #ffffff;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-text: #4b5563;
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"] {
+      --primary: #60a5fa;
+      --secondary: #3b82f6;
+      --text: #ffffff;
+      --background: #0f172a;
+      --gray-100: #1e293b;
+      --gray-200: #334155;
+      --gray-text: #d1d5db;
+    }
+
     .profile-container {
       max-width: 800px;
       margin: 2rem auto;
@@ -20,23 +41,24 @@
       align-items: center;
       gap: 1.5rem;
     }
+    /* Se usa object-fit para que la imagen subida se adapte */
     .profile-avatar {
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      object-fit: cover;
+      display: block;
       border: 3px solid var(--primary);
-    }
-    .profile-info {
-      flex: 1;
+      object-fit: cover;
     }
     .profile-info h2 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
+      color: var(--text);
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
     .profile-info p {
       font-size: 1rem;
-      color: var(--gray-200);
+      color: var(--gray-text);
     }
     .profile-form {
       display: grid;
@@ -49,6 +71,7 @@
     .profile-form .form-group label {
       font-weight: 600;
       margin-bottom: 0.5rem;
+      color: var(--text);
     }
     .profile-form .form-group input,
     .profile-form .form-group textarea {
@@ -56,13 +79,21 @@
       border: 1px solid var(--gray-200);
       border-radius: var(--radius);
       font-size: 1rem;
+      color: var(--text);
+      background-color: var(--background);
+      transition: border-color 0.3s;
+    }
+    .profile-form .form-group input:focus,
+    .profile-form .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
     }
     .profile-form .form-group textarea {
       resize: vertical;
     }
     .update-btn {
       background-color: var(--primary);
-      color: #fff;
+      color: #ffffff;
       padding: 0.75rem 1.5rem;
       border: none;
       border-radius: var(--radius);
@@ -70,6 +101,7 @@
       transition: background-color 0.3s;
       font-size: 1rem;
       align-self: flex-start;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
     .update-btn:hover {
       background-color: var(--secondary);
@@ -79,37 +111,82 @@
 
 {% block content %}
   <!-- Hero Section -->
-  <section class="hero" id="inicio">
-    <h1>Mi Perfil</h1>
-    <p>Visualiza y actualiza la información de tu cuenta.</p>
+  <section class="hero" id="inicio" style="text-align: center; margin-bottom: 2rem;">
+    <h1 style="font-size: 2.75rem; color: var(--text);">Mi Perfil</h1>
+    <p style="font-size: 1.125rem; color: var(--gray-text);">
+      Visualiza y actualiza la información de tu cuenta.
+    </p>
   </section>
 
   <!-- Contenedor del Perfil -->
   <section class="profile-container">
     <div class="profile-header">
-      <img src="https://via.placeholder.com/120" alt="Avatar del Usuario" class="profile-avatar">
+      {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="Imagen de perfil" class="profile-avatar">
+      {% else %}
+        <!-- Imagen por defecto: código SVG -->
+        <svg class="profile-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+          <defs>
+            <radialGradient id="gradAvatar" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#60a5fa"/>
+              <stop offset="100%" stop-color="#2563eb"/>
+            </radialGradient>
+          </defs>
+          <circle cx="64" cy="64" r="60" fill="url(#gradAvatar)"/>
+          <circle cx="64" cy="50" r="20" fill="#ffffff"/>
+          <path d="M44,90c0-10,8-18,20-18s20,8,20,18v6H44V90z" fill="#ffffff"/>
+        </svg>
+      {% endif %}
       <div class="profile-info">
         <h2>{{ user.get_full_name|default:user.username }}</h2>
         <p>{{ user.email }}</p>
       </div>
     </div>
-    <!-- Formulario para actualizar el perfil -->
-    <form class="profile-form" id="profileForm" method="post" action="#">
+    <!-- Formulario para actualizar el perfil con carga de archivos -->
+    <form class="profile-form" method="post" enctype="multipart/form-data">
       {% csrf_token %}
+
       <div class="form-group">
-        <label for="userName">Nombre</label>
-        <input type="text" id="userName" name="userName" value="{{ user.get_full_name|default:user.username }}" required>
+        <label for="{{ form.first_name.id_for_label }}">Nombre</label>
+        {{ form.first_name }}
+        {% if form.first_name.errors %}
+          <div class="error">{{ form.first_name.errors }}</div>
+        {% endif %}
       </div>
+
       <div class="form-group">
-        <label for="userEmail">Correo Electrónico</label>
-        <input type="email" id="userEmail" name="userEmail" value="{{ user.email }}" required>
+        <label for="{{ form.last_name.id_for_label }}">Apellido</label>
+        {{ form.last_name }}
+        {% if form.last_name.errors %}
+          <div class="error">{{ form.last_name.errors }}</div>
+        {% endif %}
       </div>
+
       <div class="form-group">
-        <label for="userBio">Biografía</label>
-        <textarea id="userBio" name="userBio" rows="4" placeholder="Escribe una breve biografía...">
-{% if user.profile.bio %}{{ user.profile.bio }}{% endif %}
-        </textarea>
+        <label for="{{ form.email.id_for_label }}">Correo Electrónico</label>
+        {{ form.email }}
+        {% if form.email.errors %}
+          <div class="error">{{ form.email.errors }}</div>
+        {% endif %}
       </div>
+
+      <div class="form-group">
+        <label for="{{ form.bio.id_for_label }}">Biografía</label>
+        {{ form.bio }}
+        {% if form.bio.errors %}
+          <div class="error">{{ form.bio.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Campo para actualizar la imagen de perfil -->
+      <div class="form-group">
+        <label for="{{ form.profile_image.id_for_label }}">Imagen de Perfil</label>
+        {{ form.profile_image }}
+        {% if form.profile_image.errors %}
+          <div class="error">{{ form.profile_image.errors }}</div>
+        {% endif %}
+      </div>
+
       <button type="submit" class="update-btn">Actualizar Perfil</button>
     </form>
   </section>

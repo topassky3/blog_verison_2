@@ -1,10 +1,15 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
-class Lector(User):
+class Lector(AbstractUser):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     email_confirmado = models.BooleanField(default=False)
+    bio = models.TextField(blank=True, null=True)  # Campo para la biografía
+    profile_image = models.ImageField(
+        upload_to='profile_images/',
+        blank=True,
+        null=True
+    )  # Campo opcional para la imagen de perfil
 
     class Meta:
         verbose_name = 'Lector'
