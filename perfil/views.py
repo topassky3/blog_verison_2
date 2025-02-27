@@ -23,3 +23,5 @@ def profile_view(request):
         template_name = 'perfil/lector_profile.html'
 
     return render(request, template_name, {'form': form, 'tutorials': tutorials})
+
+

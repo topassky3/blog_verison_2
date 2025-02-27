@@ -20,7 +20,6 @@
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }
 
-  /* Fuente base y reset básico */
   body {
     font-family: "Inter", sans-serif;
     margin: 0;
@@ -30,9 +29,7 @@
     transition: background-color 0.3s, color 0.3s;
   }
 
-  /* --------------------------
-     Contenedor principal
-     -------------------------- */
+  /* Contenedor principal */
   .container {
     max-width: 800px;
     margin: 2rem auto;
@@ -53,9 +50,7 @@
     padding-bottom: 0.5rem;
   }
 
-  /* --------------------------
-     Campos de formulario
-     -------------------------- */
+  /* Campos de formulario */
   label {
     font-weight: 600;
     display: block;
@@ -83,9 +78,7 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
   }
 
-  /* --------------------------
-     Botones
-     -------------------------- */
+  /* Botones */
   button {
     display: inline-block;
     padding: 0.5rem 1rem;
@@ -119,9 +112,7 @@
     background-color: var(--primary);
   }
 
-  /* --------------------------
-     Toolbar y Editor
-     -------------------------- */
+  /* Toolbar y Editor */
   .toolbar {
     display: flex;
     gap: 0.5rem;
@@ -146,9 +137,7 @@
     margin-bottom: 1rem;
   }
 
-  /* --------------------------
-     Bloques editables
-     -------------------------- */
+  /* Bloques editables */
   .editor-block {
     border: 1px solid var(--gray-200);
     background-color: #fff;
@@ -164,16 +153,12 @@
     background-color: var(--gray-200);
   }
 
-  .block-text {
-    /* Bloque de texto general */
-  }
-
+  .block-text { }
   .block-latex {
-    background-color: #fef9c3; /* Amarillo claro */
+    background-color: #fef9c3;
     font-family: "Times New Roman", serif;
     border-left: 4px solid var(--primary);
   }
-
   .block-code {
     background-color: var(--gray-50);
     font-family: "Courier New", monospace;
@@ -205,7 +190,7 @@
       {{ form.level }}
     </div>
 
-    <!-- Barra de herramientas para agregar nuevos bloques -->
+    <!-- Barra de herramientas para agregar bloques -->
     <div class="toolbar">
       <button type="button" data-type="text">Agregar Texto</button>
       <button type="button" data-type="latex">Agregar LaTeX</button>
@@ -215,24 +200,22 @@
     <!-- Área de edición -->
     <div id="editor">
       {% if object.pk and object.blocks.exists %}
-        {# Si se está editando y el tutorial ya tiene bloques, los mostramos #}
         {% for block in object.blocks.all %}
           <div class="editor-block block-{{ block.block_type }}" draggable="true" contenteditable="true">
             {{ block.content|safe }}
           </div>
         {% endfor %}
       {% else %}
-        {# Si no hay tutorial o no hay bloques, mostramos un bloque de texto inicial #}
         <div class="editor-block block-text" draggable="true" contenteditable="true">
           Escribe tu contenido aquí...
         </div>
       {% endif %}
     </div>
 
-    <!-- Campo oculto para serializar los bloques en formato JSON -->
+    <!-- Campo oculto para los bloques en JSON -->
     <input type="hidden" id="blocks-input" name="blocks" />
 
-    <!-- Botón de Envío -->
+    <!-- Botón de envío -->
     <button type="submit" id="submit-btn">
       {% if object.pk %}Guardar Tutorial{% else %}Crear Tutorial{% endif %}
     </button>
@@ -243,125 +226,119 @@
 </div>
 
 <script>
-/* ----------------------------------------
-   Lógica de arrastrar y reordenar bloques
-   ---------------------------------------- */
-const editor = document.getElementById('editor');
-let draggedBlock = null;
+  /* ----------------------------------------
+     Lógica de arrastrar y reordenar bloques
+     ---------------------------------------- */
+  const editor = document.getElementById('editor');
+  let draggedBlock = null;
 
-function assignDragEvents(block) {
-  block.addEventListener('dragstart', () => {
-    draggedBlock = block;
-    block.classList.add('dragging');
-  });
-  block.addEventListener('dragend', () => {
-    block.classList.remove('dragging');
-    draggedBlock = null;
-  });
-}
-
-// Asignamos eventos de arrastre a los bloques iniciales
-document.querySelectorAll('.editor-block').forEach(assignDragEvents);
-
-// Evento para permitir el dragover en el editor
-editor.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  const afterElement = getDragAfterElement(editor, e.clientY);
-  if (!afterElement) {
-    editor.appendChild(draggedBlock);
-  } else {
-    editor.insertBefore(draggedBlock, afterElement);
+  function assignDragEvents(block) {
+    block.addEventListener('dragstart', () => {
+      draggedBlock = block;
+      block.classList.add('dragging');
+    });
+    block.addEventListener('dragend', () => {
+      block.classList.remove('dragging');
+      draggedBlock = null;
+    });
   }
-});
 
-function getDragAfterElement(container, y) {
-  const draggableElements = [...container.querySelectorAll('.editor-block:not(.dragging)')];
-  return draggableElements.reduce((closest, child) => {
-    const box = child.getBoundingClientRect();
-    const offset = y - box.top - box.height / 2;
-    if (offset < 0 && offset > closest.offset) {
-      return { offset: offset, element: child };
+  document.querySelectorAll('.editor-block').forEach(assignDragEvents);
+
+  editor.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const afterElement = getDragAfterElement(editor, e.clientY);
+    if (!afterElement) {
+      editor.appendChild(draggedBlock);
+    } else {
+      editor.insertBefore(draggedBlock, afterElement);
     }
-    return closest;
-  }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
-
-/* ----------------------------------------
-   Lógica de los botones de la toolbar
-   ---------------------------------------- */
-const toolbarButtons = document.querySelectorAll('.toolbar button');
-toolbarButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const type = button.dataset.type;
-    const newBlock = document.createElement('div');
-    newBlock.classList.add('editor-block');
-    newBlock.setAttribute('draggable', 'true');
-    newBlock.setAttribute('contenteditable', 'true');
-
-    // Determinar el estilo y texto inicial
-    if (type === 'text') {
-      newBlock.classList.add('block-text');
-      newBlock.textContent = 'Nuevo bloque de texto...';
-    } else if (type === 'latex') {
-      newBlock.classList.add('block-latex');
-      newBlock.textContent = 'Inserta tu código LaTeX aquí...';
-    } else if (type === 'code') {
-      newBlock.classList.add('block-code');
-      newBlock.textContent = '// Escribe tu código aquí...';
-    }
-
-    assignDragEvents(newBlock);
-    editor.appendChild(newBlock);
   });
-});
 
-/* ----------------------------------------
-   Envío del formulario vía AJAX
-   ---------------------------------------- */
-document.getElementById('tutorial-form').addEventListener('submit', function(e) {
-  e.preventDefault();
+  function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.editor-block:not(.dragging)')];
+    return draggableElements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child };
+      }
+      return closest;
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
 
-  // 1) Recolectar los bloques y su contenido
-  let blocks = [];
-  document.querySelectorAll('.editor-block').forEach(block => {
-    let blockType = 'text';
-    if (block.classList.contains('block-latex')) blockType = 'latex';
-    if (block.classList.contains('block-code')) blockType = 'code';
+  /* ----------------------------------------
+     Lógica de la toolbar para agregar bloques
+     ---------------------------------------- */
+  const toolbarButtons = document.querySelectorAll('.toolbar button');
+  toolbarButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const type = button.dataset.type;
+      const newBlock = document.createElement('div');
+      newBlock.classList.add('editor-block');
+      newBlock.setAttribute('draggable', 'true');
+      newBlock.setAttribute('contenteditable', 'true');
 
-    blocks.push({
-      type: blockType,
-      content: block.innerHTML.trim()
+      if (type === 'text') {
+        newBlock.classList.add('block-text');
+        newBlock.textContent = 'Nuevo bloque de texto...';
+      } else if (type === 'latex') {
+        newBlock.classList.add('block-latex');
+        newBlock.textContent = 'Inserta tu código LaTeX aquí...';
+      } else if (type === 'code') {
+        newBlock.classList.add('block-code');
+        newBlock.textContent = '// Escribe tu código aquí...';
+      }
+
+      assignDragEvents(newBlock);
+      editor.appendChild(newBlock);
     });
   });
-  document.getElementById('blocks-input').value = JSON.stringify(blocks);
 
-  // 2) Enviar por AJAX
-  const formData = new FormData(this);
-  fetch(this.action, {
-    method: 'POST',
-    headers: { 'X-Requested-With': 'XMLHttpRequest' },
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Primer guardado (creación) => no existe object.pk
-    if (!('{{ object.pk }}')) {
-      alert(data.message || 'Tutorial creado exitosamente.');
-      // Ajustamos la URL de acción para que apunte a la vista de edición
-      const newActionUrl = window.location.origin + '/crear_tutoriales/editar/' + data.tutorial_pk + '/';
-      document.getElementById('tutorial-form').action = newActionUrl;
-      document.getElementById('submit-btn').textContent = 'Guardar Tutorial';
-    } else {
-      // Edición
-      alert(data.message || 'Tutorial actualizado exitosamente.');
-    }
-    // Mostramos el botón de publicar (opcional)
-    document.getElementById('publish-btn').style.display = 'inline-block';
-  })
-  .catch(error => {
-    console.error(error);
-    alert('Ocurrió un error al guardar el tutorial.');
+  /* ----------------------------------------
+     Envío del formulario vía AJAX
+     ---------------------------------------- */
+  document.getElementById('tutorial-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Recolectar bloques
+    let blocks = [];
+    document.querySelectorAll('.editor-block').forEach(block => {
+      let blockType = 'text';
+      if (block.classList.contains('block-latex')) blockType = 'latex';
+      if (block.classList.contains('block-code')) blockType = 'code';
+
+      blocks.push({
+        type: blockType,
+        content: block.innerHTML.trim()
+      });
+    });
+    document.getElementById('blocks-input').value = JSON.stringify(blocks);
+
+    // Enviar datos por AJAX
+    const formData = new FormData(this);
+    fetch(this.action, {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Si no existe {{ object.pk }}, significa que se acaba de crear
+      if (!('{{ object.pk }}')) {
+        alert(data.message || 'Tutorial creado exitosamente.');
+        const newActionUrl = window.location.origin + '/crear_tutoriales/editar/' + data.tutorial_pk + '/';
+        document.getElementById('tutorial-form').action = newActionUrl;
+        document.getElementById('submit-btn').textContent = 'Guardar Tutorial';
+      } else {
+        alert(data.message || 'Tutorial actualizado exitosamente.');
+      }
+      document.getElementById('publish-btn').style.display = 'inline-block';
+    })
+    .catch(error => {
+      console.error(error);
+      alert('Ocurrió un error al guardar el tutorial.');
+    });
   });
-});
 </script>
 {% endblock %}

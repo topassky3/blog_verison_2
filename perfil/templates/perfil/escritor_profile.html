@@ -317,34 +317,42 @@
         </form>
       </section>
 
-      <!-- Sección: Tutoriales Subidos -->
-      <!-- Sección: Tutoriales Subidos -->
-        <section id="tutorials" class="content-section section-tutorials">
-          <h2>Tutoriales Subidos</h2>
-          <div class="content-grid">
-            {% for tutorial in tutorials %}
-              <div class="content-card">
-                <h3>{{ tutorial.title }}</h3>
-                <p>Publicado: {{ tutorial.created_at|date:"d M Y" }}</p>
-              </div>
-            {% empty %}
-              <p>No tienes tutoriales subidos.</p>
-            {% endfor %}
-            <!-- Tarjeta para agregar nuevo tutorial -->
-            <div class="content-card add-new">
-              <a href="{% url 'tutorial_create' %}" class="add-new-btn">&#43; Agregar Nuevo Tutorial</a>
-            </div>
+    <!-- Sección: Tutoriales Subidos -->
+    <section id="tutorials" class="content-section section-tutorials">
+      <h2>Tutoriales Subidos</h2>
+      <div class="content-grid">
+        {% for tutorial in tutorials %}
+          <div class="content-card">
+            <a href="{% url 'tutorial_update' tutorial.pk %}" style="text-decoration:none; color:inherit;">
+              <h3>{{ tutorial.title }}</h3>
+              <p>Publicado: {{ tutorial.created_at|date:"d M Y" }}</p>
+            </a>
+            <!-- Enlace para eliminar -->
+            <a href="{% url 'tutorial_delete' tutorial.pk %}"
+               onclick="return confirm('¿Estás seguro de eliminar este tutorial?');"
+               style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
+              Eliminar
+            </a>
           </div>
+        {% empty %}
+          <p>No tienes tutoriales subidos.</p>
+        {% endfor %}
+        <!-- Tarjeta para agregar nuevo tutorial -->
+        <div class="content-card add-new">
+          <a href="{% url 'tutorial_create' %}" class="add-new-btn">&#43; Agregar Nuevo Tutorial</a>
+        </div>
+      </div>
 
-          <!-- Bloque de Paginación (opcional) -->
-          <div class="pagination">
-            <button class="page-btn" disabled>&laquo; Anterior</button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn">Siguiente &raquo;</button>
-          </div>
-        </section>
+      <!-- Bloque de Paginación (opcional) -->
+      <div class="pagination">
+        <button class="page-btn" disabled>&laquo; Anterior</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">Siguiente &raquo;</button>
+      </div>
+    </section>
+
 
 
 
