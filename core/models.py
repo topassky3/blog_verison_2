@@ -31,6 +31,7 @@ class Tutorial(models.Model):
     title = models.CharField("Título", max_length=200)
     duration = models.CharField("Duración", max_length=50, blank=True, null=True)
     level = models.CharField("Nivel", max_length=50, blank=True, null=True)
+    publicado = models.BooleanField("Publicado", default=False)
     created_at = models.DateTimeField("Creado el", auto_now_add=True)
     updated_at = models.DateTimeField("Actualizado el", auto_now=True)
 

@@ -278,8 +278,17 @@
       <button type="submit" id="submit-btn">
         {% if object.pk %}Guardar Tutorial{% else %}Crear Tutorial{% endif %}
       </button>
-      <button id="publish-btn">Publicar Tutorial</button>
+      {% if object.pk %}
+        <button id="publish-btn" data-tutorial-id="{{ object.pk }}">
+          {% if object.publicado %}
+            Publicado
+          {% else %}
+            Publicar Tutorial
+          {% endif %}
+        </button>
+      {% endif %}
     </div>
+
   </form>
 </div>
 
@@ -290,6 +299,51 @@
     <p style="color: var(--text); font-size: 0.9rem; text-align: center;">Por favor espere...</p>
   </div>
 </div>
+
+<script>
+  // Función para obtener el token CSRF (si no la tienes ya definida)
+  function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Verifica que la cookie comience con el nombre requerido
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+
+  const publishBtn = document.getElementById('publish-btn');
+  if (publishBtn) {
+    publishBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const tutorialId = this.getAttribute('data-tutorial-id');
+      fetch(`/crear_tutoriales/toggle_publish/${tutorialId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Actualiza el texto del botón según el nuevo estado
+        if (data.published) {
+          publishBtn.textContent = 'Publicado';
+        } else {
+          publishBtn.textContent = 'Publicar Tutorial';
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  }
+</script>
+
 
 <script>
   // Funciones para mostrar/ocultar el overlay de carga

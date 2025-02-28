@@ -121,3 +121,19 @@ class TutorialDeleteView(DeleteView):
         if not request.user.is_authenticated or request.user != tutorial.author:
             return redirect('login')
         return super().dispatch(request, *args, **kwargs)
+
+import json
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from core.models import Tutorial
+
+@login_required
+@require_POST
+def toggle_publish(request, pk):
+    tutorial = get_object_or_404(Tutorial, pk=pk, author=request.user)
+    # Alterna el estado
+    tutorial.publicado = not tutorial.publicado
+    tutorial.save()
+    return JsonResponse({'published': tutorial.publicado})
