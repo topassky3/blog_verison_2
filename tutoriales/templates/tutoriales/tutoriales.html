@@ -34,45 +34,39 @@
 
   <!-- Tutorials Grid -->
   <section class="tutorials-grid">
-    <article class="tutorial-card" data-category="frontend">
-      <div class="tutorial-header">
-        <span class="category-badge">Frontend</span>
-        <img src="https://via.placeholder.com/400x250" alt="Tutorial 1" class="tutorial-image">
-      </div>
-      <div class="tutorial-content">
-        <h3>React desde Cero</h3>
-        <p class="tutorial-meta">Duración: 4 horas | Nivel: Principiante</p>
-        <p>Aprende los fundamentos de React y construye tu primera aplicación.</p>
-        <div class="tutorial-footer">
-          <a href="{% url 'ver_tutoriales' %}" class="read-more">Ver Tutorial →</a>
-          <div class="rating">
-            <span class="stars">★★★★☆</span>
-            <span class="votes">(128)</span>
+    {% for tutorial in tutorials %}
+      <article class="tutorial-card" data-category="frontend">
+        <div class="tutorial-header">
+          <span class="category-badge">Frontend</span>
+          {# Si tienes un campo de imagen en el modelo, podrías mostrarlo; en caso contrario se usa un placeholder #}
+          <img src="https://via.placeholder.com/400x250" alt="{{ tutorial.title }}" class="tutorial-image">
+        </div>
+        <div class="tutorial-content">
+          <h3>{{ tutorial.title }}</h3>
+          <p class="tutorial-meta">
+            Duración: {{ tutorial.duration|default:"Desconocida" }} |
+            Nivel: {{ tutorial.level|default:"General" }}
+          </p>
+          <p>
+            {# Aquí podrías mostrar un resumen o parte del contenido si lo tienes definido #}
+            {% if tutorial.blocks.all %}
+              {{ tutorial.blocks.all.0.content|truncatewords:20 }}
+            {% else %}
+              ¡Descubre este tutorial!
+            {% endif %}
+          </p>
+          <div class="tutorial-footer">
+            <a href="#" class="read-more">Ver Tutorial →</a>
+            <div class="rating">
+              <span class="stars">★★★★☆</span>
+              <span class="votes">(128)</span>
+            </div>
           </div>
         </div>
-      </div>
-    </article>
-
-    <article class="tutorial-card" data-category="backend">
-      <div class="tutorial-header">
-        <span class="category-badge">Backend</span>
-        <img src="https://via.placeholder.com/400x250" alt="Tutorial 2" class="tutorial-image">
-      </div>
-      <div class="tutorial-content">
-        <h3>Node.js Avanzado</h3>
-        <p class="tutorial-meta">Duración: 6 horas | Nivel: Intermedio</p>
-        <p>Domina Node.js y construye APIs escalables y eficientes.</p>
-        <div class="tutorial-footer">
-          <a href="{% url 'ver_tutoriales' %}" class="read-more">Ver Tutorial →</a>
-          <div class="rating">
-            <span class="stars">★★★★★</span>
-            <span class="votes">(256)</span>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    {# Agrega más tarjetas de tutoriales según sea necesario #}
+      </article>
+    {% empty %}
+      <p>No hay tutoriales publicados en este momento.</p>
+    {% endfor %}
   </section>
 
   <!-- Pagination -->
