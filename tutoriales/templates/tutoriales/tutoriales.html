@@ -48,12 +48,7 @@
             Nivel: {{ tutorial.level|default:"General" }}
           </p>
           <p>
-            {# Aquí podrías mostrar un resumen o parte del contenido si lo tienes definido #}
-            {% if tutorial.blocks.all %}
-              {{ tutorial.blocks.all.0.content|truncatewords:20 }}
-            {% else %}
-              ¡Descubre este tutorial!
-            {% endif %}
+
           </p>
           <div class="tutorial-footer">
             <a href="{% url 'tutorial_detail' tutorial.pk %}" class="read-more">Ver Tutorial →</a>

@@ -3,9 +3,6 @@
 
 {% block extra_head %}
 <style>
-  /* --------------------------
-     Variables y estilos globales
-     -------------------------- */
   :root {
     --primary: #2563eb;
     --secondary: #3b82f6;
@@ -19,7 +16,6 @@
     --radius: 8px;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }
-
   body {
     font-family: "Inter", sans-serif;
     margin: 0;
@@ -29,7 +25,6 @@
     transition: background-color 0.3s, color 0.3s;
   }
 
-  /* Contenedor principal */
   .container {
     max-width: 800px;
     margin: 2rem auto;
@@ -39,7 +34,6 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow);
   }
-
   .container h1 {
     margin-top: 0;
     margin-bottom: 1rem;
@@ -49,16 +43,12 @@
     border-bottom: 2px solid var(--primary);
     padding-bottom: 0.5rem;
   }
-
-  /* Campos de formulario */
   label {
     font-weight: 600;
     display: block;
     margin-bottom: 0.25rem;
   }
-
   input[type="text"],
-  textarea,
   select {
     width: 100%;
     padding: 0.5rem;
@@ -66,10 +56,19 @@
     border-radius: var(--radius);
     font-size: 1rem;
     color: var(--text);
-    transition: border-color 0.3s;
     margin-bottom: 1rem;
   }
-
+  textarea {
+    width: 100%;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text);
+    padding: 0.5rem;
+    resize: vertical;
+    margin-bottom: 1rem;
+  }
   input[type="text"]:focus,
   textarea:focus,
   select:focus {
@@ -77,8 +76,6 @@
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
   }
-
-  /* Botones */
   button {
     display: inline-block;
     padding: 0.5rem 1rem;
@@ -107,7 +104,6 @@
     background-color: var(--primary);
   }
 
-  /* Toolbar y Editor */
   .toolbar {
     display: flex;
     gap: 0.5rem;
@@ -129,7 +125,6 @@
     margin-bottom: 1rem;
   }
 
-  /* Bloques editables */
   .editor-block {
     border: 1px solid var(--gray-200);
     background-color: #fff;
@@ -137,27 +132,29 @@
     margin-bottom: 1rem;
     border-radius: var(--radius);
     cursor: move;
-    position: relative; /* Para posicionar el drag handle y el botón de eliminación */
+    position: relative;
     transition: background-color 0.3s, box-shadow 0.3s;
   }
   .editor-block.dragging {
     opacity: 0.6;
     background-color: var(--gray-200);
   }
-  .block-text { }
-  .block-latex {
+
+  /* Usamos <textarea> en todos los casos para evitar que el navegador escape caracteres. */
+  .block-text textarea {
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+  .block-latex textarea {
     background-color: #fef9c3;
     font-family: "Times New Roman", serif;
-    border-left: 4px solid var(--primary);
   }
-  .block-code {
+  .block-code textarea {
     background-color: var(--gray-50);
     font-family: "Courier New", monospace;
-    border-left: 4px solid var(--secondary);
     white-space: pre-wrap;
   }
 
-  /* Drag Handle (para mover el bloque) */
   .drag-handle {
     position: absolute;
     top: 4px;
@@ -167,8 +164,6 @@
     color: var(--gray-900);
     user-select: none;
   }
-
-  /* Botón para eliminar un bloque */
   .delete-block {
     position: absolute;
     top: 4px;
@@ -184,8 +179,6 @@
     cursor: pointer;
     z-index: 10;
   }
-
-  /* Loading Overlay */
   #loadingOverlay {
     display: none;
     position: fixed;
@@ -216,8 +209,6 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-
-  /* Contenedor para los dos botones (Guardar y Publicar) */
   .buttons-container {
     display: flex;
     gap: 1rem;
@@ -259,13 +250,24 @@
     <div id="editor">
       {% if object.pk and object.blocks.exists %}
         {% for block in object.blocks.all %}
-          <div class="editor-block block-{{ block.block_type }}" draggable="true" contenteditable="true">
-            {{ block.content|safe }}
-          </div>
+          {% if block.block_type == 'text' %}
+            <div class="editor-block block-text" draggable="true">
+              <textarea rows="5">{{ block.content|safe }}</textarea>
+            </div>
+          {% elif block.block_type == 'latex' %}
+            <div class="editor-block block-latex" draggable="true">
+              <textarea rows="5">{{ block.content|safe }}</textarea>
+            </div>
+          {% elif block.block_type == 'code' %}
+            <div class="editor-block block-code" draggable="true">
+              <textarea rows="5">{{ block.content|safe }}</textarea>
+            </div>
+          {% endif %}
         {% endfor %}
       {% else %}
-        <div class="editor-block block-text" draggable="true" contenteditable="true">
-          Escribe tu contenido aquí...
+        <!-- Bloque de texto inicial vacío -->
+        <div class="editor-block block-text" draggable="true">
+          <textarea rows="5" placeholder="Escribe tu contenido HTML aquí..."></textarea>
         </div>
       {% endif %}
     </div>
@@ -273,7 +275,7 @@
     <!-- Campo oculto para los bloques en JSON -->
     <input type="hidden" id="blocks-input" name="blocks" />
 
-    <!-- Contenedor para los dos botones (Guardar y Publicar) -->
+    <!-- Botones de guardar y publicar -->
     <div class="buttons-container">
       <button type="submit" id="submit-btn">
         {% if object.pk %}Guardar Tutorial{% else %}Crear Tutorial{% endif %}
@@ -288,11 +290,10 @@
         </button>
       {% endif %}
     </div>
-
   </form>
 </div>
 
-<!-- Loading Overlay (spinner) -->
+<!-- Overlay de Carga -->
 <div id="loadingOverlay">
   <div class="modal-content">
     <div class="spinner"></div>
@@ -301,23 +302,23 @@
 </div>
 
 <script>
-  // Función para obtener el token CSRF (si no la tienes ya definida)
+  // Obtener CSRF
   function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-          const cookies = document.cookie.split(';');
-          for (let i = 0; i < cookies.length; i++) {
-              const cookie = cookies[i].trim();
-              // Verifica que la cookie comience con el nombre requerido
-              if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-              }
-          }
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
       }
-      return cookieValue;
+    }
+    return cookieValue;
   }
 
+  // Publicar
   const publishBtn = document.getElementById('publish-btn');
   if (publishBtn) {
     publishBtn.addEventListener('click', function(e) {
@@ -332,7 +333,6 @@
       })
       .then(response => response.json())
       .then(data => {
-        // Actualiza el texto del botón según el nuevo estado
         if (data.published) {
           publishBtn.textContent = 'Publicado';
         } else {
@@ -342,11 +342,8 @@
       .catch(error => console.error('Error:', error));
     });
   }
-</script>
 
-
-<script>
-  // Funciones para mostrar/ocultar el overlay de carga
+  // Overlay de carga
   function showLoading() {
     document.getElementById('loadingOverlay').style.display = 'block';
   }
@@ -354,20 +351,18 @@
     document.getElementById('loadingOverlay').style.display = 'none';
   }
 
-  // Función para agregar un botón de eliminación a un bloque
+  // Funciones para botones y drag handle
   function addDeleteButton(block) {
     if (block.querySelector('.delete-block')) return;
     const btn = document.createElement('button');
     btn.className = 'delete-block';
     btn.textContent = '×';
     btn.addEventListener('click', function(e) {
-      e.stopPropagation(); // Evita que se dispare el evento de edición
+      e.stopPropagation();
       block.remove();
     });
     block.appendChild(btn);
   }
-
-  // Función para agregar un drag handle (icono) a un bloque
   function addDragHandle(block) {
     if (block.querySelector('.drag-handle')) return;
     const handle = document.createElement('span');
@@ -375,27 +370,26 @@
     handle.textContent = '≡';
     block.appendChild(handle);
   }
-
-  // Para cada bloque existente, agregar botón de eliminación y drag handle
-  document.querySelectorAll('.editor-block').forEach(block => {
-    addDeleteButton(block);
-    addDragHandle(block);
-  });
-
-  // Lógica de arrastrar y reordenar bloques
-  const editor = document.getElementById('editor');
-  let draggedBlock = null;
   function assignDragEvents(block) {
     block.addEventListener('dragstart', () => {
-      draggedBlock = block;
       block.classList.add('dragging');
+      draggedBlock = block;
     });
     block.addEventListener('dragend', () => {
       block.classList.remove('dragging');
       draggedBlock = null;
     });
   }
-  document.querySelectorAll('.editor-block').forEach(assignDragEvents);
+
+  let draggedBlock = null;
+  document.querySelectorAll('.editor-block').forEach(block => {
+    addDeleteButton(block);
+    addDragHandle(block);
+    assignDragEvents(block);
+  });
+
+  // Drag and drop en el contenedor
+  const editor = document.getElementById('editor');
   editor.addEventListener('dragover', (e) => {
     e.preventDefault();
     const afterElement = getDragAfterElement(editor, e.clientY);
@@ -409,7 +403,7 @@
     const draggableElements = [...container.querySelectorAll('.editor-block:not(.dragging)')];
     return draggableElements.reduce((closest, child) => {
       const box = child.getBoundingClientRect();
-      const offset = y - box.top - box.height / 2;
+      const offset = y - box.top - (box.height / 2);
       if (offset < 0 && offset > closest.offset) {
         return { offset: offset, element: child };
       }
@@ -417,7 +411,7 @@
     }, { offset: Number.NEGATIVE_INFINITY }).element;
   }
 
-  // Lógica de la toolbar para agregar bloques
+  // Toolbar para agregar nuevos bloques
   const toolbarButtons = document.querySelectorAll('.toolbar button');
   toolbarButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -425,49 +419,50 @@
       const newBlock = document.createElement('div');
       newBlock.classList.add('editor-block');
       newBlock.setAttribute('draggable', 'true');
-      newBlock.setAttribute('contenteditable', 'true');
+
+      // Creamos un <textarea> para todos los tipos
+      const textArea = document.createElement('textarea');
+      textArea.rows = 5;
+
       if (type === 'text') {
         newBlock.classList.add('block-text');
-        newBlock.textContent = 'Nuevo bloque de texto...';
+        textArea.placeholder = 'HTML normal (encabezados, párrafos, etc.)';
       } else if (type === 'latex') {
         newBlock.classList.add('block-latex');
-        newBlock.textContent = 'Inserta tu código LaTeX aquí...';
+        textArea.placeholder = 'Aquí tu LaTeX (usa $$...$$ o \\(...\\))';
       } else if (type === 'code') {
         newBlock.classList.add('block-code');
-        newBlock.textContent = '// Escribe tu código aquí...';
+        textArea.placeholder = '<pre><code class="language-xxx">\n // tu código \n</code></pre>';
       }
+      newBlock.appendChild(textArea);
+
       assignDragEvents(newBlock);
-      // Agregar botón de eliminación y drag handle al nuevo bloque
       addDeleteButton(newBlock);
       addDragHandle(newBlock);
       editor.appendChild(newBlock);
     });
   });
 
-  // Envío del formulario vía AJAX
+  // Al enviar el formulario
   document.getElementById('tutorial-form').addEventListener('submit', function(e) {
     e.preventDefault();
-
-    // Deshabilitar el botón para evitar múltiples clics
     document.getElementById('submit-btn').disabled = true;
-
-    // Mostrar el overlay de carga
     showLoading();
 
-    // Recolectar bloques en JSON (se remueven los botones de eliminación)
+    // Recolectar bloques
     const blocks = [];
     document.querySelectorAll('.editor-block').forEach(block => {
       let blockType = 'text';
       if (block.classList.contains('block-latex')) blockType = 'latex';
       if (block.classList.contains('block-code')) blockType = 'code';
-      blocks.push({
-        type: blockType,
-        content: block.innerHTML.replace(/<button class="delete-block".*?<\/button>/g, '').replace(/<span class="drag-handle".*?<\/span>/g, '').trim()
-      });
+
+      const textArea = block.querySelector('textarea');
+      const content = textArea ? textArea.value.trim() : '';
+
+      blocks.push({ type: blockType, content });
     });
     document.getElementById('blocks-input').value = JSON.stringify(blocks);
 
-    // Construir formData y hacer la petición fetch
     const formData = new FormData(this);
     fetch(this.action, {
       method: 'POST',
@@ -477,7 +472,6 @@
     .then(response => response.json())
     .then(data => {
       hideLoading();
-      // Modo CREACIÓN: si object.pk es vacío
       if ('{{ object.pk|default_if_none:"" }}' === '') {
         window.location.href = window.location.origin + '/crear_tutoriales/editar/' + data.tutorial_pk + '/';
       } else {

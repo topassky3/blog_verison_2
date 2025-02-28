@@ -1,15 +1,25 @@
 {% extends "core/core.html" %}
-
 {% block title %}{{ tutorial.title }} | WebDev Blog{% endblock %}
 
 {% block extra_head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Aquí puedes incluir tus enlaces a fuentes o cualquier otro recurso externo -->
+  <!-- Fuentes de Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- MathJax para renderizar LaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+
+  <!-- Highlight.js para resaltar código -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
   <style>
-    /* Variables y Configuración Base */
+    /* =============================
+       Variables y Configuración Base
+       ============================= */
     :root {
       --primary: #2563eb;
       --secondary: #3b82f6;
@@ -48,7 +58,10 @@
       max-width: 100%;
       display: block;
     }
-    /* Navbar */
+
+    /* =========================
+       Navbar
+       ========================= */
     .navbar {
       position: sticky;
       top: 0;
@@ -124,7 +137,10 @@
         display: block;
       }
     }
-    /* Layout Principal */
+
+    /* =========================
+       Layout Principal
+       ========================= */
     .container {
       max-width: 1200px;
       margin: 3rem auto;
@@ -138,7 +154,6 @@
         grid-template-columns: 3fr 1fr;
       }
     }
-    /* Artículo del Tutorial */
     article {
       padding: 2rem;
       border: 1px solid var(--gray-200);
@@ -189,7 +204,51 @@
     .back-button:hover {
       background-color: var(--secondary);
     }
-    /* Tabla de Contenido (TOC) */
+
+    /* =========================
+       Bloques del Tutorial
+       ========================= */
+    .tutorial-block {
+      margin-bottom: 1rem;
+    }
+    .block-text {
+      text-align: justify;
+    }
+    .block-latex {
+      background-color: #f9f9f9;
+      border-left: 4px solid var(--primary);
+      padding: 1rem;
+    }
+    .block-code {
+      background-color: var(--gray-100);
+      border-left: 4px solid var(--secondary);
+      /* Ajusta el padding del contenedor según tu gusto (menos vertical) */
+      padding: 0.25rem 0.5rem;
+      font-family: "Courier New", monospace;
+      white-space: pre-wrap;
+    }
+
+    /* Fuerza la eliminación de margen/padding en la zona resaltada */
+    .hljs {
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: 1.2 !important; /* Ajusta a tu gusto (0 es extremo y superpone el texto) */
+      background: none !important; /* Si no quieres color de fondo extra */
+    }
+
+    /* Ajusta también el pre/code dentro de tu bloque .block-code */
+    .block-code pre,
+    .block-code code {
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: 1.2 !important;
+      display: block; /* Para asegurarte de que no colapse el espacio */
+    }
+
+
+    /* =========================
+       TOC (Tabla de Contenido)
+       ========================= */
     .toc {
       position: sticky;
       top: 2rem;
@@ -220,7 +279,10 @@
     .toc ul li a:hover {
       color: var(--secondary);
     }
-    /* Footer */
+
+    /* =========================
+       Footer
+       ========================= */
     .footer {
       background-color: var(--gray-100);
       padding: 4rem 2rem 2rem;
@@ -311,7 +373,10 @@
     .legal-links a:hover {
       color: var(--primary);
     }
-    /* Botón de cambio de tema */
+
+    /* =========================
+       Botón de cambio de tema
+       ========================= */
     .theme-toggle {
       position: fixed;
       bottom: 2rem;
@@ -331,7 +396,6 @@
 {% endblock %}
 
 {% block content %}
-
   <!-- Main Content -->
   <main class="container">
     <article>
@@ -343,9 +407,23 @@
       </header>
       <section class="tutorial-content">
         {% for block in tutorial.blocks.all %}
-          <div class="tutorial-block">
-            {{ block.content|safe }}
-          </div>
+          {% if block.block_type == 'text' %}
+            <div class="tutorial-block block-text">
+              {{ block.content|safe }}
+            </div>
+          {% elif block.block_type == 'latex' %}
+            <div class="tutorial-block block-latex">
+              {{ block.content|safe }}
+            </div>
+          {% elif block.block_type == 'code' %}
+            <div class="tutorial-block block-latex">
+              {{ block.content|safe }}
+            </div>
+          {% else %}
+            <div class="tutorial-block block-text">
+              {{ block.content|safe }}
+            </div>
+          {% endif %}
         {% endfor %}
       </section>
       <a href="{% url 'tutoriales_home' %}" class="back-button">← Volver a Tutoriales</a>
@@ -418,21 +496,28 @@
 
 {% block extra_js %}
   <script>
-    // Toggle menú móvil
+    // Menú móvil
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navMenu = document.querySelector('.nav-menu');
-    mobileMenuBtn.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-    });
+    if (mobileMenuBtn && navMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+      });
+    }
+
     // Toggle de tema
     const themeToggle = document.querySelector('.theme-toggle');
     const html = document.documentElement;
-    themeToggle.addEventListener('click', () => {
-      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('theme', html.dataset.theme);
-    });
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        html.dataset.theme = (html.dataset.theme === 'dark') ? 'light' : 'dark';
+        localStorage.setItem('theme', html.dataset.theme);
+      });
+    }
+
     // Cargar tema guardado o preferido
-    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const savedTheme = localStorage.getItem('theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     html.dataset.theme = savedTheme;
   </script>
   <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
