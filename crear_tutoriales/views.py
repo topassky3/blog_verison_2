@@ -6,7 +6,7 @@ from core.models import Tutorial, TutorialBlock
 
 class TutorialCreateView(CreateView):
     model = Tutorial
-    fields = ['title', 'duration', 'level']
+    fields = ['title', 'duration', 'level', 'category', 'image']
     template_name = 'crear_tutoriales/tutorial_form.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -59,7 +59,7 @@ class TutorialCreateView(CreateView):
 
 class TutorialUpdateView(UpdateView):
     model = Tutorial
-    fields = ['title', 'duration', 'level']
+    fields = ['title', 'duration', 'level', 'category', 'image']
     template_name = 'crear_tutoriales/tutorial_form.html'
 
     def dispatch(self, request, *args, **kwargs):

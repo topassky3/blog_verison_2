@@ -223,7 +223,7 @@
     {% if object.pk %}Editar Tutorial{% else %}Crear Nuevo Tutorial{% endif %}
   </h1>
 
-  <form id="tutorial-form" method="post">
+  <form id="tutorial-form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <!-- Campos básicos del Tutorial -->
     <div>
@@ -237,6 +237,14 @@
     <div>
       <label for="id_level">Nivel:</label>
       {{ form.level }}
+    </div>
+    <div>
+      <label for="id_image">Imagen Representativa:</label>
+      {{ form.image }}
+    </div>
+    <div>
+      <label for="id_category">Categoría:</label>
+      {{ form.category }}
     </div>
 
     <!-- Barra de herramientas para agregar bloques -->

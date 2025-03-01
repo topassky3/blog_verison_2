@@ -31,3 +31,27 @@ class LectorAdmin(UserAdmin):
                 user.groups.remove(group)
         self.message_user(request, "Los usuarios seleccionados han sido marcados como Lector.")
     make_lector.short_description = "Marcar como Lector"
+
+from .models import Category
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    # En el formulario de edición se mostrarán "name" y "slug",
+    # mientras que en el de creación solo se mostrará "name"
+    def get_fields(self, request, obj=None):
+        if obj:
+            return ('name', 'slug')
+        return ('name',)
+
+    # Prepopula "slug" solo en el formulario de edición
+    def get_prepopulated_fields(self, request, obj=None):
+        if obj:
+            return {"slug": ("name",)}
+        return {}
+
+    # Como en el formulario de edición queremos que "slug" no se edite, lo marcamos como readonly
+    readonly_fields = ('slug',)
+
+    list_display = ('name', 'slug')
+
+
