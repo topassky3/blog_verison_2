@@ -1225,3 +1225,67 @@ img {
 .search-form button:hover {
   background-color: var(--secondary);
 }
+
+/* Contenedor para el menú de usuario */
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+/* Botón que muestra el ícono de usuario */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  color: var(--primary);
+}
+
+.icon-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Menú desplegable oculto por defecto */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background-color: var(--background);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.5rem 0;
+  z-index: 1000;
+  width: 150px;
+}
+
+/* Mostrar el menú cuando se active */
+.dropdown-menu.show {
+  display: block;
+}
+
+/* Estilos para los elementos del menú */
+.dropdown-menu a,
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: var(--gray-100);
+}

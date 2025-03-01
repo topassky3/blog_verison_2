@@ -33,20 +33,29 @@
           <li><a href="{% url 'contacto_home' %}" class="nav-link">Contacto</a></li>
         </ul>
         <!-- Bloque de Login -->
-        <div class="login-container">
-          {% if user.is_authenticated %}
-              <div class="user-info">
-                  <a href="{% url 'profile' %}">Bienvenido, {{ user.username }}</a>
-                  <form method="post" action="{% url 'login:logout' %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-btn">Cerrar sesión</button>
-                  </form>
-                </div>
-            {% else %}
-              <a href="{% url 'login:login' %}" class="login-btn">Iniciar Sesión</a>
-            {% endif %}
+       <div class="login-container">
+  {% if user.is_authenticated %}
+    <div class="user-menu">
+      <button class="icon-btn" id="userMenuToggle" title="Menú de usuario">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5.121 17.804A7.962 7.962 0 0012 20a7.962 7.962 0 006.879-2.196M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </button>
+      <div class="dropdown-menu">
+        <a href="{% url 'profile' %}">Perfil</a>
+        <form method="post" action="{% url 'login:logout' %}">
+          {% csrf_token %}
+          <button type="submit">Cerrar sesión</button>
+        </form>
+      </div>
+    </div>
+  {% else %}
+    <a href="{% url 'login:login' %}" class="login-btn">Iniciar Sesión</a>
+  {% endif %}
+</div>
 
-        </div>
+
         <!-- Fin bloque de Login -->
       </div>
     </nav>
@@ -128,6 +137,24 @@
   <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
   <!-- Lógica para el modal de Login -->
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+  const toggleBtn = document.getElementById('userMenuToggle');
+  const dropdownMenu = document.querySelector('.dropdown-menu');
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function (event) {
+      event.stopPropagation(); // Evita que el clic se propague y cierre inmediatamente el menú
+      dropdownMenu.classList.toggle('show');
+    });
+  }
+
+  // Cierra el menú si se hace clic fuera del mismo
+  document.addEventListener('click', function () {
+    if (dropdownMenu.classList.contains('show')) {
+      dropdownMenu.classList.remove('show');
+    }
+  });
+});
 
   </script>
 </body>
