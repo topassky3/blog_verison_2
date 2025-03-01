@@ -4,6 +4,43 @@
 
 {% block extra_head %}
   {# Si necesitas agregar estilos CSS adicionales exclusivos para esta página, puedes enlazarlos o escribirlos aquí #}
+    <style>
+        .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 2rem;
+        }
+
+        .pagination .page-btn {
+          background-color: var(--primary);
+          color: #fff;
+          padding: 0.5rem 1rem;
+          border: none;
+          border-radius: var(--radius);
+          text-decoration: none;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .pagination .page-btn:hover {
+          background-color: var(--secondary);
+          transform: translateY(-1px);
+        }
+
+        .pagination .page-btn:disabled {
+          background-color: var(--gray-200);
+          cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+          font-size: 1rem;
+          color: var(--text);
+        }
+
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -15,22 +52,29 @@
 
   <!-- Tutorials Filter -->
   <section class="tutorials-filter">
-    <div class="filter-options">
-      <button class="filter-btn active" data-filter="all">Todos</button>
-      <button class="filter-btn" data-filter="frontend">Frontend</button>
-      <button class="filter-btn" data-filter="backend">Backend</button>
-      <button class="filter-btn" data-filter="fullstack">Fullstack</button>
-      <button class="filter-btn" data-filter="devops">DevOps</button>
-    </div>
-    <div class="search-box">
-      <input type="text" placeholder="Buscar tutoriales...">
-      <button type="submit">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
-      </button>
-    </div>
-  </section>
+      <div class="filter-options">
+        <!-- Enlace "Todos" -->
+        <a href="?cat=all{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if selected_category == 'all' or not selected_category %}active{% endif %}" data-filter="all">Todos</a>
+        <!-- Generar dinámicamente los enlaces para cada categoría -->
+        {% for category in categories %}
+          <a href="?cat={{ category.slug }}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if selected_category == category.slug %}active{% endif %}" data-filter="{{ category.slug }}">
+            {{ category.name }}
+          </a>
+        {% endfor %}
+      </div>
+      <form class="search-box" method="get">
+        <!-- Preserva el filtro de categoría en la búsqueda -->
+        {% if selected_category and selected_category != 'all' %}
+          <input type="hidden" name="cat" value="{{ selected_category }}">
+        {% endif %}
+        <input type="text" name="q" placeholder="Buscar tutoriales..." value="{{ search_query }}">
+        <button type="submit">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </button>
+      </form>
+    </section>
 
   <!-- Tutorials Grid -->
   <section class="tutorials-grid">
@@ -68,48 +112,29 @@
   </section>
 
   <!-- Pagination -->
-  <section class="pagination">
-    <button class="page-btn" disabled>Anterior</button>
-    <div class="page-numbers">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <span>...</span>
-      <button class="page-btn">10</button>
-    </div>
-    <button class="page-btn">Siguiente</button>
-  </section>
+
+  <nav class="pagination">
+      {% if tutorials.has_previous %}
+        <a class="page-btn" href="?page={{ tutorials.previous_page_number }}">← Anterior</a>
+      {% else %}
+        <button class="page-btn" disabled>← Anterior</button>
+      {% endif %}
+
+      <span class="page-info">Página {{ tutorials.number }} de {{ tutorials.paginator.num_pages }}</span>
+
+      {% if tutorials.has_next %}
+        <a class="page-btn" href="?page={{ tutorials.next_page_number }}">Siguiente →</a>
+      {% else %}
+        <button class="page-btn" disabled>Siguiente →</button>
+      {% endif %}
+    </nav>
+
+
 {% endblock %}
 
 {% block extra_js %}
   <script>
-    // Funcionalidad de Filtrado de Tutoriales
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const tutorialCards = document.querySelectorAll('.tutorial-card');
 
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        const filter = button.dataset.filter;
-        tutorialCards.forEach(card => {
-          if (filter === 'all' || card.dataset.category === filter) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
 
-    // Funcionalidad de Búsqueda de Tutoriales
-    const searchBox = document.querySelector('.search-box input');
-    searchBox.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      tutorialCards.forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = title.includes(searchTerm) ? 'block' : 'none';
-      });
-    });
   </script>
 {% endblock %}
