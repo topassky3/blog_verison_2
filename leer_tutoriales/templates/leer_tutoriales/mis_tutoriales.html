@@ -3,23 +3,17 @@
 
 {% block extra_head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Fuentes de Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- MathJax para renderizar LaTeX -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
 
-  <!-- Highlight.js para resaltar código -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
 
   <style>
-    /* =============================
-       Variables y Configuración Base
-       ============================= */
     :root {
       --primary: #2563eb;
       --secondary: #3b82f6;
@@ -38,11 +32,7 @@
       --gray-100: #1e293b;
       --gray-200: #334155;
     }
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       color: var(--text);
@@ -50,18 +40,10 @@
       line-height: 1.6;
       transition: background-color 0.3s, color 0.3s;
     }
-    a {
-      text-decoration: none;
-      color: var(--primary);
-    }
-    img {
-      max-width: 100%;
-      display: block;
-    }
+    a { text-decoration: none; color: var(--primary); }
+    img { max-width: 100%; display: block; }
 
-    /* =========================
-       Navbar
-       ========================= */
+    /* Navbar */
     .navbar {
       position: sticky;
       top: 0;
@@ -78,18 +60,8 @@
       justify-content: space-between;
       align-items: center;
     }
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      transition: color 0.3s;
-    }
-    .nav-menu {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      list-style: none;
-    }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); transition: color 0.3s; }
+    .nav-menu { display: flex; gap: 2rem; align-items: center; list-style: none; }
     .nav-link {
       padding: 0.5rem 1rem;
       border-radius: var(--radius);
@@ -98,19 +70,15 @@
       color: var(--text);
     }
     .nav-link:hover,
-    .nav-link.active {
-      background-color: var(--gray-100);
-    }
+    .nav-link.active { background-color: var(--gray-100); }
     .nav-cta {
       background-color: var(--primary);
-      color: #ffffff;
+      color: #fff;
       padding: 0.75rem 1.5rem;
       border-radius: var(--radius);
       transition: background-color 0.3s ease;
     }
-    .nav-cta:hover {
-      background-color: var(--secondary);
-    }
+    .nav-cta:hover { background-color: var(--secondary); }
     .mobile-menu-btn {
       display: none;
       background: none;
@@ -130,17 +98,11 @@
         flex-direction: column;
         box-shadow: var(--shadow);
       }
-      .nav-menu.active {
-        display: flex;
-      }
-      .mobile-menu-btn {
-        display: block;
-      }
+      .nav-menu.active { display: flex; }
+      .mobile-menu-btn { display: block; }
     }
 
-    /* =========================
-       Layout Principal
-       ========================= */
+    /* Layout Principal */
     .container {
       max-width: 1200px;
       margin: 3rem auto;
@@ -149,11 +111,7 @@
       grid-template-columns: 1fr;
       gap: 2rem;
     }
-    @media (min-width: 1024px) {
-      .container {
-        grid-template-columns: 3fr 1fr;
-      }
-    }
+    @media (min-width: 1024px) { .container { grid-template-columns: 3fr 1fr; } }
     article {
       padding: 2rem;
       border: 1px solid var(--gray-200);
@@ -163,13 +121,9 @@
     .tutorial-header {
       border-bottom: 1px solid var(--gray-200);
       padding-bottom: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.1rem;
     }
-    .tutorial-header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      color: var(--text);
-    }
+    .tutorial-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text); }
     .tutorial-meta {
       font-size: 0.9rem;
       color: var(--text);
@@ -177,21 +131,11 @@
       padding: 0.25rem 0.5rem;
       border-radius: var(--radius);
       display: inline-block;
-      margin-bottom: 1rem;
+      margin-bottom: 0.1rem;
     }
-    .tutorial-content {
-      font-size: 1.125rem;
-      line-height: 1.8;
-    }
-    .tutorial-content h2 {
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      font-size: 1.75rem;
-      color: var(--primary);
-    }
-    .tutorial-content p {
-      margin-bottom: 1rem;
-    }
+    .tutorial-content { font-size: 1.125rem; line-height: 1.8; }
+    .tutorial-content h2 { margin: 2rem 0 1rem; font-size: 1.75rem; color: var(--primary); }
+    .tutorial-content p { margin-bottom: 1rem; }
     .back-button {
       display: inline-block;
       margin-top: 2rem;
@@ -201,19 +145,11 @@
       border-radius: var(--radius);
       transition: background-color 0.3s;
     }
-    .back-button:hover {
-      background-color: var(--secondary);
-    }
+    .back-button:hover { background-color: var(--secondary); }
 
-    /* =========================
-       Bloques del Tutorial
-       ========================= */
-    .tutorial-block {
-      margin-bottom: 1rem;
-    }
-    .block-text {
-      text-align: justify;
-    }
+    /* Bloques del Tutorial */
+    .tutorial-block { margin-bottom: 1rem; }
+    .block-text { text-align: justify; }
     .block-latex {
       background-color: #f9f9f9;
       border-left: 4px solid var(--primary);
@@ -222,33 +158,25 @@
     .block-code {
       background-color: var(--gray-100);
       border-left: 4px solid var(--secondary);
-      /* Ajusta el padding del contenedor según tu gusto (menos vertical) */
       padding: 0.25rem 0.5rem;
       font-family: "Courier New", monospace;
       white-space: pre-wrap;
     }
-
-    /* Fuerza la eliminación de margen/padding en la zona resaltada */
     .hljs {
       margin: 0 !important;
       padding: 0 !important;
-      line-height: 1.2 !important; /* Ajusta a tu gusto (0 es extremo y superpone el texto) */
-      background: none !important; /* Si no quieres color de fondo extra */
+      line-height: 1.2 !important;
+      background: none !important;
     }
-
-    /* Ajusta también el pre/code dentro de tu bloque .block-code */
     .block-code pre,
     .block-code code {
       margin: 0 !important;
       padding: 0 !important;
       line-height: 1.2 !important;
-      display: block; /* Para asegurarte de que no colapse el espacio */
+      display: block;
     }
 
-
-    /* =========================
-       TOC (Tabla de Contenido)
-       ========================= */
+    /* TOC */
     .toc {
       position: sticky;
       top: 2rem;
@@ -259,30 +187,17 @@
       max-height: 80vh;
       overflow-y: auto;
     }
-    .toc h2 {
-      font-size: 1.25rem;
-      margin-bottom: 1rem;
-      color: var(--primary);
-    }
-    .toc ul {
-      list-style: none;
-      padding-left: 0;
-    }
-    .toc ul li {
-      margin-bottom: 0.5rem;
-    }
+    .toc h2 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary); }
+    .toc ul { list-style: none; padding-left: 0; }
+    .toc ul li { margin-bottom: 0.5rem; }
     .toc ul li a {
       color: var(--text);
       font-size: 0.95rem;
       transition: color 0.3s;
     }
-    .toc ul li a:hover {
-      color: var(--secondary);
-    }
+    .toc ul li a:hover { color: var(--secondary); }
 
-    /* =========================
-       Footer
-       ========================= */
+    /* Footer */
     .footer {
       background-color: var(--gray-100);
       padding: 4rem 2rem 2rem;
@@ -297,41 +212,22 @@
       gap: 2rem;
     }
     .footer-section h3,
-    .footer-section h4 {
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-    .footer-section ul {
-      list-style: none;
-      padding: 0;
-    }
-    .footer-section ul li {
-      margin-bottom: 0.75rem;
-    }
+    .footer-section h4 { color: var(--primary); margin-bottom: 1rem; }
+    .footer-section ul { list-style: none; padding: 0; }
+    .footer-section ul li { margin-bottom: 0.75rem; }
     .footer-section ul li a {
       color: var(--text);
       transition: color 0.3s;
     }
-    .footer-section ul li a:hover {
-      color: var(--primary);
-    }
-    .social-links {
-      display: flex;
-      gap: 1rem;
-    }
+    .footer-section ul li a:hover { color: var(--primary); }
+    .social-links { display: flex; gap: 1rem; }
     .social-links a {
       color: var(--text);
       font-size: 1.25rem;
       transition: color 0.3s;
     }
-    .social-links a:hover {
-      color: var(--primary);
-    }
-    .footer-newsletter {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
+    .social-links a:hover { color: var(--primary); }
+    .footer-newsletter { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .footer-newsletter input {
       flex: 1;
       padding: 0.75rem;
@@ -347,9 +243,7 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    .footer-newsletter button:hover {
-      background-color: var(--secondary);
-    }
+    .footer-newsletter button:hover { background-color: var(--secondary); }
     .footer-bottom {
       margin-top: 2rem;
       padding-top: 2rem;
@@ -370,13 +264,9 @@
       color: var(--text);
       transition: color 0.3s;
     }
-    .legal-links a:hover {
-      color: var(--primary);
-    }
+    .legal-links a:hover { color: var(--primary); }
 
-    /* =========================
-       Botón de cambio de tema
-       ========================= */
+    /* Botón de cambio de tema */
     .theme-toggle {
       position: fixed;
       bottom: 2rem;
@@ -389,14 +279,11 @@
       box-shadow: var(--shadow);
       transition: transform 0.3s;
     }
-    .theme-toggle:hover {
-      transform: scale(1.1);
-    }
+    .theme-toggle:hover { transform: scale(1.1); }
   </style>
 {% endblock %}
 
 {% block content %}
-  <!-- Main Content -->
   <main class="container">
     <article>
       <header class="tutorial-header">
@@ -408,21 +295,13 @@
       <section class="tutorial-content">
         {% for block in tutorial.blocks.all %}
           {% if block.block_type == 'text' %}
-            <div class="tutorial-block block-text">
-              {{ block.content|safe }}
-            </div>
+            <div class="tutorial-block block-text">{{ block.content|safe }}</div>
           {% elif block.block_type == 'latex' %}
-            <div class="tutorial-block block-latex">
-              {{ block.content|safe }}
-            </div>
+            <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
           {% elif block.block_type == 'code' %}
-            <div class="tutorial-block block-latex">
-              {{ block.content|safe }}
-            </div>
+            <div class="tutorial-block block-code">{{ block.content|safe }}</div>
           {% else %}
-            <div class="tutorial-block block-text">
-              {{ block.content|safe }}
-            </div>
+            <div class="tutorial-block block-text">{{ block.content|safe }}</div>
           {% endif %}
         {% endfor %}
       </section>
@@ -441,73 +320,19 @@
       </ul>
     </aside>
   </main>
-
-  <!-- Footer -->
-  <footer class="footer" id="contacto">
-    <div class="footer-container">
-      <div class="footer-section">
-        <h3>WebDev Blog</h3>
-        <p>Tu recurso definitivo para desarrollo web moderno. Tutoriales, guías y recursos profesionales.</p>
-      </div>
-      <div class="footer-section">
-        <h4>Enlaces Rápidos</h4>
-        <ul>
-          <li><a href="inicio.html">Inicio</a></li>
-          <li><a href="tutoriales.html">Tutoriales</a></li>
-          <li><a href="guias.html">Guías</a></li>
-          <li><a href="podcast.html">Podcast</a></li>
-          <li><a href="suscripcion.html">Suscripción</a></li>
-          <li><a href="contacto.html">Contacto</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h4>Síguenos</h4>
-        <div class="social-links">
-          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-        </div>
-      </div>
-      <div class="footer-section">
-        <h4>Newsletter</h4>
-        <form class="footer-newsletter">
-          <input type="email" placeholder="Tu correo" required>
-          <button type="submit">Suscribirse</button>
-        </form>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2023 WebDev Blog. Todos los derechos reservados.</p>
-      <ul class="legal-links">
-        <li><a href="#privacidad">Política de Privacidad</a></li>
-        <li><a href="#terminos">Términos de Servicio</a></li>
-      </ul>
-    </div>
-  </footer>
-
-  <!-- Botón de cambio de tema -->
-  <button class="theme-toggle" aria-label="Cambiar tema">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1-8.313-12.454z"/>
-    </svg>
-  </button>
 {% endblock %}
 
 {% block extra_js %}
   <script>
-    // Menú móvil
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.querySelector('.nav-menu');
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn'),
+          navMenu = document.querySelector('.nav-menu'),
+          themeToggle = document.querySelector('.theme-toggle'),
+          html = document.documentElement;
+
     if (mobileMenuBtn && navMenu) {
-      mobileMenuBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-      });
+      mobileMenuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
     }
 
-    // Toggle de tema
-    const themeToggle = document.querySelector('.theme-toggle');
-    const html = document.documentElement;
     if (themeToggle) {
       themeToggle.addEventListener('click', () => {
         html.dataset.theme = (html.dataset.theme === 'dark') ? 'light' : 'dark';
@@ -515,10 +340,8 @@
       });
     }
 
-    // Cargar tema guardado o preferido
-    const savedTheme = localStorage.getItem('theme') ||
+    html.dataset.theme = localStorage.getItem('theme') ||
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    html.dataset.theme = savedTheme;
   </script>
   <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
 {% endblock %}
