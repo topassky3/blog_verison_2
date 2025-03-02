@@ -430,103 +430,77 @@
     </aside>
 
     <!-- Sección de Comentarios y Valoraciones -->
-    <section class="comments-section">
+    <section id="comments" class="comments-section">
       <h2>Comentarios y Valoraciones</h2>
-      <form class="comment-form" method="post" action="#">
+      <form class="comment-form" method="post" action="{% url 'tutorial_detail' pk=tutorial.pk %}">
         {% csrf_token %}
+        {{ form.non_field_errors }}
         <div class="form-group">
-          <label for="comment">Deja tu comentario:</label>
-          <textarea id="comment" name="comment" rows="4" placeholder="Escribe aquí lo que te gustó del tutorial..." required></textarea>
+          {{ form.content.label_tag }}
+          {{ form.content }}
+          {% for error in form.content.errors %}
+            <div class="error">{{ error }}</div>
+          {% endfor %}
         </div>
-        <div class="form-group">
-          <label for="rating">Valoración:</label>
-          <div class="star-rating">
-            <input type="radio" id="star5" name="rating" value="5" required>
-            <label for="star5" title="5 estrellas"><i class="fas fa-star"></i></label>
-            <input type="radio" id="star4" name="rating" value="4">
-            <label for="star4" title="4 estrellas"><i class="fas fa-star"></i></label>
-            <input type="radio" id="star3" name="rating" value="3">
-            <label for="star3" title="3 estrellas"><i class="fas fa-star"></i></label>
-            <input type="radio" id="star2" name="rating" value="2">
-            <label for="star2" title="2 estrellas"><i class="fas fa-star"></i></label>
-            <input type="radio" id="star1" name="rating" value="1">
-            <label for="star1" title="1 estrella"><i class="fas fa-star"></i></label>
-          </div>
-        </div>
+        <div class="star-rating">
+  {% for i in "54321" %}
+    <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+           {% if form.rating.value|stringformat:"s" == i %}checked{% endif %} required>
+    <label for="star{{ i }}" title="{{ i }} estrella{% if i != '1' %}s{% endif %}">
+      <i class="fas fa-star"></i>
+    </label>
+  {% endfor %}
+</div>
+
+
         <button type="submit" class="submit-comment">Enviar Comentario</button>
       </form>
 
       <div class="comments-list">
-        <!-- Comentario de ejemplo con foto y respuesta del escritor -->
-        <div class="comment">
-          <div class="comment-header">
-            <span class="comment-author">
-              <img src="https://via.placeholder.com/40" alt="Foto de JuanPerez" class="comment-avatar">
-              JuanPerez
-            </span>
-            <span class="comment-rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </span>
-          </div>
-          <div class="comment-body">
-            <p>Este tutorial es excelente. Me ayudó a entender conceptos complejos de manera sencilla.</p>
-          </div>
-          <div class="comment-reply">
-            <div class="reply-header">
-              <img src="https://via.placeholder.com/30" alt="Foto del Escritor" class="reply-avatar">
-              <span class="reply-author">Escritor</span>
-            </div>
-            <div class="reply-body">
-              <p>¡Gracias por tu comentario, Juan! Me alegra que el tutorial te haya resultado útil.</p>
-            </div>
-          </div>
-        </div>
-        <!-- Otro comentario de ejemplo con foto (sin respuesta) -->
-        <div class="comment">
-          <div class="comment-header">
-            <span class="comment-author">
-              <img src="https://via.placeholder.com/40" alt="Foto de AnaLopez" class="comment-avatar">
-              AnaLopez
-            </span>
-            <span class="comment-rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-            </span>
-          </div>
-          <div class="comment-body">
-            <p>Muy buen tutorial, aunque me gustaría ver más ejemplos prácticos.</p>
-          </div>
-        </div>
-        <!-- Comentarios dinámicos (si existen) -->
         {% for comment in tutorial.comments.all %}
           <div class="comment">
-            <div class="comment-header">
-              <span class="comment-author">
-                <img src="{{ comment.author.profile_image.url }}" alt="Foto de {{ comment.author.username }}" class="comment-avatar">
-                {{ comment.author.username }}
-              </span>
-              <span class="comment-rating">
-                {% for i in "12345"|slice:":comment.rating"|make_list %}
-                  <i class="fas fa-star"></i>
-                {% endfor %}
-              </span>
-            </div>
-            <div class="comment-body">
-              <p>{{ comment.content }}</p>
-            </div>
+          <div class="comment-header">
+            <span class="comment-author">
+              {% if comment.author.profile_image %}
+              <img src="{{ comment.author.profile_image.url }}" alt="Foto de {{ comment.author.get_full_name|default:comment.author.username }}" class="comment-avatar">
+            {% else %}
+              <!-- Imagen por defecto: código SVG -->
+              <svg class="comment-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <defs>
+                  <radialGradient id="gradAvatar" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#60a5fa"/>
+                    <stop offset="100%" stop-color="#2563eb"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="64" cy="64" r="60" fill="url(#gradAvatar)"/>
+                <circle cx="64" cy="50" r="20" fill="#ffffff"/>
+                <path d="M44,90c0-10,8-18,20-18s20,8,20,18v6H44V90z" fill="#ffffff"/>
+              </svg>
+            {% endif %}
+              {{ comment.author.get_full_name|default:comment.author.username }}
+            </span>
+            <span class="comment-rating">
+              {% for star in "12345" %}
+  {% if forloop.counter <= comment.rating %}
+    <i class="fas fa-star"></i>
+  {% endif %}
+{% endfor %}
+
+
+            </span>
           </div>
+          <div class="comment-body">
+            <p>{{ comment.content }}</p>
+          </div>
+        </div>
+
+
         {% empty %}
           <p>No hay comentarios aún. ¡Sé el primero en opinar!</p>
         {% endfor %}
       </div>
     </section>
+
   </main>
 {% endblock %}
 
