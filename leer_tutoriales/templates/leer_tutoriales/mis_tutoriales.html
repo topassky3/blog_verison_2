@@ -663,21 +663,23 @@
               <!-- Sección de Reacciones para este comentario -->
               <div class="comment-reactions">
                 <!-- Botón de "Me gusta" -->
-                <div class="reaction-button like-button" data-comment-id="{{ comment.id }}" data-reaction="like">
+                <div class="reaction-button like-button {% if request.user in comment.likes.all %}active{% endif %}" data-comment-id="{{ comment.id }}" data-reaction="like">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M2 20h2v-9H2v9zm20-10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13 2 7.59 7.41C7.21 7.79 7 8.3 7 8.83V19c0 1.1.9 2 2 2h7c.79 0 1.48-.47 1.78-1.17l3.02-7.05c.09-.23.14-.47.14-.73v-1z"/>
                   </svg>
                   <span class="like-text">Me gusta</span>
                   <span class="like-count">{{ comment.likes.count }}</span>
                 </div>
+
                 <!-- Botón de "No me gusta" -->
-                <div class="reaction-button dislike-button" data-comment-id="{{ comment.id }}" data-reaction="dislike">
+                <div class="reaction-button dislike-button {% if request.user in comment.dislikes.all %}active{% endif %}" data-comment-id="{{ comment.id }}" data-reaction="dislike">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M22 4h-2v9h2V4zm-12 10H3c-.79 0-1.48.47-1.78 1.17L.2 17.22c-.09.23-.14.47-.14.73v1h7V4h2v10zm12-4c0 1.1-.9 2-2 2h-6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L11 22l5.41-5.41c.38-.38.59-.89.59-1.42V6h2z"/>
                   </svg>
                   <span class="dislike-text">No me gusta</span>
                   <span class="dislike-count">{{ comment.dislikes.count }}</span>
                 </div>
+
               </div>
             </div>
 
