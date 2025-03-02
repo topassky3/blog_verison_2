@@ -473,6 +473,42 @@
   color: var(--secondary);
 }
 
+/* Reacciones en Comentarios */
+.comment-reactions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.comment-reactions .reaction-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.comment-reactions .reaction-button:hover {
+  transform: scale(1.1);
+}
+
+.comment-reactions .reaction-button svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--gray-400);
+  transition: fill 0.3s ease;
+}
+
+.comment-reactions .reaction-button.active svg {
+  fill: var(--primary);
+}
+
+.comment-reactions .reaction-button span {
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+
   </style>
 {% endblock %}
 
@@ -543,40 +579,57 @@
       <div class="comments-list">
         {% for comment in tutorial.comments.all %}
           <div class="comment">
-          <div class="comment-header">
-            <span class="comment-author">
-              {% if comment.author.profile_image %}
-              <img src="{{ comment.author.profile_image.url }}" alt="Foto de {{ comment.author.get_full_name|default:comment.author.username }}" class="comment-avatar">
-            {% else %}
-              <!-- Imagen por defecto: código SVG -->
-              <svg class="comment-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-                <defs>
-                  <radialGradient id="gradAvatar" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#60a5fa"/>
-                    <stop offset="100%" stop-color="#2563eb"/>
-                  </radialGradient>
-                </defs>
-                <circle cx="64" cy="64" r="60" fill="url(#gradAvatar)"/>
-                <circle cx="64" cy="50" r="20" fill="#ffffff"/>
-                <path d="M44,90c0-10,8-18,20-18s20,8,20,18v6H44V90z" fill="#ffffff"/>
-              </svg>
-            {% endif %}
-              {{ comment.author.get_full_name|default:comment.author.username }}
-            </span>
-            <span class="comment-rating">
-              {% for star in "12345" %}
-  {% if forloop.counter <= comment.rating %}
-    <i class="fas fa-star"></i>
-  {% endif %}
-{% endfor %}
+              <div class="comment-header">
+                <span class="comment-author">
+                  {% if comment.author.profile_image %}
+                    <img src="{{ comment.author.profile_image.url }}" alt="Foto de {{ comment.author.get_full_name|default:comment.author.username }}" class="comment-avatar">
+                  {% else %}
+                    <!-- Imagen por defecto: código SVG -->
+                    <svg class="comment-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                      <defs>
+                        <radialGradient id="gradAvatar" cx="50%" cy="50%" r="50%">
+                          <stop offset="0%" stop-color="#60a5fa"/>
+                          <stop offset="100%" stop-color="#2563eb"/>
+                        </radialGradient>
+                      </defs>
+                      <circle cx="64" cy="64" r="60" fill="url(#gradAvatar)"/>
+                      <circle cx="64" cy="50" r="20" fill="#ffffff"/>
+                      <path d="M44,90c0-10,8-18,20-18s20,8,20,18v6H44V90z" fill="#ffffff"/>
+                    </svg>
+                  {% endif %}
+                  {{ comment.author.get_full_name|default:comment.author.username }}
+                </span>
+                <span class="comment-rating">
+                  {% for star in "12345" %}
+                    {% if forloop.counter <= comment.rating %}
+                      <i class="fas fa-star"></i>
+                    {% endif %}
+                  {% endfor %}
+                </span>
+              </div>
+              <div class="comment-body">
+                <p>{{ comment.content }}</p>
+              </div>
 
+              <!-- Sección de Reacciones para este comentario -->
+              <div class="comment-reactions">
+                <div class="reaction-button" data-reaction="like">
+                  <!-- SVG de manito arriba -->
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M2 20h2v-9H2v9zm20-10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13 2 7.59 7.41C7.21 7.79 7 8.3 7 8.83V19c0 1.1.9 2 2 2h7c.79 0 1.48-.47 1.78-1.17l3.02-7.05c.09-.23.14-.47.14-.73v-1z"/>
+                  </svg>
+                  <span>Me gusta</span>
+                </div>
+                <div class="reaction-button" data-reaction="dislike">
+                  <!-- SVG de manito abajo -->
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M22 4h-2v9h2V4zm-12 10H3c-.79 0-1.48.47-1.78 1.17L.2 17.22c-.09.23-.14.47-.14.73v1h7V4h2v10zm12-4c0 1.1-.9 2-2 2h-6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L11 22l5.41-5.41c.38-.38.59-.89.59-1.42V6h2z"/>
+                  </svg>
+                  <span>No me gusta</span>
+                </div>
+              </div>
+</div>
 
-            </span>
-          </div>
-          <div class="comment-body">
-            <p>{{ comment.content }}</p>
-          </div>
-        </div>
 
 
         {% empty %}
