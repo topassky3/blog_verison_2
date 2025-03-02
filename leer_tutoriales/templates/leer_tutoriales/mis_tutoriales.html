@@ -625,59 +625,71 @@
 
       <div class="comments-list">
         {% for comment in tutorial.comments.all %}
-  <div class="comment" id="comment-{{ comment.id }}">
-    <div class="comment-header">
-      <span class="comment-author">
-        {% if comment.author.profile_image %}
-          <img src="{{ comment.author.profile_image.url }}" alt="Foto de {{ comment.author.get_full_name|default:comment.author.username }}" class="comment-avatar">
-        {% else %}
-          <!-- Imagen por defecto: código SVG -->
-          <svg class="comment-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-            <!-- ... contenido SVG ... -->
-          </svg>
-        {% endif %}
-        {{ comment.author.get_full_name|default:comment.author.username }}
-      </span>
-      <span class="comment-rating">
-        {% for star in "12345" %}
-          {% if forloop.counter <= comment.rating %}
-            <i class="fas fa-star"></i>
-          {% endif %}
+          <!-- Dentro del ciclo que muestra cada comentario -->
+            <!-- Dentro del ciclo que muestra cada comentario -->
+            <div class="comment">
+              <div class="comment-header">
+                <span class="comment-author">
+                  {% if comment.author.profile_image %}
+                    <img src="{{ comment.author.profile_image.url }}" alt="Foto de {{ comment.author.get_full_name|default:comment.author.username }}" class="comment-avatar">
+                  {% else %}
+                    <!-- Imagen por defecto: código SVG -->
+                    <svg class="comment-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                      <defs>
+                        <radialGradient id="gradAvatar" cx="50%" cy="50%" r="50%">
+                          <stop offset="0%" stop-color="#60a5fa"/>
+                          <stop offset="100%" stop-color="#2563eb"/>
+                        </radialGradient>
+                      </defs>
+                      <circle cx="64" cy="64" r="60" fill="url(#gradAvatar)"/>
+                      <circle cx="64" cy="50" r="20" fill="#ffffff"/>
+                      <path d="M44,90c0-10,8-18,20-18s20,8,20,18v6H44V90z" fill="#ffffff"/>
+                    </svg>
+                  {% endif %}
+                  {{ comment.author.get_full_name|default:comment.author.username }}
+                </span>
+                <span class="comment-rating">
+                  {% for star in "12345" %}
+                    {% if forloop.counter <= comment.rating %}
+                      <i class="fas fa-star"></i>
+                    {% endif %}
+                  {% endfor %}
+                </span>
+              </div>
+              <div class="comment-body">
+                <p>{{ comment.content }}</p>
+              </div>
+
+              <!-- Sección de Reacciones para este comentario -->
+              <div class="comment-reactions">
+                <!-- Botón de "Me gusta" -->
+                <div class="reaction-button like-button {% if request.user in comment.likes.all %}active{% endif %}" data-comment-id="{{ comment.id }}" data-reaction="like">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M2 20h2v-9H2v9zm20-10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13 2 7.59 7.41C7.21 7.79 7 8.3 7 8.83V19c0 1.1.9 2 2 2h7c.79 0 1.48-.47 1.78-1.17l3.02-7.05c.09-.23.14-.47.14-.73v-1z"/>
+                  </svg>
+                  <span class="like-text">Me gusta</span>
+                  <span class="like-count">{{ comment.likes.count }}</span>
+                </div>
+
+                <!-- Botón de "No me gusta" -->
+                <div class="reaction-button dislike-button {% if request.user in comment.dislikes.all %}active{% endif %}" data-comment-id="{{ comment.id }}" data-reaction="dislike">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M22 4h-2v9h2V4zm-12 10H3c-.79 0-1.48.47-1.78 1.17L.2 17.22c-.09.23-.14.47-.14.73v1h7V4h2v10zm12-4c0 1.1-.9 2-2 2h-6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L11 22l5.41-5.41c.38-.38.59-.89.59-1.42V6h2z"/>
+                  </svg>
+                  <span class="dislike-text">No me gusta</span>
+                  <span class="dislike-count">{{ comment.dislikes.count }}</span>
+                </div>
+
+              </div>
+            </div>
+
+
+
+
+
+        {% empty %}
+          <p>No hay comentarios aún. ¡Sé el primero en opinar!</p>
         {% endfor %}
-      </span>
-      {# Botón de borrar, visible solo si el comentario es del usuario logueado #}
-      {% if request.user == comment.author %}
-        <button class="delete-comment-button" data-comment-id="{{ comment.id }}">Borrar</button>
-      {% endif %}
-    </div>
-    <div class="comment-body">
-      <p>{{ comment.content }}</p>
-    </div>
-    <!-- Sección de reacciones -->
-    <div class="comment-reactions">
-      <!-- Botón de "Me gusta" -->
-      <div class="reaction-button like-button {% if request.user in comment.likes.all %}active{% endif %}" data-comment-id="{{ comment.id }}" data-reaction="like">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M2 20h2v-9H2v9zm20-10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13 2 7.59 7.41C7.21 7.79 7 8.3 7 8.83V19c0 1.1.9 2 2 2h7c.79 0 1.48-.47 1.78-1.17l3.02-7.05c.09-.23.14-.47.14-.73v-1z"/>
-        </svg>
-        <span class="like-text">Me gusta</span>
-        <span class="like-count">{{ comment.likes.count }}</span>
-      </div>
-
-      <!-- Botón de "No me gusta" -->
-      <div class="reaction-button dislike-button {% if request.user in comment.dislikes.all %}active{% endif %}" data-comment-id="{{ comment.id }}" data-reaction="dislike">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M22 4h-2v9h2V4zm-12 10H3c-.79 0-1.48.47-1.78 1.17L.2 17.22c-.09.23-.14.47-.14.73v1h7V4h2v10zm12-4c0 1.1-.9 2-2 2h-6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L11 22l5.41-5.41c.38-.38.59-.89.59-1.42V6h2z"/>
-        </svg>
-        <span class="dislike-text">No me gusta</span>
-        <span class="dislike-count">{{ comment.dislikes.count }}</span>
-      </div>
-    </div>
-  </div>
-{% empty %}
-  <p>No hay comentarios aún. ¡Sé el primero en opinar!</p>
-{% endfor %}
-
       </div>
     </section>
 
@@ -715,128 +727,117 @@
     html.dataset.theme = localStorage.getItem('theme') ||
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   </script>
-  <script>
+
+    <script>
+
 
     document.addEventListener('DOMContentLoaded', function() {
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-      const loadingOverlay = document.getElementById('loadingOverlay');
+    // Verificar que exista el overlay
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (!loadingOverlay) {
+    console.error('No se encontró el overlay de carga en el DOM.');
+    }
 
-      function showLoading() {
-        loadingOverlay.style.display = 'block';
+    // Funciones para mostrar/ocultar el overlay
+    function showLoading() {
+    loadingOverlay.style.display = 'block';
+    }
+    function hideLoading() {
+    loadingOverlay.style.display = 'none';
+    }
+
+    // Obtener el token CSRF
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Función genérica para enviar la petición AJAX
+    function sendReaction(url, commentId, callback) {
+    showLoading();
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': csrfToken
+      },
+      body: new URLSearchParams({ 'comment_id': commentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      hideLoading();
+      callback(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      hideLoading();
+    });
+    }
+
+    function updateReactionUI(commentId, data) {
+  // Actualiza todos los botones "me gusta" para ese comentario
+  document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="like"]`)
+    .forEach(el => {
+      const likeCount = el.querySelector('.like-count');
+      if (likeCount) {
+        likeCount.textContent = data.like_count;
       }
-      function hideLoading() {
-        loadingOverlay.style.display = 'none';
+      if (data.liked) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
       }
-
-      // Función genérica para enviar peticiones AJAX
-      function sendReaction(url, commentId, callback) {
-        showLoading();
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': csrfToken
-          },
-          body: new URLSearchParams({ 'comment_id': commentId })
-        })
-        .then(response => response.json())
-        .then(data => {
-          hideLoading();
-          callback(data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          hideLoading();
-        });
-      }
-
-      // Función para actualizar la UI de reacciones
-      function updateReactionUI(commentId, data) {
-        // Actualiza botones "me gusta"
-        document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="like"]`)
-          .forEach(el => {
-            const likeCount = el.querySelector('.like-count');
-            if (likeCount) {
-              likeCount.textContent = data.like_count;
-            }
-            if (data.liked) {
-              el.classList.add('active');
-            } else {
-              el.classList.remove('active');
-            }
-          });
-
-        // Actualiza botones "no me gusta"
-        document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="dislike"]`)
-          .forEach(el => {
-            const dislikeCount = el.querySelector('.dislike-count');
-            if (dislikeCount) {
-              dislikeCount.textContent = data.dislike_count;
-            }
-            if (data.disliked) {
-              el.classList.add('active');
-            } else {
-              el.classList.remove('active');
-            }
-          });
-      }
-
-      // Registro de botones de reacciones (like/dislike)
-      function registerReactionButtons() {
-        document.querySelectorAll('.like-button').forEach(button => {
-          button.addEventListener('click', function() {
-            const commentId = button.getAttribute('data-comment-id');
-            sendReaction("{% url 'toggle_comment_like' %}", commentId, function(data) {
-              if (data.error) {
-                console.error(data.error);
-              } else {
-                updateReactionUI(commentId, data);
-              }
-            });
-          });
-        });
-
-        document.querySelectorAll('.dislike-button').forEach(button => {
-          button.addEventListener('click', function() {
-            const commentId = button.getAttribute('data-comment-id');
-            sendReaction("{% url 'toggle_comment_dislike' %}", commentId, function(data) {
-              if (data.error) {
-                console.error(data.error);
-              } else {
-                updateReactionUI(commentId, data);
-              }
-            });
-          });
-        });
-      }
-
-      // Registro de botones de borrar comentario
-      function registerDeleteButtons() {
-        document.querySelectorAll('.delete-comment-button').forEach(button => {
-          button.addEventListener('click', function() {
-            const commentId = button.getAttribute('data-comment-id');
-            if (confirm('¿Estás seguro de que deseas borrar este comentario?')) {
-              sendReaction("{% url 'delete_comment' %}", commentId, function(data) {
-                if (data.success) {
-                  // Remover el comentario del DOM
-                  const commentDiv = document.getElementById(`comment-${commentId}`);
-                  if (commentDiv) {
-                    commentDiv.remove();
-                  }
-                } else {
-                  alert(data.error || 'Error al borrar el comentario.');
-                }
-              });
-            }
-          });
-        });
-      }
-
-      // Llamada a funciones de registro
-      registerReactionButtons();
-      registerDeleteButtons();
     });
 
-  </script>
+  // Actualiza todos los botones "no me gusta" para ese comentario
+  document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="dislike"]`)
+    .forEach(el => {
+      const dislikeCount = el.querySelector('.dislike-count');
+      if (dislikeCount) {
+        dislikeCount.textContent = data.dislike_count;
+      }
+      if (data.disliked) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+    });
+}
+
+
+    // Registrar event listeners para ambos tipos de botones
+    function registerReactionButtons() {
+    // Botones de "me gusta"
+
+    // Para "me gusta"
+    document.querySelectorAll('.like-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const commentId = button.getAttribute('data-comment-id');
+        sendReaction("{% url 'toggle_comment_like' %}", commentId, function(data) {
+          if (data.error) {
+            console.error(data.error);
+          } else {
+            updateReactionUI(commentId, data);
+          }
+        });
+      });
+    });
+
+    // Para "no me gusta"
+    document.querySelectorAll('.dislike-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const commentId = button.getAttribute('data-comment-id');
+        sendReaction("{% url 'toggle_comment_dislike' %}", commentId, function(data) {
+          if (data.error) {
+            console.error(data.error);
+          } else {
+            updateReactionUI(commentId, data);
+          }
+        });
+      });
+    });
+
+    }
+
+    registerReactionButtons();
+    });
+    </script>
 
 {% endblock %}

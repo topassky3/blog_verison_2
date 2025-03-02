@@ -112,26 +112,3 @@ def toggle_comment_dislike(request):
         'like_count': comment.likes.count()  # Para actualizar también el contador de "me gusta"
     }
     return JsonResponse(data)
-
-
-# core/views.py (nueva vista para borrar comentarios)
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
-from core.models import Comment
-
-
-# core/views.py
-@login_required
-@require_POST
-def delete_comment(request):
-    comment_id = request.POST.get('comment_id')
-    try:
-        # Solo se podrá borrar si el comentario pertenece al usuario
-        comment = Comment.objects.get(id=comment_id, author=request.user)
-    except Comment.DoesNotExist:
-        return JsonResponse({'error': 'Comentario no encontrado o no tienes permiso para borrarlo.'}, status=404)
-
-    comment.delete()
-    return JsonResponse({'success': True})
-
