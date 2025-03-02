@@ -89,6 +89,8 @@ class TutorialBlock(models.Model):
         return f"{self.get_block_type_display()} - Orden: {self.order}"
 
 
+# core/models.py
+
 class Comment(models.Model):
     tutorial = models.ForeignKey(
         'Tutorial',
@@ -103,6 +105,19 @@ class Comment(models.Model):
     content = models.TextField("Contenido")
     rating = models.PositiveSmallIntegerField("Valoración", choices=[(i, i) for i in range(1, 6)])
     created_at = models.DateTimeField("Fecha de Creación", auto_now_add=True)
+    # Campo para "me gusta"
+    likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='liked_comments',
+        blank=True
+    )
+    # Nuevo campo para "no me gusta"
+    dislikes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='disliked_comments',
+        blank=True
+    )
 
     def __str__(self):
         return f"Comentario de {self.author} en {self.tutorial}"
+

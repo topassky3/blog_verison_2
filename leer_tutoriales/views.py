@@ -44,3 +44,71 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
         comment.save()
         return super().form_valid(form)
 
+
+# core/views.py (o donde centralices las vistas para interacciones AJAX)
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from core.models import Comment
+
+
+@login_required
+@require_POST
+def toggle_comment_like(request):
+    comment_id = request.POST.get('comment_id')
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except Comment.DoesNotExist:
+        return JsonResponse({'error': 'Comentario no encontrado.'}, status=404)
+
+    user = request.user
+    if user in comment.likes.all():
+        comment.likes.remove(user)
+        liked = False
+    else:
+        # Si el usuario ya dio "no me gusta", se quita esa reacción
+        if user in comment.dislikes.all():
+            comment.dislikes.remove(user)
+        comment.likes.add(user)
+        liked = True
+
+    data = {
+        'liked': liked,
+        'like_count': comment.likes.count(),
+        'dislike_count': comment.dislikes.count()  # Esto permite actualizar el contador de "no me gusta"
+    }
+    return JsonResponse(data)
+
+
+# core/views.py (o donde centralices las vistas AJAX)
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from core.models import Comment
+
+@login_required
+@require_POST
+def toggle_comment_dislike(request):
+    comment_id = request.POST.get('comment_id')
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except Comment.DoesNotExist:
+        return JsonResponse({'error': 'Comentario no encontrado.'}, status=404)
+
+    user = request.user
+    if user in comment.dislikes.all():
+        comment.dislikes.remove(user)
+        disliked = False
+    else:
+        # Si el usuario ya dio "me gusta", se quita esa reacción
+        if user in comment.likes.all():
+            comment.likes.remove(user)
+        comment.dislikes.add(user)
+        disliked = True
+
+    data = {
+        'disliked': disliked,
+        'dislike_count': comment.dislikes.count(),
+        'like_count': comment.likes.count()  # Para actualizar también el contador de "me gusta"
+    }
+    return JsonResponse(data)
