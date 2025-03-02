@@ -555,6 +555,24 @@
   to   { transform: rotate(360deg); }
 }
 
+.delete-comment-button {
+  background-color: var(--secondary);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 1rem;
+  transition: background-color 0.3s;
+}
+.delete-comment-button:hover {
+  background-color: var(--primary);
+}
 
   </style>
 {% endblock %}
@@ -654,7 +672,7 @@
                 {% endfor %}
               </span>
               {% if request.user == comment.author %}
-                <button class="delete-comment-button" data-comment-id="{{ comment.id }}">Borrar</button>
+                <button class="delete-comment-button" data-comment-id="{{ comment.id }}">×</button>
               {% endif %}
             </div>
             <div class="comment-body">
