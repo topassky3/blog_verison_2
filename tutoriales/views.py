@@ -1,22 +1,25 @@
-from django.views.generic import TemplateView
-from core.models import Tutorial, Category
-from django.views.generic import DetailView
+from django.views.generic import TemplateView, DetailView
+from django.db.models import Avg, Count, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
+from core.models import Tutorial, Category
 
 class TutorialesView(TemplateView):
     template_name = "tutoriales/tutoriales.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Parámetros de búsqueda y filtro de categoría
         query = self.request.GET.get('q', '')
         cat_slug = self.request.GET.get('cat', 'all')
 
-        # Obtén todos los tutoriales publicados ordenados
-        tutorial_list = Tutorial.objects.filter(publicado=True).order_by('-created_at')
+        # Obtenemos los tutoriales publicados y agregamos las anotaciones:
+        # - average_rating: Promedio de valoraciones de los comentarios.
+        # - comments_count: Total de comentarios.
+        tutorial_list = Tutorial.objects.filter(publicado=True).annotate(
+            average_rating=Avg('comments__rating'),
+            comments_count=Count('comments')
+        ).order_by('-created_at')
 
-        # Aplica la búsqueda en título, duración o nivel
+        # Filtro de búsqueda
         if query:
             tutorial_list = tutorial_list.filter(
                 Q(title__icontains=query) |
@@ -24,7 +27,7 @@ class TutorialesView(TemplateView):
                 Q(level__icontains=query)
             )
 
-        # Filtra por categoría si se ha seleccionado una distinta a "all"
+        # Filtro por categoría
         if cat_slug != 'all':
             tutorial_list = tutorial_list.filter(category__slug=cat_slug)
 
@@ -38,12 +41,18 @@ class TutorialesView(TemplateView):
         except EmptyPage:
             tutorials = paginator.page(paginator.num_pages)
 
-        context['tutorials'] = tutorials
-        context['categories'] = Category.objects.all()  # Para generar las opciones dinámicamente
-        context['search_query'] = query  # Para preservar el valor en el input
-        context['selected_category'] = cat_slug  # Para marcar la categoría activa
-        return context
+        # Para cada tutorial en la página, calculamos la valoración entera redondeada
+        for tutorial in tutorials:
+            if tutorial.average_rating is not None:
+                tutorial.integer_rating = int(round(tutorial.average_rating))
+            else:
+                tutorial.integer_rating = 0
 
+        context['tutorials'] = tutorials
+        context['categories'] = Category.objects.all()
+        context['search_query'] = query
+        context['selected_category'] = cat_slug
+        return context
 
 class TutorialDetailView(DetailView):
     model = Tutorial

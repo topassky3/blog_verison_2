@@ -99,9 +99,20 @@
             <div class="tutorial-footer">
               <a href="{% url 'tutorial_detail' tutorial.pk %}" class="read-more">Ver Tutorial →</a>
               <div class="rating">
-                <span class="stars">★★★★☆</span>
-                <span class="votes">(128)</span>
-              </div>
+                  {% if tutorial.average_rating %}
+                    {% for star in "12345"|make_list %}
+                      {% if forloop.counter <= tutorial.integer_rating %}
+                        <span class="star">★</span>
+                      {% else %}
+                        <span class="star">☆</span>
+                      {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    <span>No hay valoraciones</span>
+                  {% endif %}
+                  <span class="votes">({{ tutorial.comments_count }})</span>
+                </div>
+
             </div>
           </div>
         </article>

@@ -281,114 +281,198 @@
     }
     .theme-toggle:hover { transform: scale(1.1); }
 
-    /* Sección de Comentarios y Valoraciones */
-    .comments-section {
-      margin-top: 2rem;
-      padding: 1.5rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      background-color: var(--gray-100);
-    }
-    .comments-section h2 {
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-    .comment-form .form-group {
-      margin-bottom: 1rem;
-    }
-    .comment-form label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-    .comment-form textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-    }
-    .submit-comment {
-      background-color: var(--primary);
-      color: #fff;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .submit-comment:hover {
-      background-color: var(--secondary);
-    }
-    .comments-list {
-      margin-top: 2rem;
-    }
-    .comment {
-      border-top: 1px solid var(--gray-200);
-      padding-top: 1rem;
-      margin-top: 1rem;
-    }
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .comment-author {
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    /* Estilo para los avatares de los comentarios */
-    .comment-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    /* Estilo para el control de estrellas */
-    .star-rating {
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: flex-end;
-      gap: 0.2rem;
-    }
-    .star-rating input {
-      display: none;
-    }
-    .star-rating label {
-      font-size: 1.5rem;
-      color: var(--gray-200);
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .star-rating input:checked ~ label,
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-      color: var(--primary);
-    }
-    /* Estilo para la respuesta del escritor */
-    .comment-reply {
-      margin-top: 1rem;
-      padding: 0.75rem;
-      background-color: var(--gray-100);
-      border-left: 3px solid var(--secondary);
-      border-radius: var(--radius);
-    }
-    .reply-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .reply-avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .reply-author {
-      font-weight: bold;
-    }
+    /* Sección de Comentarios - Mejorada */
+.comments-section {
+  margin-top: 4rem;
+  padding: 2.5rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  box-shadow: var(--shadow);
+}
+
+.comments-section h2 {
+  font-size: 1.75rem;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary);
+}
+
+/* Formulario de Comentarios */
+.comment-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.comment-form label {
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--text);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comment-form textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.submit-comment {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: var(--primary);
+  color: #fff;
+  padding: 0.75rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+.submit-comment:hover {
+  transform: translateY(-2px);
+  background-color: var(--secondary);
+}
+
+/* Lista de Comentarios */
+.comments-list {
+  margin-top: 3rem;
+}
+
+.comment {
+  position: relative;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  background: var(--gray-100);
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-200);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comment:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.comment-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.comment-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  padding: 2px;
+  background: var(--background);
+}
+
+.comment-author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-author-name {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.comment-date {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+}
+
+/* Sistema de Valoración */
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+.star-rating label {
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: color 0.2s ease;
+}
+
+.star-rating .fas.fa-star {
+  color: var(--gray-300);
+}
+
+.star-rating .fas.fa-star.active,
+.star-rating input[type="radio"]:checked ~ label .fas.fa-star {
+  color: #f59e0b;
+}
+
+/* Respuestas */
+.comment-reply {
+  margin-left: 3rem;
+  margin-top: 1.5rem;
+  padding-left: 1.5rem;
+  border-left: 3px solid var(--secondary);
+  position: relative;
+}
+
+.comment-reply::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: -1.5rem;
+  height: 1.5rem;
+  width: 3px;
+  background: var(--secondary);
+}
+
+.reply-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.reply-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--secondary);
+  padding: 2px;
+  background: var(--background);
+}
+
+.reply-author {
+  font-weight: 600;
+  color: var(--secondary);
+}
+
   </style>
 {% endblock %}
 
