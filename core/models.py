@@ -103,7 +103,12 @@ class Comment(models.Model):
         related_name='comments'
     )
     content = models.TextField("Contenido")
-    rating = models.PositiveSmallIntegerField("Valoración", choices=[(i, i) for i in range(1, 6)])
+    rating = models.PositiveSmallIntegerField(
+        "Valoración",
+        choices=[(i, i) for i in range(1, 6)],
+        blank=True,
+        null=True
+    )
     created_at = models.DateTimeField("Fecha de Creación", auto_now_add=True)
     likes = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -115,7 +120,6 @@ class Comment(models.Model):
         related_name='disliked_comments',
         blank=True
     )
-    # Nuevo campo para respuestas (comentarios anidados)
     parent = models.ForeignKey(
         'self',
         null=True,
