@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
+from django.db.models import Count, ExpressionWrapper, IntegerField
 from core.models import Tutorial
 from .forms import CommentForm
 
@@ -18,10 +19,14 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Asigna la instancia del tutorial con la variable 'tutorial'
         context['tutorial'] = self.object
-        # Filtra solo los comentarios sin padre (comentarios principales)
-        context['top_level_comments'] = self.object.comments.filter(parent__isnull=True)
+        # Calculamos el score: diferencia de me gusta y no me gusta.
+        top_level_comments = self.object.comments.filter(parent__isnull=True).annotate(
+            like_count=Count('likes'),
+            dislike_count=Count('dislikes'),
+            score=ExpressionWrapper(Count('likes') - Count('dislikes'), output_field=IntegerField())
+        ).order_by('-score', '-created_at')
+        context['top_level_comments'] = top_level_comments
         if 'form' not in context:
             context['form'] = self.get_form()
         return context
