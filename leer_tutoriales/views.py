@@ -136,10 +136,14 @@ from core.models import Comment
 def delete_comment(request):
     comment_id = request.POST.get('comment_id')
     try:
-        # Solo se podrá borrar si el comentario pertenece al usuario
+        # Obtenemos el comentario, comprobando que el usuario es el autor
         comment = Comment.objects.get(id=comment_id, author=request.user)
+        parent_id = comment.parent.id if comment.parent else None  # Guardamos el id del padre si existe
+        comment.delete()
     except Comment.DoesNotExist:
         return JsonResponse({'error': 'Comentario no encontrado o no tienes permiso para borrarlo.'}, status=404)
 
-    comment.delete()
-    return JsonResponse({'success': True})
+    data = {'success': True}
+    if parent_id:
+        data['parent_id'] = parent_id  # Devolvemos el id del comentario padre si se borró una respuesta
+    return JsonResponse(data)
