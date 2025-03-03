@@ -18,8 +18,10 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Se asigna la instancia del tutorial con la variable 'tutorial'
+        # Asigna la instancia del tutorial con la variable 'tutorial'
         context['tutorial'] = self.object
+        # Filtra solo los comentarios sin padre (comentarios principales)
+        context['top_level_comments'] = self.object.comments.filter(parent__isnull=True)
         if 'form' not in context:
             context['form'] = self.get_form()
         return context
