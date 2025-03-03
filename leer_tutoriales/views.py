@@ -37,10 +37,18 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        # Crea y guarda el comentario asignándole el tutorial y el usuario logueado
         comment = form.save(commit=False)
         comment.tutorial = self.object
         comment.author = self.request.user
+        # Si se envía el campo 'parent', se asigna el comentario padre
+        parent_id = self.request.POST.get('parent')
+        if parent_id:
+            try:
+                from core.models import Comment
+                parent_comment = Comment.objects.get(id=parent_id)
+                comment.parent = parent_comment
+            except Comment.DoesNotExist:
+                pass
         comment.save()
         return super().form_valid(form)
 

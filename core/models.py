@@ -105,19 +105,24 @@ class Comment(models.Model):
     content = models.TextField("Contenido")
     rating = models.PositiveSmallIntegerField("Valoración", choices=[(i, i) for i in range(1, 6)])
     created_at = models.DateTimeField("Fecha de Creación", auto_now_add=True)
-    # Campo para "me gusta"
     likes = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='liked_comments',
         blank=True
     )
-    # Nuevo campo para "no me gusta"
     dislikes = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='disliked_comments',
         blank=True
     )
+    # Nuevo campo para respuestas (comentarios anidados)
+    parent = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='replies',
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return f"Comentario de {self.author} en {self.tutorial}"
-
