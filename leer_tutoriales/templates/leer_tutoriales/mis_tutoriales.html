@@ -579,6 +579,42 @@ transition: background-color 0.3s;
 background-color: var(--primary);
 }
 
+/* Estilos para la cabecera del tutorial */
+.tutorial-header {
+  border-bottom: 1px solid var(--gray-200);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tutorial-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.tutorial-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.tutorial-info span {
+  background-color: var(--gray-100);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Opcional: estilos diferenciados para cada dato */
+.tutorial-duration { /* Puedes ajustar el color o fuente si deseas */ }
+.tutorial-level { /* Por ejemplo, en negrita */ font-weight: 600; }
+.tutorial-date { color: var(--secondary); }
+.tutorial-author { font-style: italic; }
+
 
 </style>
 {% endblock %}
@@ -587,11 +623,15 @@ background-color: var(--primary);
 <main class="container">
 <article>
   <header class="tutorial-header">
-    <h1>{{ tutorial.title }}</h1>
-    <p class="tutorial-meta">
-      Duración: {{ tutorial.duration|default:"Desconocida" }} | Nivel: {{ tutorial.level|default:"General" }}
-    </p>
-  </header>
+  <h1 class="tutorial-title">{{ tutorial.title }}</h1>
+      <div class="tutorial-info">
+        <span class="tutorial-duration">Duración: {{ tutorial.duration|default:"Desconocida" }}</span>
+        <span class="tutorial-level">Nivel: {{ tutorial.level|default:"General" }}</span>
+        <span class="tutorial-date">Publicado: {{ tutorial.created_at|date:"d/m/Y" }}</span>
+        <span class="tutorial-author">Por: {{ tutorial.author.get_full_name|default:tutorial.author.username }}</span>
+      </div>
+    </header>
+
   <section class="tutorial-content">
     {% for block in tutorial.blocks.all %}
       {% if block.block_type == 'text' %}
