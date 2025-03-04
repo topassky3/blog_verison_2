@@ -8,7 +8,7 @@
         {% if podcast.cover %}
           <img src="{{ podcast.cover.url }}" alt="{{ podcast.title }}" class="podcast-image">
         {% else %}
-          <img src="https://via.placeholder.com/400x250" alt="{{ podcast.title }}" class="podcast-image">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><rect width='400' height='250' fill='%23e2e8f0'/><text x='50%' y='50%' text-anchor='middle' fill='%23333' font-size='20' dy='.3em'>No Image</text></svg>" alt="{{ podcast.title }}" class="podcast-image">
         {% endif %}
       </div>
       <div class="podcast-content">

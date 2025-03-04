@@ -282,12 +282,18 @@
   <!-- Reproductor del Podcast -->
     <section class="podcast-player" aria-label="Reproductor del episodio actual">
           <div class="cover-art">
-            {% if podcast.cover %}
-              <img src="{{ podcast.cover.url }}" alt="Cover del Podcast">
-            {% else %}
-              <img src="https://via.placeholder.com/400x400?text=Podcast+Cover" alt="Cover del Podcast">
-            {% endif %}
-          </div>
+              {% if podcast.cover %}
+                <img src="{{ podcast.cover.url }}" alt="Cover del Podcast">
+              {% else %}
+                <!-- SVG inline para el logo por defecto -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="podcast-logo" id="coverImagePreview" aria-label="Podcast Logo">
+                  <circle cx="32" cy="32" r="30" fill="#2563eb"/>
+                  <rect x="28" y="18" width="8" height="20" rx="4" fill="#fff"/>
+                  <path d="M20 38a12 12 0 0 1 24 0v4H20v-4z" fill="#fff"/>
+                  <rect x="30" y="42" width="4" height="8" fill="#fff"/>
+                </svg>
+              {% endif %}
+            </div>
           <div class="podcast-meta">
             <h2 class="podcast-title">{{ podcast.title }}</h2>
             <p class="podcast-description">{{ podcast.description }}</p>
