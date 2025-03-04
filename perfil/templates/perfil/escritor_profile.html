@@ -419,19 +419,29 @@
       </section>
 
       <!-- Sección: Podcasts Subidos -->
-      <section id="podcasts" class="content-section section-podcasts">
-        <h2>Podcasts Subidos</h2>
-        <div class="content-grid">
-          <div class="content-card">
-            <h3>Episodio 1: Desarrollo Web</h3>
-            <p>Publicado: 15 Feb 2025</p>
+        <section id="podcasts" class="content-section section-podcasts">
+          <h2>Podcasts Subidos</h2>
+          <div class="content-grid">
+            {% for podcast in podcasts %}
+              <div class="content-card">
+                <a href="{% url 'podcast_update' podcast.pk %}" style="text-decoration:none; color:inherit;">
+                  <h3>{{ podcast.title }}</h3>
+                  <p>Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
+                </a>
+                <a href="{% url 'podcast_delete' podcast.pk %}" class="delete-podcast" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
+                  Eliminar
+                </a>
+              </div>
+            {% empty %}
+              <p>No tienes podcasts subidos.</p>
+            {% endfor %}
+            <!-- Botón para subir nuevo podcast -->
+            <div class="content-card add-new">
+              <a href="{% url 'crear_podcart' %}" class="add-new-btn">&#43; Agregar Nuevo Podcast</a>
+            </div>
           </div>
-          <div class="content-card">
-            <h3>Episodio 2: JavaScript Avanzado</h3>
-            <p>Publicado: 22 Feb 2025</p>
-          </div>
-        </div>
-      </section>
+        </section>
+
 
       <!-- Sección: Estadísticas del Sitio -->
       <section id="stats" class="content-section section-stats">

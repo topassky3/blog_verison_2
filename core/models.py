@@ -1,8 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
-
-from django.db import models
 from django.utils.text import slugify
 
 class Category(models.Model):
@@ -87,9 +85,6 @@ class TutorialBlock(models.Model):
 
     def __str__(self):
         return f"{self.get_block_type_display()} - Orden: {self.order}"
-
-
-# core/models.py
 
 class Comment(models.Model):
     tutorial = models.ForeignKey(
