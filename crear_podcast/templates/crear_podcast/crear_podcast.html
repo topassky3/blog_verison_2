@@ -1,14 +1,140 @@
 {% extends "core/core.html" %}
-{% block title %}Crear Podcast| WebDev Blog{% endblock %}
+{% block title %}Crear Podcast | WebDev Blog{% endblock %}
 
 {% block extra_head %}
-
+  <style>
+    /* Estilos básicos para la página de Crear Podcast */
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+    .crear-podcast-container {
+      max-width: 800px;
+      margin: 3rem auto;
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    .crear-podcast-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .crear-podcast-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #2563eb;
+    }
+    .crear-podcast-header p {
+      font-size: 1rem;
+      color: #4b5563;
+    }
+    .crear-podcast-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .crear-podcast-form label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .crear-podcast-form input[type="text"],
+    .crear-podcast-form input[type="file"],
+    .crear-podcast-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .crear-podcast-form textarea {
+      resize: vertical;
+    }
+    .crear-podcast-form button {
+      align-self: center;
+      background-color: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    .crear-podcast-form button:hover {
+      background-color: #3b82f6;
+    }
+    /* Vista previa de la portada */
+    .cover-preview {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .cover-preview img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #2563eb;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
-
+<div class="crear-podcast-container">
+  <div class="crear-podcast-header">
+    <h1>{% if object %}Editar Podcast{% else %}Subir Nuevo Podcast{% endif %}</h1>
+    <p>
+      {% if object %}
+        Modifica la información del podcast.
+      {% else %}
+        Completa la información para agregar un nuevo episodio.
+      {% endif %}
+    </p>
+  </div>
+  <form class="crear-podcast-form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="cover-preview">
+      {% if object and object.cover %}
+        <img id="coverImagePreview" src="{{ object.cover.url }}" alt="Vista previa de portada">
+      {% else %}
+        <img id="coverImagePreview" src="https://via.placeholder.com/200x200?text=Cover+Preview" alt="Vista previa de portada">
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="id_title">Título del Podcast</label>
+      {{ form.title }}
+    </div>
+    <div class="form-group">
+      <label for="id_description">Descripción</label>
+      {{ form.description }}
+    </div>
+    <div class="form-group">
+      <label for="id_audio">Archivo de Audio</label>
+      {{ form.audio }}
+    </div>
+    <div class="form-group">
+      <label for="id_cover">Portada del Podcast</label>
+      {{ form.cover }}
+    </div>
+    <button type="submit">{% if object %}Guardar Cambios{% else %}Subir Podcast{% endif %}</button>
+  </form>
+</div>
 {% endblock %}
 
 {% block extra_js %}
-
+  <script>
+    // Actualiza la vista previa de la portada cuando se selecciona una imagen
+    document.getElementById('id_cover').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('coverImagePreview').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
 {% endblock %}

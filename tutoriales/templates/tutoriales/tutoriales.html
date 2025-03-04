@@ -1,4 +1,5 @@
 {% extends "core/core.html" %}
+{% load tutorial_tags %}
 
 {% block title %}Tutoriales | WebDev Blog{% endblock %}
 
@@ -77,50 +78,7 @@
     </section>
 
   <!-- Tutorials Grid -->
-  <section class="tutorials-grid">
-    {% for tutorial in tutorials %}
-      <article class="tutorial-card" data-category="{{ tutorial.category.slug|default:"sin-categoria" }}">
-          <div class="tutorial-header">
-            <span class="category-badge">
-              {{ tutorial.category.name|default:"Sin Categoría" }}
-            </span>
-            {% if tutorial.image %}
-              <img src="{{ tutorial.image.url }}" alt="{{ tutorial.title }}" class="tutorial-image">
-            {% else %}
-              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><rect width='400' height='250' fill='%23e2e8f0'/><text x='50%' y='50%' text-anchor='middle' fill='%23333' font-size='20' dy='.3em'>No Image</text></svg>" alt="{{ tutorial.title }}" class="tutorial-image">
-            {% endif %}
-          </div>
-          <div class="tutorial-content">
-            <h3>{{ tutorial.title }}</h3>
-            <p class="tutorial-meta">
-              Duración: {{ tutorial.duration|default:"Desconocida" }} |
-              Nivel: {{ tutorial.level|default:"General" }}
-            </p>
-            <div class="tutorial-footer">
-              <a href="{% url 'tutorial_detail' tutorial.pk %}" class="read-more">Ver Tutorial →</a>
-              <div class="rating">
-                  {% if tutorial.average_rating %}
-                    {% for star in "12345"|make_list %}
-                      {% if forloop.counter <= tutorial.integer_rating %}
-                        <span class="star">★</span>
-                      {% else %}
-                        <span class="star">☆</span>
-                      {% endif %}
-                    {% endfor %}
-                  {% else %}
-                    <span>No hay valoraciones</span>
-                  {% endif %}
-                  <span class="votes">({{ tutorial.comments_count }})</span>
-                </div>
-
-            </div>
-          </div>
-        </article>
-
-    {% empty %}
-      <p>No hay tutoriales publicados en este momento.</p>
-    {% endfor %}
-  </section>
+    {% render_tutorials tutorials %}
 
   <!-- Pagination -->
 

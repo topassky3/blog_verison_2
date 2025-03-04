@@ -34,45 +34,32 @@
 
   <!-- Podcast Grid -->
   <section class="podcast-grid">
-    <article class="podcast-card" data-category="entrevista">
-      <div class="podcast-header">
-        <span class="category-badge">Entrevistas</span>
-        <img src="https://via.placeholder.com/400x250" alt="Podcast 1" class="podcast-image">
+    {% for podcast in podcasts %}
+  <article class="podcast-card" data-category="{% if podcast.category %}{{ podcast.category.slug }}{% else %}general{% endif %}">
+    <div class="podcast-header">
+      <span class="category-badge">
+        {% if podcast.category %}{{ podcast.category.name }}{% else %}General{% endif %}
+      </span>
+      {% if podcast.cover %}
+        <img src="{{ podcast.cover.url }}" alt="{{ podcast.title }}" class="podcast-image">
+      {% else %}
+        <img src="https://via.placeholder.com/400x250" alt="{{ podcast.title }}" class="podcast-image">
+      {% endif %}
+    </div>
+    <div class="podcast-content">
+      <h3>{{ podcast.title }}</h3>
+      <p class="podcast-meta">Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
+      <p>{{ podcast.description }}</p>
+      <div class="podcast-footer">
+        <a href="{% url 'escuchar_podcast' podcast.pk %}" class="read-more">Escuchar Podcast →</a>
+        {# Puedes agregar un sistema de rating si lo implementas #}
       </div>
-      <div class="podcast-content">
-        <h3>Entrevista con Expertos en DevOps</h3>
-        <p class="podcast-meta">Duración: 45 min | Episodio 5</p>
-        <p>Descubre las mejores prácticas y consejos de líderes en DevOps en esta entrevista exclusiva.</p>
-        <div class="podcast-footer">
-          <a href="{% url 'escuchar_podcast' %}" class="read-more">Escuchar Podcast →</a>
-          <div class="rating">
-            <span class="stars">★★★★☆</span>
-            <span class="votes">(75)</span>
-          </div>
-        </div>
-      </div>
-    </article>
+    </div>
+  </article>
+{% empty %}
+  <p>No se han creado podcasts.</p>
+{% endfor %}
 
-    <article class="podcast-card" data-category="noticias">
-      <div class="podcast-header">
-        <span class="category-badge">Noticias</span>
-        <img src="https://via.placeholder.com/400x250" alt="Podcast 2" class="podcast-image">
-      </div>
-      <div class="podcast-content">
-        <h3>Actualizaciones del Mundo Tech</h3>
-        <p class="podcast-meta">Duración: 30 min | Episodio 12</p>
-        <p>Mantente al día con las últimas noticias y tendencias del sector tecnológico en este episodio.</p>
-        <div class="podcast-footer">
-          <a href="{% url 'escuchar_podcast' %}" class="read-more">Escuchar Podcast →</a>
-          <div class="rating">
-            <span class="stars">★★★☆☆</span>
-            <span class="votes">(50)</span>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    {# Agrega más tarjetas de podcast según sea necesario #}
   </section>
 
   <!-- Pagination -->

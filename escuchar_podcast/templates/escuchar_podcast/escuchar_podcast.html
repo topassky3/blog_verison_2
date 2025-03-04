@@ -279,22 +279,26 @@
     <p class="podcast-description">Explora el mundo del desarrollo web a través de conversaciones con expertos de la industria.</p>
   </header>
 
-  <!-- Reproductor del episodio actual -->
-  <section class="podcast-player" aria-label="Reproductor del episodio actual">
-    <div class="cover-art">
-      <img src="https://via.placeholder.com/400x400?text=Podcast+Cover" alt="Cover del Podcast">
-    </div>
-    <div class="podcast-meta">
-      <h2 class="podcast-title">Episodio Actual: Evolución del Desarrollo Web</h2>
-      <p class="podcast-description">Un viaje a través de la historia del desarrollo web, desde sus inicios hasta las tendencias actuales.</p>
-    </div>
-    <div class="audio-controls">
-      <audio controls>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
-      </audio>
-    </div>
-  </section>
+  <!-- Reproductor del Podcast -->
+    <section class="podcast-player" aria-label="Reproductor del episodio actual">
+          <div class="cover-art">
+            {% if podcast.cover %}
+              <img src="{{ podcast.cover.url }}" alt="Cover del Podcast">
+            {% else %}
+              <img src="https://via.placeholder.com/400x400?text=Podcast+Cover" alt="Cover del Podcast">
+            {% endif %}
+          </div>
+          <div class="podcast-meta">
+            <h2 class="podcast-title">{{ podcast.title }}</h2>
+            <p class="podcast-description">{{ podcast.description }}</p>
+          </div>
+          <div class="audio-controls">
+            <audio controls>
+              <source src="{{ podcast.audio.url }}" type="audio/mpeg">
+              Tu navegador no soporta el elemento de audio.
+            </audio>
+          </div>
+        </section>
 
   <!-- Lista de episodios anteriores -->
   <section class="episodes-section">

@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import PodcastView
+from .views import PodcastListView
 
 urlpatterns = [
-    path('', PodcastView.as_view(), name='podcast_home'),
+    path('', PodcastListView.as_view(), name='podcast_home'),
 ]

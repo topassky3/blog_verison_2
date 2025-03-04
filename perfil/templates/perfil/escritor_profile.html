@@ -418,7 +418,7 @@
         </div>
       </section>
 
-      <!-- Sección: Podcasts Subidos -->
+       <!-- Sección: Podcasts Subidos -->
         <section id="podcasts" class="content-section section-podcasts">
           <h2>Podcasts Subidos</h2>
           <div class="content-grid">
@@ -428,7 +428,7 @@
                   <h3>{{ podcast.title }}</h3>
                   <p>Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
                 </a>
-                <a href="{% url 'podcast_delete' podcast.pk %}" class="delete-podcast" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
+                <a href="#" class="delete-podcast" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
                   Eliminar
                 </a>
               </div>
@@ -440,7 +440,9 @@
               <a href="{% url 'crear_podcart' %}" class="add-new-btn">&#43; Agregar Nuevo Podcast</a>
             </div>
           </div>
+          <!-- Paginación de podcasts (si aplica) -->
         </section>
+
 
 
       <!-- Sección: Estadísticas del Sitio -->

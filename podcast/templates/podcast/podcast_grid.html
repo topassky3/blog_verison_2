@@ -1,0 +1,27 @@
+<section class="podcast-grid">
+  {% for podcast in podcasts %}
+    <article class="podcast-card" data-category="{% if podcast.category %}{{ podcast.category.slug }}{% else %}general{% endif %}">
+      <div class="podcast-header">
+        <span class="category-badge">
+          {% if podcast.category %}{{ podcast.category.name }}{% else %}General{% endif %}
+        </span>
+        {% if podcast.cover %}
+          <img src="{{ podcast.cover.url }}" alt="{{ podcast.title }}" class="podcast-image">
+        {% else %}
+          <img src="https://via.placeholder.com/400x250" alt="{{ podcast.title }}" class="podcast-image">
+        {% endif %}
+      </div>
+      <div class="podcast-content">
+        <h3>{{ podcast.title }}</h3>
+        <p class="podcast-meta">Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
+        <p>{{ podcast.description }}</p>
+        <div class="podcast-footer">
+          <a href="{% url 'escuchar_podcast' podcast.pk %}" class="read-more">Escuchar Podcast →</a>
+          {# Aquí podrías agregar rating si lo implementas #}
+        </div>
+      </div>
+    </article>
+  {% empty %}
+    <p>No se han creado podcasts.</p>
+  {% endfor %}
+</section>

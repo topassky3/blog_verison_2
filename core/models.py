@@ -125,3 +125,24 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comentario de {self.author} en {self.tutorial}"
+
+from django.db import models
+from django.conf import settings
+
+class Podcast(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='podcasts',
+        verbose_name="Autor"
+    )
+    title = models.CharField("Título", max_length=200)
+    description = models.TextField("Descripción")
+    audio = models.FileField("Archivo de Audio", upload_to='podcast_audio/')
+    cover = models.ImageField("Portada", upload_to='podcast_covers/', blank=True, null=True)
+    created_at = models.DateTimeField("Creado el", auto_now_add=True)
+    updated_at = models.DateTimeField("Actualizado el", auto_now=True)
+
+    def __str__(self):
+        return self.title
+
