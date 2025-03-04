@@ -1,902 +1,898 @@
 {% extends "core/core.html" %}
+{% load toc_tags %}
+{% load comments_tags %}
 {% block title %}{{ tutorial.title }} | WebDev Blog{% endblock %}
 
 {% block extra_head %}
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-  <script>hljs.highlightAll();</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
 
-  <style>
-    :root {
-      --primary: #2563eb;
-      --secondary: #3b82f6;
-      --text: #1e293b;
-      --background: #ffffff;
-      --gray-100: #f1f5f9;
-      --gray-200: #e2e8f0;
-      --radius: 8px;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    [data-theme="dark"] {
-      --primary: #60a5fa;
-      --secondary: #3b82f6;
-      --text: #f8fafc;
-      --background: #0f172a;
-      --gray-100: #1e293b;
-      --gray-200: #334155;
-    }
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      background-color: var(--background);
-      line-height: 1.6;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    a { text-decoration: none; color: var(--primary); }
-    img { max-width: 100%; display: block; }
+<style>
+:root {
+  --primary: #2563eb;
+  --secondary: #3b82f6;
+  --text: #1e293b;
+  --background: #ffffff;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --radius: 8px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+[data-theme="dark"] {
+  --primary: #60a5fa;
+  --secondary: #3b82f6;
+  --text: #f8fafc;
+  --background: #0f172a;
+  --gray-100: #1e293b;
+  --gray-200: #334155;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background-color: var(--background);
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
+}
+a { text-decoration: none; color: var(--primary); }
+img { max-width: 100%; display: block; }
 
-    /* Navbar */
-    .navbar {
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(10px);
-      background-color: rgba(241,245,249, 0.8);
-      z-index: 1000;
-      border-bottom: 1px solid var(--gray-200);
-    }
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); transition: color 0.3s; }
-    .nav-menu { display: flex; gap: 2rem; align-items: center; list-style: none; }
-    .nav-link {
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius);
-      font-weight: 500;
-      transition: all 0.3s ease;
-      color: var(--text);
-    }
-    .nav-link:hover,
-    .nav-link.active { background-color: var(--gray-100); }
-    .nav-cta {
-      background-color: var(--primary);
-      color: #fff;
-      padding: 0.75rem 1.5rem;
-      border-radius: var(--radius);
-      transition: background-color 0.3s ease;
-    }
-    .nav-cta:hover { background-color: var(--secondary); }
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-    }
-    @media (max-width: 768px) {
-      .nav-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: var(--background);
-        padding: 1rem;
-        flex-direction: column;
-        box-shadow: var(--shadow);
-      }
-      .nav-menu.active { display: flex; }
-      .mobile-menu-btn { display: block; }
-    }
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  background-color: rgba(241,245,249, 0.8);
+  z-index: 1000;
+  border-bottom: 1px solid var(--gray-200);
+}
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); transition: color 0.3s; }
+.nav-menu { display: flex; gap: 2rem; align-items: center; list-style: none; }
+.nav-link {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  color: var(--text);
+}
+.nav-link:hover,
+.nav-link.active { background-color: var(--gray-100); }
+.nav-cta {
+  background-color: var(--primary);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  transition: background-color 0.3s ease;
+}
+.nav-cta:hover { background-color: var(--secondary); }
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--background);
+    padding: 1rem;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+  }
+  .nav-menu.active { display: flex; }
+  .mobile-menu-btn { display: block; }
+}
 
-    /* Layout Principal */
-    .container {
-      max-width: 1200px;
-      margin: 3rem auto;
-      padding: 0 1rem;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-    @media (min-width: 1024px) { .container { grid-template-columns: 3fr 1fr; } }
-    article {
-      padding: 2rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      background-color: var(--background);
-    }
-    .tutorial-header {
-      border-bottom: 1px solid var(--gray-200);
-      padding-bottom: 1rem;
-      margin-bottom: 0.1rem;
-    }
-    .tutorial-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text); }
-    .tutorial-meta {
-      font-size: 0.9rem;
-      color: var(--text);
-      background-color: var(--gray-100);
-      padding: 0.25rem 0.5rem;
-      border-radius: var(--radius);
-      display: inline-block;
-      margin-bottom: 0.1rem;
-    }
-    .tutorial-content { font-size: 1.125rem; line-height: 1.8; }
-    .tutorial-content h2 { margin: 2rem 0 1rem; font-size: 1.75rem; color: var(--primary); }
-    .tutorial-content p { margin-bottom: 1rem; }
-    .back-button {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.75rem 1.5rem;
-      background-color: var(--primary);
-      color: #fff;
-      border-radius: var(--radius);
-      transition: background-color 0.3s;
-    }
-    .back-button:hover { background-color: var(--secondary); }
-
-    /* Bloques del Tutorial */
-    .tutorial-block { margin-bottom: 1rem; }
-    .block-text { text-align: justify; }
-    .block-latex {
-      background-color: #f9f9f9;
-      border-left: 4px solid var(--primary);
-      padding: 1rem;
-    }
-    .block-code {
-      background-color: var(--gray-100);
-      border-left: 4px solid var(--secondary);
-      padding: 0.25rem 0.5rem;
-      font-family: "Courier New", monospace;
-      white-space: pre-wrap;
-    }
-    .hljs {
-      margin: 0 !important;
-      padding: 0 !important;
-      line-height: 1.2 !important;
-      background: none !important;
-    }
-    .block-code pre,
-    .block-code code {
-      margin: 0 !important;
-      padding: 0 !important;
-      line-height: 1.2 !important;
-      display: block;
-    }
-
-    /* TOC */
-    .toc {
-      position: sticky;
-      top: 2rem;
-      background-color: var(--gray-100);
-      padding: 1rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    .toc h2 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary); }
-    .toc ul { list-style: none; padding-left: 0; }
-    .toc ul li { margin-bottom: 0.5rem; }
-    .toc ul li a {
-      color: var(--text);
-      font-size: 0.95rem;
-      transition: color 0.3s;
-    }
-    .toc ul li a:hover { color: var(--secondary); }
-
-    /* Footer */
-    .footer {
-      background-color: var(--gray-100);
-      padding: 4rem 2rem 2rem;
-      margin-top: 4rem;
-      border-top: 1px solid var(--gray-200);
-    }
-    .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    .footer-section h3,
-    .footer-section h4 { color: var(--primary); margin-bottom: 1rem; }
-    .footer-section ul { list-style: none; padding: 0; }
-    .footer-section ul li { margin-bottom: 0.75rem; }
-    .footer-section ul li a {
-      color: var(--text);
-      transition: color 0.3s;
-    }
-    .footer-section ul li a:hover { color: var(--primary); }
-    .social-links { display: flex; gap: 1rem; }
-    .social-links a {
-      color: var(--text);
-      font-size: 1.25rem;
-      transition: color 0.3s;
-    }
-    .social-links a:hover { color: var(--primary); }
-    .footer-newsletter { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .footer-newsletter input {
-      flex: 1;
-      padding: 0.75rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-    }
-    .footer-newsletter button {
-      background-color: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .footer-newsletter button:hover { background-color: var(--secondary); }
-    .footer-bottom {
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--gray-200);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .legal-links {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-    }
-    .legal-links a {
-      color: var(--text);
-      transition: color 0.3s;
-    }
-    .legal-links a:hover { color: var(--primary); }
-
-    /* Botón de cambio de tema */
-    .theme-toggle {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background-color: var(--gray-100);
-      border: none;
-      padding: 0.75rem;
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      transition: transform 0.3s;
-    }
-    .theme-toggle:hover { transform: scale(1.1); }
-
-    /* Sección de Comentarios - Mejorada */
-.comments-section {
-  margin-top: 4rem;
-  padding: 2.5rem;
+/* Layout Principal */
+.container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 1024px) { .container { grid-template-columns: 3fr 1fr; } }
+article {
+  padding: 2rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   background-color: var(--background);
+}
+.tutorial-header {
+  border-bottom: 1px solid var(--gray-200);
+  padding-bottom: 1rem;
+  margin-bottom: 0.1rem;
+}
+.tutorial-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text); }
+.tutorial-meta {
+  font-size: 0.9rem;
+  color: var(--text);
+  background-color: var(--gray-100);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius);
+  display: inline-block;
+  margin-bottom: 0.1rem;
+}
+.tutorial-content { font-size: 1.125rem; line-height: 1.8; }
+.tutorial-content h2 { margin: 2rem 0 1rem; font-size: 1.75rem; color: var(--primary); }
+.tutorial-content p { margin-bottom: 1rem; }
+.back-button {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary);
+  color: #fff;
+  border-radius: var(--radius);
+  transition: background-color 0.3s;
+}
+.back-button:hover { background-color: var(--secondary); }
+
+/* Bloques del Tutorial */
+.tutorial-block { margin-bottom: 1rem; }
+.block-text { text-align: justify; }
+.block-latex {
+  background-color: #f9f9f9;
+  border-left: 4px solid var(--primary);
+  padding: 1rem;
+}
+.block-code {
+  background-color: var(--gray-100);
+  border-left: 4px solid var(--secondary);
+  padding: 0.25rem 0.5rem;
+  font-family: "Courier New", monospace;
+  white-space: pre-wrap;
+}
+.hljs {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+  background: none !important;
+}
+.block-code pre,
+.block-code code {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+  display: block;
+}
+
+/* TOC */
+.toc {
+  position: sticky;
+  top: 2rem;
+  background-color: var(--gray-100);
+  padding: 1rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.toc h2 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary); }
+.toc ul { list-style: none; padding-left: 0; }
+.toc ul li { margin-bottom: 0.5rem; }
+.toc ul li a {
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+.toc ul li a:hover { color: var(--secondary); }
+
+/* Footer */
+.footer {
+  background-color: var(--gray-100);
+  padding: 4rem 2rem 2rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--gray-200);
+}
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+.footer-section h3,
+.footer-section h4 { color: var(--primary); margin-bottom: 1rem; }
+.footer-section ul { list-style: none; padding: 0; }
+.footer-section ul li { margin-bottom: 0.75rem; }
+.footer-section ul li a {
+  color: var(--text);
+  transition: color 0.3s;
+}
+.footer-section ul li a:hover { color: var(--primary); }
+.social-links { display: flex; gap: 1rem; }
+.social-links a {
+  color: var(--text);
+  font-size: 1.25rem;
+  transition: color 0.3s;
+}
+.social-links a:hover { color: var(--primary); }
+.footer-newsletter { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.footer-newsletter input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+}
+.footer-newsletter button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.footer-newsletter button:hover { background-color: var(--secondary); }
+.footer-bottom {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--gray-200);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.legal-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.legal-links a {
+  color: var(--text);
+  transition: color 0.3s;
+}
+.legal-links a:hover { color: var(--primary); }
+
+/* Botón de cambio de tema */
+.theme-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: var(--gray-100);
+  border: none;
+  padding: 0.75rem;
+  border-radius: 50%;
+  cursor: pointer;
   box-shadow: var(--shadow);
+  transition: transform 0.3s;
+}
+.theme-toggle:hover { transform: scale(1.1); }
+
+/* Sección de Comentarios - Mejorada */
+.comments-section {
+margin-top: 4rem;
+padding: 2.5rem;
+border: 1px solid var(--gray-200);
+border-radius: var(--radius);
+background-color: var(--background);
+box-shadow: var(--shadow);
 }
 
 .comments-section h2 {
-  font-size: 1.75rem;
-  color: var(--primary);
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--primary);
+font-size: 1.75rem;
+color: var(--primary);
+margin-bottom: 1.5rem;
+padding-bottom: 0.5rem;
+border-bottom: 2px solid var(--primary);
 }
 
 /* Formulario de Comentarios */
 .comment-form .form-group {
-  margin-bottom: 1.5rem;
+margin-bottom: 1.5rem;
 }
 
 .comment-form label {
-  font-weight: 600;
-  color: var(--primary);
-  margin-bottom: 0.75rem;
-  display: block;
+font-weight: 600;
+color: var(--primary);
+margin-bottom: 0.75rem;
+display: block;
 }
 
 .comment-form textarea {
-  width: 100%;
-  min-height: 150px;
-  padding: 1rem;
-  border: 2px solid var(--gray-200);
-  border-radius: var(--radius);
-  background: var(--background);
-  color: var(--text);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+width: 100%;
+min-height: 150px;
+padding: 1rem;
+border: 2px solid var(--gray-200);
+border-radius: var(--radius);
+background: var(--background);
+color: var(--text);
+transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .comment-form textarea:focus {
-  border-color: var(--primary);
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+border-color: var(--primary);
+outline: none;
+box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .submit-comment {
-  width: 100%;
-  font-size: 1rem;
-  font-weight: 600;
-  background-color: var(--primary);
-  color: #fff;
-  padding: 0.75rem;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.3s ease;
-  margin-top: 1rem;
+width: 100%;
+font-size: 1rem;
+font-weight: 600;
+background-color: var(--primary);
+color: #fff;
+padding: 0.75rem;
+border: none;
+border-radius: var(--radius);
+cursor: pointer;
+transition: transform 0.2s ease, background-color 0.3s ease;
+margin-top: 1rem;
 }
 
 .submit-comment:hover {
-  transform: translateY(-2px);
-  background-color: var(--secondary);
+transform: translateY(-2px);
+background-color: var(--secondary);
 }
 
 /* Lista de Comentarios */
 .comments-list {
-  margin-top: 3rem;
+margin-top: 3rem;
 }
 
 .comment {
-  position: relative;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  background: var(--gray-100);
-  border-radius: var(--radius);
-  border: 1px solid var(--gray-200);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+position: relative;
+padding: 1.5rem;
+margin: 1.5rem 0;
+background: var(--gray-100);
+border-radius: var(--radius);
+border: 1px solid var(--gray-200);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .comment:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+transform: translateX(5px);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .comment-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1rem;
 }
 
 .comment-author {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+display: flex;
+align-items: center;
+gap: 1rem;
 }
 
 .comment-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--primary);
-  padding: 2px;
-  background: var(--background);
+width: 48px;
+height: 48px;
+border-radius: 50%;
+object-fit: cover;
+border: 2px solid var(--primary);
+padding: 2px;
+background: var(--background);
 }
 
 .comment-author-info {
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 }
 
 .comment-author-name {
-  font-weight: 600;
-  color: var(--primary);
+font-weight: 600;
+color: var(--primary);
 }
 
 .comment-date {
-  font-size: 0.875rem;
-  color: var(--gray-500);
+font-size: 0.875rem;
+color: var(--gray-500);
 }
 
 /* Sistema de Valoración */
 .star-rating {
-  display: inline-flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: 0.25rem;
+display: inline-flex;
+flex-direction: row-reverse;
+align-items: center;
+gap: 0.25rem;
 }
 
 .star-rating input[type="radio"] {
-  display: none;
+display: none;
 }
 
 .star-rating label {
-  cursor: pointer;
-  font-size: 1.25rem;
-  transition: color 0.2s ease;
+cursor: pointer;
+font-size: 1.25rem;
+transition: color 0.2s ease;
 }
 
 .star-rating .fas.fa-star {
-  color: var(--gray-300);
+color: var(--gray-300);
 }
 
 .star-rating .fas.fa-star.active,
 .star-rating input[type="radio"]:checked ~ label .fas.fa-star {
-  color: #f59e0b;
+color: #f59e0b;
 }
 
 /* Respuestas */
 .comment-reply {
-  margin-left: 3rem;
-  margin-top: 1.5rem;
-  padding-left: 1.5rem;
-  border-left: 3px solid var(--secondary);
-  position: relative;
+margin-left: 3rem;
+margin-top: 1.5rem;
+padding-left: 1.5rem;
+border-left: 3px solid var(--secondary);
+position: relative;
 }
 
 .comment-reply::before {
-  content: '';
-  position: absolute;
-  left: -3px;
-  top: -1.5rem;
-  height: 1.5rem;
-  width: 3px;
-  background: var(--secondary);
+content: '';
+position: absolute;
+left: -3px;
+top: -1.5rem;
+height: 1.5rem;
+width: 3px;
+background: var(--secondary);
 }
 
 .reply-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+display: flex;
+align-items: center;
+gap: 0.75rem;
+margin-bottom: 0.5rem;
 }
 
 .reply-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--secondary);
-  padding: 2px;
-  background: var(--background);
+width: 36px;
+height: 36px;
+border-radius: 50%;
+object-fit: cover;
+border: 2px solid var(--secondary);
+padding: 2px;
+background: var(--background);
 }
 
 .reply-author {
-  font-weight: 600;
-  color: var(--secondary);
+font-weight: 600;
+color: var(--secondary);
 }
 
 /* Reacciones en Comentarios */
 .comment-reactions {
-  margin-top: 1rem;
-  display: flex;
-  gap: 1rem;
+margin-top: 1rem;
+display: flex;
+gap: 1rem;
 }
 
 .comment-reactions .reaction-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+cursor: pointer;
+transition: transform 0.2s ease;
 }
 
 .comment-reactions .reaction-button:hover {
-  transform: scale(1.1);
+transform: scale(1.1);
 }
 
 .comment-reactions .reaction-button svg {
-  width: 20px;
-  height: 20px;
-  fill: var(--gray-400);
-  transition: fill 0.3s ease;
+width: 20px;
+height: 20px;
+fill: var(--gray-400);
+transition: fill 0.3s ease;
 }
 
 .comment-reactions .reaction-button.active svg {
-  fill: var(--primary);
+fill: var(--primary);
 }
 
 .comment-reactions .reaction-button span {
-  font-size: 0.875rem;
-  color: var(--text);
+font-size: 0.875rem;
+color: var(--text);
 }
 
-/* Overlay de Carga - Debe cubrir toda la pantalla */
+/* CSS para el overlay (ya tienes algo similar) */
 #loadingOverlay {
-  position: fixed;           /* Posición fija para cubrir toda la ventana */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);  /* Fondo semi-transparente */
-  display: none;             /* Oculto por defecto */
-  z-index: 9999;             /* Asegura que quede por encima de todos los elementos */
-  align-items: center;       /* Centra verticalmente el contenido */
-  justify-content: center;   /* Centra horizontalmente el contenido */
-  animation: fadeIn 0.3s ease;  /* Animación de aparición */
+  background: rgba(0, 0, 0, 0.6);
+  display: none;  /* Oculto por defecto */
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
 }
+
+/* Puedes mantener la animación y demás estilos */
+
 
 /* Animación para el overlay */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+from { opacity: 0; }
+to   { opacity: 1; }
 }
 
 /* Estilos para el contenido del modal */
 .modal-content {
-  background: var(--background);
-  padding: 20px 30px;
-  border-radius: var(--radius);
-  text-align: center;
-  box-shadow: var(--shadow);
+background: var(--background);
+padding: 20px 30px;
+border-radius: var(--radius);
+text-align: center;
+box-shadow: var(--shadow);
 }
 
 /* Spinner animado */
 .spinner {
-  border: 4px solid var(--gray-200);
-  border-top: 4px solid var(--primary);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1rem auto;
+border: 4px solid var(--gray-200);
+border-top: 4px solid var(--primary);
+border-radius: 50%;
+width: 40px;
+height: 40px;
+animation: spin 1s linear infinite;
+margin: 0 auto 1rem auto;
 }
 
 /* Animación del spinner */
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+from { transform: rotate(0deg); }
+to   { transform: rotate(360deg); }
 }
 
 .delete-comment-button {
-  background-color: var(--secondary);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 1rem;
-  transition: background-color 0.3s;
+background-color: var(--secondary);
+color: #fff;
+border: none;
+border-radius: 50%;
+width: 20px;
+height: 20px;
+font-size: 14px;
+line-height: 20px;
+text-align: center;
+cursor: pointer;
+padding: 0;
+margin-left: 1rem;
+transition: background-color 0.3s;
 }
 .delete-comment-button:hover {
-  background-color: var(--primary);
+background-color: var(--primary);
 }
 
 
-  </style>
+</style>
 {% endblock %}
 
 {% block content %}
-  <main class="container">
-    <article>
-      <header class="tutorial-header">
-        <h1>{{ tutorial.title }}</h1>
-        <p class="tutorial-meta">
-          Duración: {{ tutorial.duration|default:"Desconocida" }} | Nivel: {{ tutorial.level|default:"General" }}
-        </p>
-      </header>
-      <section class="tutorial-content">
-        {% for block in tutorial.blocks.all %}
-          {% if block.block_type == 'text' %}
-            <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-          {% elif block.block_type == 'latex' %}
-            <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
-          {% elif block.block_type == 'code' %}
-            <div class="tutorial-block block-code">{{ block.content|safe }}</div>
-          {% else %}
-            <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-          {% endif %}
-        {% endfor %}
-      </section>
-      <a href="{% url 'tutoriales_home' %}" class="back-button">← Volver a Tutoriales</a>
-    </article>
-    <aside class="toc">
-      <h2>Contenido</h2>
-      <ul>
-        <li><a href="#introduccion">Introducción</a></li>
-        <li><a href="#instalacion">Instalación y Configuración</a></li>
-        <li><a href="#componentes">Componentes y Arquitectura</a></li>
-        <li><a href="#hooks">Hooks Avanzados</a></li>
-        <li><a href="#enrutamiento">Enrutamiento</a></li>
-        <li><a href="#estado">Estado Global</a></li>
-        <li><a href="#apis">Integración con APIs</a></li>
-      </ul>
-    </aside>
-    {% load comments_tags %}
-     <!-- Sección de Comentarios y Valoraciones -->
-    <section id="comments" class="comments-section">
-      <h2>Comentarios y Valoraciones</h2>
-      <form class="comment-form" method="post" action="{% url 'tutorial_detail' pk=tutorial.pk %}">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="form-group">
-          {{ form.content.label_tag }}
-          {{ form.content }}
-          {% for error in form.content.errors %}
-            <div class="error">{{ error }}</div>
-          {% endfor %}
-        </div>
-        <div class="star-rating">
-          {% for i in "54321" %}
-            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
-                   {% if form.rating.value|stringformat:"s" == i %}checked{% endif %}>
-            <label for="star{{ i }}" title="{{ i }} estrella{% if i != '1' %}s{% endif %}">
-              <i class="fas fa-star"></i>
-            </label>
-          {% endfor %}
-        </div>
-        <button type="submit" class="submit-comment">Enviar Comentario</button>
-      </form>
-
-      <div class="comments-list">
-        {% for comment in top_level_comments %}
-          {% render_comentario comment %}
-        {% empty %}
-          <p>No hay comentarios aún. ¡Sé el primero en opinar!</p>
-        {% endfor %}
-      </div>
-    </section>
+<main class="container">
+<article>
+  <header class="tutorial-header">
+    <h1>{{ tutorial.title }}</h1>
+    <p class="tutorial-meta">
+      Duración: {{ tutorial.duration|default:"Desconocida" }} | Nivel: {{ tutorial.level|default:"General" }}
+    </p>
+  </header>
+  <section class="tutorial-content">
+    {% for block in tutorial.blocks.all %}
+      {% if block.block_type == 'text' %}
+        <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+      {% elif block.block_type == 'latex' %}
+        <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
+      {% elif block.block_type == 'code' %}
+        <div class="tutorial-block block-code">{{ block.content|safe }}</div>
+      {% else %}
+        <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+      {% endif %}
+    {% endfor %}
+  </section>
+  <a href="{% url 'tutoriales_home' %}" class="back-button">← Volver a Tutoriales</a>
+</article>
 
 
-  </main>
+<aside class="toc">
+  <h2>Contenido</h2>
+  <ul>
+    {% build_toc tutorial as toc_list %}
+    {% for item in toc_list %}
+      {# Para diferenciar niveles, puedes agregar un margen izquierdo basado en el nivel #}
+      <li style="margin-left: {% if item.level == 3 %}1.5em{% else %}0em{% endif %};">
+        <a href="#{{ item.id }}">{{ item.text }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+</aside>
+
+ <!-- Sección de Comentarios y Valoraciones -->
+<section id="comments" class="comments-section">
+  <h2>Comentarios y Valoraciones</h2>
+  <form class="comment-form" method="post" action="{% url 'tutorial_detail' pk=tutorial.pk %}">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="form-group">
+      {{ form.content.label_tag }}
+      {{ form.content }}
+      {% for error in form.content.errors %}
+        <div class="error">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="star-rating">
+      {% for i in "54321" %}
+        <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+               {% if form.rating.value|stringformat:"s" == i %}checked{% endif %}>
+        <label for="star{{ i }}" title="{{ i }} estrella{% if i != '1' %}s{% endif %}">
+          <i class="fas fa-star"></i>
+        </label>
+      {% endfor %}
+    </div>
+    <button type="submit" class="submit-comment">Enviar Comentario</button>
+  </form>
+
+  <div class="comments-list">
+    {% for comment in top_level_comments %}
+      {% render_comentario comment %}
+    {% empty %}
+      <p>No hay comentarios aún. ¡Sé el primero en opinar!</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+</main>
 
 {% endblock %}
 
 {% block extra_js %}
-  <script>
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn'),
-          navMenu = document.querySelector('.nav-menu'),
-          themeToggle = document.querySelector('.theme-toggle'),
-          html = document.documentElement;
+<script>
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn'),
+      navMenu = document.querySelector('.nav-menu'),
+      themeToggle = document.querySelector('.theme-toggle'),
+      html = document.documentElement;
 
-    if (mobileMenuBtn && navMenu) {
-      mobileMenuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
-    }
+if (mobileMenuBtn && navMenu) {
+  mobileMenuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
+}
 
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => {
-        html.dataset.theme = (html.dataset.theme === 'dark') ? 'light' : 'dark';
-        localStorage.setItem('theme', html.dataset.theme);
-      });
-    }
-
-    html.dataset.theme = localStorage.getItem('theme') ||
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  </script>
-
-    <script>
-
-
-    document.addEventListener('DOMContentLoaded', function() {
-  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-  const loadingOverlay = document.getElementById('loadingOverlay');
-
-  function showLoading() {
-    loadingOverlay.style.display = 'block';
-  }
-  function hideLoading() {
-    loadingOverlay.style.display = 'none';
-  }
-
-  // Función genérica para enviar peticiones AJAX
-  function sendReaction(url, commentId, callback) {
-    showLoading();
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'X-CSRFToken': csrfToken
-      },
-      body: new URLSearchParams({ 'comment_id': commentId })
-    })
-    .then(response => response.json())
-    .then(data => {
-      hideLoading();
-      callback(data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      hideLoading();
-    });
-  }
-
-  // Función para actualizar la UI de reacciones
-  function updateReactionUI(commentId, data) {
-    // Actualiza botones "me gusta"
-    document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="like"]`)
-      .forEach(el => {
-        const likeCount = el.querySelector('.like-count');
-        if (likeCount) {
-          likeCount.textContent = data.like_count;
-        }
-        if (data.liked) {
-          el.classList.add('active');
-        } else {
-          el.classList.remove('active');
-        }
-      });
-
-    // Actualiza botones "no me gusta"
-    document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="dislike"]`)
-      .forEach(el => {
-        const dislikeCount = el.querySelector('.dislike-count');
-        if (dislikeCount) {
-          dislikeCount.textContent = data.dislike_count;
-        }
-        if (data.disliked) {
-          el.classList.add('active');
-        } else {
-          el.classList.remove('active');
-        }
-      });
-  }
-
-  // Registro de botones de reacciones (like/dislike)
-  function registerReactionButtons() {
-    document.querySelectorAll('.like-button').forEach(button => {
-      button.addEventListener('click', function() {
-        const commentId = button.getAttribute('data-comment-id');
-        sendReaction("{% url 'toggle_comment_like' %}", commentId, function(data) {
-          if (data.error) {
-            console.error(data.error);
-          } else {
-            updateReactionUI(commentId, data);
-          }
-        });
-      });
-    });
-
-    document.querySelectorAll('.dislike-button').forEach(button => {
-      button.addEventListener('click', function() {
-        const commentId = button.getAttribute('data-comment-id');
-        sendReaction("{% url 'toggle_comment_dislike' %}", commentId, function(data) {
-          if (data.error) {
-            console.error(data.error);
-          } else {
-            updateReactionUI(commentId, data);
-          }
-        });
-      });
-    });
-  }
-
-  // Registro de botones de borrar comentario
-  function registerDeleteButtons() {
-  document.querySelectorAll('.delete-comment-button').forEach(button => {
-    button.addEventListener('click', function() {
-      const commentId = button.getAttribute('data-comment-id');
-      // Usamos customConfirm para confirmar la acción
-      customConfirm('¿Estás seguro de que deseas borrar este comentario?')
-        .then((confirmed) => {
-          if (confirmed) {
-            sendReaction("{% url 'delete_comment' %}", commentId, function(data) {
-              if (data.success) {
-                // Si se borra la respuesta, actualizamos el contador en el botón de respuestas del comentario padre
-                if (data.parent_id) {
-                  const toggleButton = document.querySelector(`.toggle-replies-button[data-comment-id="${data.parent_id}"]`);
-                  if (toggleButton) {
-                    // Actualizamos el atributo data-replies-count
-                    let currentCount = parseInt(toggleButton.getAttribute('data-replies-count'));
-                    currentCount = Math.max(0, currentCount - 1);
-                    toggleButton.setAttribute('data-replies-count', currentCount);
-                    // Actualizamos el texto del botón
-                    const spanEl = toggleButton.querySelector('span');
-                    if (spanEl) {
-                      spanEl.textContent = currentCount > 0 ? `Ver respuestas (${currentCount})` : '';
-                    }
-                    // Si no quedan respuestas, ocultamos el botón
-                    if (currentCount === 0) {
-                      toggleButton.style.display = 'none';
-                    }
-                  }
-                }
-                // Quitamos el div del comentario borrado
-                const commentDiv = document.getElementById(`comment-${commentId}`);
-                if (commentDiv) {
-                  commentDiv.remove();
-                }
-              } else {
-                alert(data.error || 'Error al borrar el comentario.');
-              }
-            });
-          }
-        });
-    });
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    html.dataset.theme = (html.dataset.theme === 'dark') ? 'light' : 'dark';
+    localStorage.setItem('theme', html.dataset.theme);
   });
 }
 
+html.dataset.theme = localStorage.getItem('theme') ||
+  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+</script>
 
-  // Llamada a funciones de registro
-  registerReactionButtons();
-  registerDeleteButtons();
+<script>
+
+
+document.addEventListener('DOMContentLoaded', function() {
+const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+const loadingOverlay = document.getElementById('loadingOverlay');
+
+// Funciones JavaScript para mostrar/ocultar el overlay
+function showLoading() {
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  // Si usas Flex para centrar, lo ideal es mostrarlo con 'flex'
+  loadingOverlay.style.display = 'flex';
+}
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+// Función genérica para enviar peticiones AJAX
+function sendReaction(url, commentId, callback) {
+showLoading();
+fetch(url, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'X-CSRFToken': csrfToken
+  },
+  body: new URLSearchParams({ 'comment_id': commentId })
+})
+.then(response => response.json())
+.then(data => {
+  hideLoading();
+  callback(data);
+})
+.catch(error => {
+  console.error('Error:', error);
+  hideLoading();
 });
+}
 
-    </script>
+// Función para actualizar la UI de reacciones
+function updateReactionUI(commentId, data) {
+// Actualiza botones "me gusta"
+document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="like"]`)
+  .forEach(el => {
+    const likeCount = el.querySelector('.like-count');
+    if (likeCount) {
+      likeCount.textContent = data.like_count;
+    }
+    if (data.liked) {
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
+  });
 
-    <script>
-  // Sobrescribe alert() para usar un modal personalizado (ya lo tienes).
-  window.alert = function(message, redirectUrl = null) {
-    const modal = document.createElement('div');
-    modal.className = 'modal';
-    modal.style.display = 'block';
-    modal.innerHTML = `
-      <div class="modal-content alert">
-        <p>${message}</p>
-        <button id="customAlertOkButton">Aceptar</button>
-      </div>
-    `;
-    document.body.appendChild(modal);
+// Actualiza botones "no me gusta"
+document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="dislike"]`)
+  .forEach(el => {
+    const dislikeCount = el.querySelector('.dislike-count');
+    if (dislikeCount) {
+      dislikeCount.textContent = data.dislike_count;
+    }
+    if (data.disliked) {
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
+  });
+}
 
-    document.getElementById('customAlertOkButton').addEventListener('click', function() {
-      modal.remove();
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
+// Registro de botones de reacciones (like/dislike)
+function registerReactionButtons() {
+document.querySelectorAll('.like-button').forEach(button => {
+  button.addEventListener('click', function() {
+    const commentId = button.getAttribute('data-comment-id');
+    sendReaction("{% url 'toggle_comment_like' %}", commentId, function(data) {
+      if (data.error) {
+        console.error(data.error);
+      } else {
+        updateReactionUI(commentId, data);
       }
     });
-  };
+  });
+});
 
-  // Crea una función asíncrona para "confirm()"
-  // Devuelve una promesa que resuelve en true (Aceptar) o false (Cancelar)
-  function customConfirm(message) {
-    return new Promise((resolve) => {
-      // Crea el modal
-      const modal = document.createElement('div');
-      modal.className = 'modal';
-      modal.style.display = 'block';
-      modal.innerHTML = `
-        <div class="modal-content confirm">
-          <p>${message}</p>
-          <div class="confirm-buttons">
-            <button id="customConfirmOkButton">Aceptar</button>
-            <button id="customConfirmCancelButton" class="cancel-button">Cancelar</button>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-
-      // Manejadores para los botones
-      document.getElementById('customConfirmOkButton').addEventListener('click', function() {
-        modal.remove();
-        resolve(true);  // Usuario aceptó
-      });
-      document.getElementById('customConfirmCancelButton').addEventListener('click', function() {
-        modal.remove();
-        resolve(false); // Usuario canceló
-      });
-    });
-  }
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.reaction-button.reply-button').forEach(button => {
-      button.addEventListener('click', function() {
-        const commentId = button.getAttribute('data-comment-id');
-        const replyForm = document.getElementById(`reply-form-${commentId}`);
-        replyForm.style.display = (replyForm.style.display === 'none' || replyForm.style.display === '')
-          ? 'block'
-          : 'none';
-      });
+document.querySelectorAll('.dislike-button').forEach(button => {
+  button.addEventListener('click', function() {
+    const commentId = button.getAttribute('data-comment-id');
+    sendReaction("{% url 'toggle_comment_dislike' %}", commentId, function(data) {
+      if (data.error) {
+        console.error(data.error);
+      } else {
+        updateReactionUI(commentId, data);
+      }
     });
   });
+});
+}
+
+// Registro de botones de borrar comentario
+function registerDeleteButtons() {
+document.querySelectorAll('.delete-comment-button').forEach(button => {
+button.addEventListener('click', function() {
+  const commentId = button.getAttribute('data-comment-id');
+  // Usamos customConfirm para confirmar la acción
+  customConfirm('¿Estás seguro de que deseas borrar este comentario?')
+    .then((confirmed) => {
+      if (confirmed) {
+        sendReaction("{% url 'delete_comment' %}", commentId, function(data) {
+          if (data.success) {
+            // Si se borra la respuesta, actualizamos el contador en el botón de respuestas del comentario padre
+            if (data.parent_id) {
+              const toggleButton = document.querySelector(`.toggle-replies-button[data-comment-id="${data.parent_id}"]`);
+              if (toggleButton) {
+                // Actualizamos el atributo data-replies-count
+                let currentCount = parseInt(toggleButton.getAttribute('data-replies-count'));
+                currentCount = Math.max(0, currentCount - 1);
+                toggleButton.setAttribute('data-replies-count', currentCount);
+                // Actualizamos el texto del botón
+                const spanEl = toggleButton.querySelector('span');
+                if (spanEl) {
+                  spanEl.textContent = currentCount > 0 ? `Ver respuestas (${currentCount})` : '';
+                }
+                // Si no quedan respuestas, ocultamos el botón
+                if (currentCount === 0) {
+                  toggleButton.style.display = 'none';
+                }
+              }
+            }
+            // Quitamos el div del comentario borrado
+            const commentDiv = document.getElementById(`comment-${commentId}`);
+            if (commentDiv) {
+              commentDiv.remove();
+            }
+          } else {
+            alert(data.error || 'Error al borrar el comentario.');
+          }
+        });
+      }
+    });
+});
+});
+}
+
+
+// Llamada a funciones de registro
+registerReactionButtons();
+registerDeleteButtons();
+});
+
 </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+// Sobrescribe alert() para usar un modal personalizado (ya lo tienes).
+window.alert = function(message, redirectUrl = null) {
+const modal = document.createElement('div');
+modal.className = 'modal';
+modal.style.display = 'block';
+modal.innerHTML = `
+  <div class="modal-content alert">
+    <p>${message}</p>
+    <button id="customAlertOkButton">Aceptar</button>
+  </div>
+`;
+document.body.appendChild(modal);
+
+document.getElementById('customAlertOkButton').addEventListener('click', function() {
+  modal.remove();
+  if (redirectUrl) {
+    window.location.href = redirectUrl;
+  }
+});
+};
+
+// Crea una función asíncrona para "confirm()"
+// Devuelve una promesa que resuelve en true (Aceptar) o false (Cancelar)
+function customConfirm(message) {
+return new Promise((resolve) => {
+  // Crea el modal
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.display = 'block';
+  modal.innerHTML = `
+    <div class="modal-content confirm">
+      <p>${message}</p>
+      <div class="confirm-buttons">
+        <button id="customConfirmOkButton">Aceptar</button>
+        <button id="customConfirmCancelButton" class="cancel-button">Cancelar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Manejadores para los botones
+  document.getElementById('customConfirmOkButton').addEventListener('click', function() {
+    modal.remove();
+    resolve(true);  // Usuario aceptó
+  });
+  document.getElementById('customConfirmCancelButton').addEventListener('click', function() {
+    modal.remove();
+    resolve(false); // Usuario canceló
+  });
+});
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Toggle para mostrar/ocultar respuestas de comentarios
   document.querySelectorAll('.toggle-replies-button').forEach(function(button) {
-    // Almacena el número de respuestas desde el atributo data
     const repliesCount = button.getAttribute('data-replies-count');
     button.addEventListener('click', function() {
       const commentId = button.getAttribute('data-comment-id');
@@ -910,9 +906,48 @@
       }
     });
   });
+
+  // 2. Toggle para mostrar/ocultar formularios de respuesta al pulsar el botón "Responder"
+  document.querySelectorAll('.reaction-button.reply-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const commentId = button.getAttribute('data-comment-id');
+      const replyForm = document.getElementById(`reply-form-${commentId}`);
+      replyForm.style.display = (replyForm.style.display === 'none' || replyForm.style.display === '')
+        ? 'block'
+        : 'none';
+    });
+  });
+
+  // 3. Mostrar el overlay de carga al enviar cualquier formulario de comentario o respuesta
+  // Selecciona el formulario principal de comentarios
+  const commentForms = document.querySelectorAll('form.comment-form');
+  // Selecciona también los formularios de respuesta que estén dentro de un contenedor con clase "reply-form"
+  const replyForms = document.querySelectorAll('.reply-form form');
+
+  // Función para mostrar el overlay (usa display 'flex' para centrar el contenido)
+  function showLoading() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    loadingOverlay.style.display = 'flex';
+  }
+
+  // Agregar el evento submit para cada formulario de comentario
+  commentForms.forEach(form => {
+    form.addEventListener('submit', function() {
+      showLoading();
+    });
+  });
+
+  // Agregar el evento submit para cada formulario de respuesta
+  replyForms.forEach(form => {
+    form.addEventListener('submit', function() {
+      showLoading();
+    });
+  });
 });
 
 </script>
+
+
 
 
 
