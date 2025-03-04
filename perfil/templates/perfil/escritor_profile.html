@@ -357,37 +357,51 @@
 
       <!-- Sección: Tutoriales Subidos -->
       <section id="tutorials" class="content-section section-tutorials">
-        <h2>Tutoriales Subidos</h2>
-        <div class="content-grid">
-          {% for tutorial in tutorials %}
-            <div class="content-card">
-              <a href="{% url 'tutorial_update' tutorial.pk %}" style="text-decoration:none; color:inherit;">
-                <h3>{{ tutorial.title }}</h3>
-                <p>Publicado: {{ tutorial.created_at|date:"d M Y" }}</p>
-              </a>
-              <!-- Enlace para eliminar con confirmación modal personalizada -->
-              <a href="{% url 'tutorial_delete' tutorial.pk %}" class="delete-tutorial"
-                 style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
-                Eliminar
-              </a>
-            </div>
-          {% empty %}
-            <p>No tienes tutoriales subidos.</p>
-          {% endfor %}
-          <!-- Tarjeta para agregar nuevo tutorial -->
-          <div class="content-card add-new">
-            <a href="{% url 'tutorial_create' %}" class="add-new-btn">&#43; Agregar Nuevo Tutorial</a>
-          </div>
-        </div>
-        <!-- Bloque de Paginación (opcional) -->
-        <div class="pagination">
-          <button class="page-btn" disabled>&laquo; Anterior</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn">3</button>
-          <button class="page-btn">Siguiente &raquo;</button>
-        </div>
-      </section>
+  <h2>Tutoriales Subidos</h2>
+  <div class="content-grid">
+    {% for tutorial in tutorials %}
+      <div class="content-card">
+        <a href="{% url 'tutorial_update' tutorial.pk %}" style="text-decoration:none; color:inherit;">
+          <h3>{{ tutorial.title }}</h3>
+          <p>Publicado: {{ tutorial.created_at|date:"d M Y" }}</p>
+        </a>
+        <a href="{% url 'tutorial_delete' tutorial.pk %}" class="delete-tutorial" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
+          Eliminar
+        </a>
+      </div>
+    {% empty %}
+      <p>No tienes tutoriales subidos.</p>
+    {% endfor %}
+    <div class="content-card add-new">
+      <a href="{% url 'tutorial_create' %}" class="add-new-btn">&#43; Agregar Nuevo Tutorial</a>
+    </div>
+  </div>
+  <!-- Paginación -->
+  <div class="pagination">
+  {% if tutorials.has_previous %}
+    <a class="page-btn" href="?page={{ tutorials.previous_page_number }}#tutorials">&laquo; Anterior</a>
+  {% else %}
+    <button class="page-btn" disabled>&laquo; Anterior</button>
+  {% endif %}
+
+  {% for num in tutorials.paginator.page_range %}
+    {% if tutorials.number == num %}
+      <button class="page-btn active">{{ num }}</button>
+    {% else %}
+      <a class="page-btn" href="?page={{ num }}#tutorials">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if tutorials.has_next %}
+    <a class="page-btn" href="?page={{ tutorials.next_page_number }}#tutorials">Siguiente &raquo;</a>
+  {% else %}
+    <button class="page-btn" disabled>Siguiente &raquo;</button>
+  {% endif %}
+</div>
+
+</section>
+
+
 
       <!-- Sección: Guías Subidas -->
       <section id="guides" class="content-section section-guides">
@@ -521,17 +535,32 @@
 
     // -- LÓGICA DE TABS --
     // Cambiar entre secciones del panel
-    const tabLinks = document.querySelectorAll('.tab-link');
-    const contentSections = document.querySelectorAll('.content-section');
-    tabLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const tab = this.dataset.tab;
+
+      const tabLinks = document.querySelectorAll('.tab-link');
+      const contentSections = document.querySelectorAll('.content-section');
+      tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const tab = this.dataset.tab;
+          tabLinks.forEach(link => link.classList.remove('active'));
+          contentSections.forEach(section => section.classList.remove('active'));
+          this.classList.add('active');
+          document.getElementById(tab).classList.add('active');
+        });
+      });
+
+      // Si la URL tiene el fragmento #tutorials, activar esa pestaña
+      if(window.location.hash === "#tutorials"){
+        // Quitar la clase active de todos y activar el tab de tutoriales
         tabLinks.forEach(link => link.classList.remove('active'));
         contentSections.forEach(section => section.classList.remove('active'));
-        this.classList.add('active');
-        document.getElementById(tab).classList.add('active');
-      });
-    });
+
+        const tutorialsTab = document.querySelector('.tab-link[data-tab="tutorials"]');
+        const tutorialsSection = document.getElementById('tutorials');
+        if(tutorialsTab && tutorialsSection){
+          tutorialsTab.classList.add('active');
+          tutorialsSection.classList.add('active');
+        }
+      }
   </script>
 {% endblock %}

@@ -36,6 +36,7 @@ urlpatterns = [
     path('perfil/', include('perfil.urls')),
     path('crear_tutoriales/', include('crear_tutoriales.urls')),
     path('tutoriales/', include('leer_tutoriales.urls')),
+    path('escuchar-podcast/', include('escuchar_podcast.urls')),
 ]
 
 if settings.DEBUG:

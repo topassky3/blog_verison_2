@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'perfil',
     'crear_tutoriales',
     'leer_tutoriales',
+    'escuchar_podcast',
 ]
 
 SITE_ID = 1
