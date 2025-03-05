@@ -16,76 +16,61 @@
 
 <!-- Podcast Filter -->
 <section class="podcast-filter">
-  <div class="filter-options">
-    <a href="?cat=all" class="filter-btn active" data-filter="all">Todos</a>
-    {% for category in categories %}
-      <a href="?cat={{ category.slug }}" class="filter-btn" data-filter="{{ category.slug }}">{{ category.name }}</a>
-    {% endfor %}
-  </div>
-  <div class="search-box">
-    <input type="text" placeholder="Buscar podcasts...">
-    <button type="submit">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-      </svg>
-    </button>
-  </div>
-</section>
+    <div class="filter-options">
+      <!-- Enlace "Todos" -->
+      <a href="?cat=all{% if search_query %}&q={{ search_query }}{% endif %}"
+         class="filter-btn {% if selected_category == 'all' or not selected_category %}active{% endif %}">
+         Todos
+      </a>
+      <!-- Generar dinámicamente los enlaces para cada categoría -->
+      {% for category in categories %}
+        <a href="?cat={{ category.slug }}{% if search_query %}&q={{ search_query }}{% endif %}"
+           class="filter-btn {% if selected_category == category.slug %}active{% endif %}">
+          {{ category.name }}
+        </a>
+      {% endfor %}
+    </div>
 
+    <!-- Formulario de búsqueda (método GET) -->
+    <form class="search-box" method="get">
+      <!-- Si la categoría está seleccionada y no es 'all', la mantenemos en un input oculto -->
+      {% if selected_category and selected_category != 'all' %}
+        <input type="hidden" name="cat" value="{{ selected_category }}">
+      {% endif %}
+      <input type="text" name="q" placeholder="Buscar podcasts..." value="{{ search_query }}">
+      <button type="submit">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </button>
+    </form>
+  </section>
 
   <!-- Podcast Grid -->
-  <section class="podcast-grid">
-  {% for podcast in podcasts %}
-    <article class="podcast-card" data-category="{% if podcast.category %}{{ podcast.category.slug }}{% else %}general{% endif %}">
-      <div class="podcast-header">
-        <span class="category-badge">
-          {% if podcast.category %}{{ podcast.category.name }}{% else %}General{% endif %}
-        </span>
-        {% if podcast.cover %}
-          <img src="{{ podcast.cover.url }}" alt="{{ podcast.title }}" class="podcast-image">
-        {% else %}
-          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><rect width='400' height='250' fill='%23e2e8f0'/><text x='50%' y='50%' text-anchor='middle' fill='%23333' font-size='20' dy='.3em'>No Image</text></svg>" alt="{{ podcast.title }}" class="podcast-image">
-        {% endif %}
-      </div>
-      <div class="podcast-content">
-        <h3>{{ podcast.title }}</h3>
-        <p class="podcast-meta">Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
-        <p>{{ podcast.description }}</p>
-        <div class="podcast-footer">
-          <a href="{% url 'escuchar_podcast' podcast.pk %}" class="read-more">Escuchar Podcast →</a>
-          {# Aquí podrías agregar rating si lo implementas #}
-        </div>
-      </div>
-    </article>
-  {% empty %}
-    <p>No se han creado podcasts.</p>
-  {% endfor %}
-</section>
+  {% render_podcasts podcasts %}
 
-
+  <!-- Pagination -->
   <nav class="pagination">
-  {% if page_obj.has_previous %}
-    <a class="page-btn"
-       href="?page={{ page_obj.previous_page_number }}{% if request.GET.cat %}&cat={{ request.GET.cat }}{% endif %}">
-       ← Anterior
-    </a>
-  {% else %}
-    <button class="page-btn" disabled>← Anterior</button>
-  {% endif %}
+    {% if page_obj.has_previous %}
+      <a class="page-btn"
+         href="?page={{ page_obj.previous_page_number }}{% if selected_category != 'all' %}&cat={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+         ← Anterior
+      </a>
+    {% else %}
+      <button class="page-btn" disabled>← Anterior</button>
+    {% endif %}
 
-  <span class="page-info">
-    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
-  </span>
+    <span class="page-info">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
 
-  {% if page_obj.has_next %}
-    <a class="page-btn"
-       href="?page={{ page_obj.next_page_number }}{% if request.GET.cat %}&cat={{ request.GET.cat }}{% endif %}">
-       Siguiente →
-    </a>
-  {% else %}
-    <button class="page-btn" disabled>Siguiente →</button>
-  {% endif %}
-</nav>
+    {% if page_obj.has_next %}
+      <a class="page-btn"
+         href="?page={{ page_obj.next_page_number }}{% if selected_category != 'all' %}&cat={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+         Siguiente →
+      </a>
+    {% else %}
+      <button class="page-btn" disabled>Siguiente →</button>
+    {% endif %}
+  </nav>
 
 {% endblock %}
 
