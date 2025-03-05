@@ -85,6 +85,31 @@
       border-radius: 50%;
       border: 4px solid #2563eb;
     }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+      }
+      .form-group select,
+      .form-group input[type="text"] {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        font-size: 1rem;
+        color: var(--text);
+        background-color: var(--background);
+        transition: border-color 0.3s ease;
+      }
+      .form-group select:focus,
+      .form-group input[type="text"]:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
   </style>
 {% endblock %}
 
@@ -122,6 +147,10 @@
     <div class="form-group">
       <label for="id_description">Descripción</label>
       {{ form.description }}
+    </div>
+    <div class="form-group">
+      <label for="id_category">Categoría del Podcast</label>
+      {{ form.category }}
     </div>
     <div class="form-group">
       <label for="id_audio">Archivo de Audio</label>
