@@ -152,4 +152,14 @@
       }
     });
   </script>
+
+    <script>
+    // Selecciona el formulario de creación de podcast
+    const podcastForm = document.querySelector('.crear-podcast-form');
+
+    // Al enviar el formulario, muestra el overlay de carga
+    podcastForm.addEventListener('submit', function() {
+      document.getElementById('loadingOverlay').style.display = 'block';
+    });
+  </script>
 {% endblock %}

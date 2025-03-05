@@ -14,24 +14,24 @@
     <p>Escucha entrevistas, debates y tips de desarrollo web para inspirarte y aprender de los mejores.</p>
   </section>
 
-  <!-- Podcast Filter -->
-  <section class="podcast-filter">
-    <div class="filter-options">
-      <button class="filter-btn active" data-filter="all">Todos</button>
-      <button class="filter-btn" data-filter="entrevista">Entrevistas</button>
-      <button class="filter-btn" data-filter="noticias">Noticias</button>
-      <button class="filter-btn" data-filter="debate">Debates</button>
-      <button class="filter-btn" data-filter="tips">Tips</button>
-    </div>
-    <div class="search-box">
-      <input type="text" placeholder="Buscar podcasts...">
-      <button type="submit">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
-      </button>
-    </div>
-  </section>
+<!-- Podcast Filter -->
+<section class="podcast-filter">
+  <div class="filter-options">
+    <a href="?cat=all" class="filter-btn active" data-filter="all">Todos</a>
+    {% for category in categories %}
+      <a href="?cat={{ category.slug }}" class="filter-btn" data-filter="{{ category.slug }}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+  <div class="search-box">
+    <input type="text" placeholder="Buscar podcasts...">
+    <button type="submit">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+    </button>
+  </div>
+</section>
+
 
   <!-- Podcast Grid -->
   <section class="podcast-grid">

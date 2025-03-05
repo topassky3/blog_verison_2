@@ -55,3 +55,17 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
 
 
+from django.contrib import admin
+from .models import PodcastCategory
+
+from django.contrib import admin
+from .models import PodcastCategory
+
+
+@admin.register(PodcastCategory)
+class PodcastCategoryAdmin(admin.ModelAdmin):
+    # Oculta el campo slug en el formulario del admin
+    exclude = ('slug',)
+
+    # En la lista, mostramos name y slug (opcional)
+    list_display = ('name', 'slug')
