@@ -1,0 +1,47 @@
+{% load podcast_comments_tags %}
+<div class="comment" id="comment-{{ comentario.id }}">
+  <div class="comment-header">
+    <span class="comment-author">
+      {% if comentario.author.profile_image %}
+        <img src="{{ comentario.author.profile_image.url }}" alt="Foto de {{ comentario.author.get_full_name|default:comentario.author.username }}" class="comment-avatar">
+      {% else %}
+        <!-- Imagen por defecto -->
+        <svg class="comment-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+          <defs>
+            <radialGradient id="gradAvatar" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#60a5fa"/>
+              <stop offset="100%" stop-color="#2563eb"/>
+            </radialGradient>
+          </defs>
+          <circle cx="64" cy="64" r="60" fill="url(#gradAvatar)"/>
+          <circle cx="64" cy="50" r="20" fill="#ffffff"/>
+          <path d="M44,90c0-10,8-18,20-18s20,8,20,18v6H44V90z" fill="#ffffff"/>
+        </svg>
+      {% endif %}
+      {{ comentario.author.get_full_name|default:comentario.author.username }}
+    </span>
+    {% if not comentario.parent %}
+      <span class="comment-rating">
+        {% for star in "12345" %}
+          {% if forloop.counter <= comentario.rating %}
+            <i class="fas fa-star"></i>
+          {% endif %}
+        {% endfor %}
+      </span>
+    {% endif %}
+  </div>
+
+  <div class="comment-body">
+    <p>{{ comentario.content }}</p>
+  </div>
+
+  <!-- Aquí puedes incluir botones para reacciones, respuestas, etc. -->
+
+  {% if comentario.replies.all %}
+    <div class="comment-replies" id="replies-{{ comentario.id }}">
+      {% for reply in comentario.replies.all %}
+        {% render_podcast_comentario reply %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

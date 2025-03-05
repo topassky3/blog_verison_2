@@ -173,3 +173,48 @@ class Podcast(models.Model):
 
     def __str__(self):
         return self.title
+
+from django.conf import settings
+from django.db import models
+
+class PodcastComment(models.Model):
+    podcast = models.ForeignKey(
+        'Podcast',
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name="Podcast"
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='podcast_comments',
+        verbose_name="Autor"
+    )
+    content = models.TextField("Contenido")
+    rating = models.PositiveSmallIntegerField(
+        "Valoración",
+        choices=[(i, i) for i in range(1, 6)],
+        blank=True,
+        null=True
+    )
+    created_at = models.DateTimeField("Fecha de Creación", auto_now_add=True)
+    likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='liked_podcast_comments',
+        blank=True
+    )
+    dislikes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='disliked_podcast_comments',
+        blank=True
+    )
+    parent = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='replies',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f"Comentario de {self.author} en {self.podcast}"

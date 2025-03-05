@@ -1,5 +1,5 @@
 {% extends "core/core.html" %}
-{% load comments_tags %}
+{% load podcast_comments_tags %} {# Carga nuestro tag específico para comentarios de podcasts #}
 
 {% block title %}Escuchar Podcast | WebDev Blog{% endblock %}
 
@@ -280,60 +280,56 @@
   </header>
 
   <!-- Reproductor del Podcast -->
-    <section class="podcast-player" aria-label="Reproductor del episodio actual">
-          <div class="cover-art">
-              {% if podcast.cover %}
-                <img src="{{ podcast.cover.url }}" alt="Cover del Podcast">
-              {% else %}
-                <!-- SVG inline para el logo por defecto -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="podcast-logo" id="coverImagePreview" aria-label="Podcast Logo">
-                  <circle cx="32" cy="32" r="30" fill="#2563eb"/>
-                  <rect x="28" y="18" width="8" height="20" rx="4" fill="#fff"/>
-                  <path d="M20 38a12 12 0 0 1 24 0v4H20v-4z" fill="#fff"/>
-                  <rect x="30" y="42" width="4" height="8" fill="#fff"/>
-                </svg>
-              {% endif %}
-            </div>
-          <div class="podcast-meta">
-            <h2 class="podcast-title">{{ podcast.title }}</h2>
-            <p class="podcast-description">{{ podcast.description }}</p>
-          </div>
-          <div class="audio-controls">
-            <audio controls>
-              <source src="{{ podcast.audio.url }}" type="audio/mpeg">
-              Tu navegador no soporta el elemento de audio.
-            </audio>
-          </div>
-        </section>
+  <section class="podcast-player" aria-label="Reproductor del episodio actual">
+    <div class="cover-art">
+      {% if podcast.cover %}
+        <img src="{{ podcast.cover.url }}" alt="Cover del Podcast">
+      {% else %}
+        <!-- SVG inline para el logo por defecto -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="podcast-logo" id="coverImagePreview" aria-label="Podcast Logo">
+          <circle cx="32" cy="32" r="30" fill="#2563eb"/>
+          <rect x="28" y="18" width="8" height="20" rx="4" fill="#fff"/>
+          <path d="M20 38a12 12 0 0 1 24 0v4H20v-4z" fill="#fff"/>
+          <rect x="30" y="42" width="4" height="8" fill="#fff"/>
+        </svg>
+      {% endif %}
+    </div>
+    <div class="podcast-meta">
+      <h2 class="podcast-title">{{ podcast.title }}</h2>
+      <p class="podcast-description">{{ podcast.description }}</p>
+    </div>
+    <div class="audio-controls">
+      <audio controls>
+        <source src="{{ podcast.audio.url }}" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+      </audio>
+    </div>
+  </section>
 
   <!-- Lista de episodios anteriores -->
-  <section class="episodes-section">
-    <h2 class="section-title">Episodios Anteriores</h2>
+<section class="episodes-section">
+  <h2 class="section-title">Episodios Anteriores</h2>
+  {% for episode in previous_episodes %}
     <div class="episode-card">
-      <div class="episode-number">#25</div>
+      <div class="episode-number">#{{ forloop.counter }}</div>
       <div class="episode-content">
-        <h3>Herramientas y Tecnologías Modernas</h3>
-        <div class="episode-date">15 Marzo 2024</div>
-        <p>Conoce las herramientas que están revolucionando el sector tecnológico actual, con un enfoque en innovación y eficiencia.</p>
-        <span class="episode-duration">45 min</span>
+        <h3>{{ episode.title }}</h3>
+        <div class="episode-date">{{ episode.created_at|date:"d M Y" }}</div>
+        <p>{{ episode.description }}</p>
+        <span class="episode-duration">{{ episode.duration }}</span>
       </div>
     </div>
-    <div class="episode-card">
-      <div class="episode-number">#24</div>
-      <div class="episode-content">
-        <h3>Introducción al Mundo Web</h3>
-        <div class="episode-date">1 Marzo 2024</div>
-        <p>Fundamentos del desarrollo web y tendencias actuales que están definiendo el futuro de la industria.</p>
-        <span class="episode-duration">38 min</span>
-      </div>
-    </div>
-    {# Se pueden generar más tarjetas dinámicamente desde el contexto #}
-  </section>
+  {% empty %}
+    <p>No hay episodios anteriores.</p>
+  {% endfor %}
+</section>
 
   <!-- Sección de Comentarios y Valoraciones -->
   <section id="comments" class="comments-section">
     <h2>Comentarios y Valoraciones</h2>
-    <form class="comment-form" method="post" action="#">
+
+    <!-- Formulario para agregar un comentario -->
+    <form class="comment-form" method="post" action="{% url 'escuchar_podcast' podcast.pk %}#comments">
       {% csrf_token %}
       <div class="form-group">
         <label for="id_content">Comentario:</label>
@@ -350,9 +346,10 @@
       <button type="submit" class="submit-comment">Enviar Comentario</button>
     </form>
 
+    <!-- Lista de comentarios -->
     <div class="comments-list">
       {% for comment in top_level_comments %}
-        {% render_comentario comment %}
+        {% render_podcast_comentario comment %}
       {% empty %}
         <p>No hay comentarios aún. ¡Sé el primero en opinar!</p>
       {% endfor %}
