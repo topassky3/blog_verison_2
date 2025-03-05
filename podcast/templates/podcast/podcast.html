@@ -63,18 +63,30 @@
 </section>
 
 
-  <!-- Pagination -->
-  <section class="pagination">
-    <button class="page-btn" disabled>Anterior</button>
-    <div class="page-numbers">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <span>...</span>
-      <button class="page-btn">10</button>
-    </div>
-    <button class="page-btn">Siguiente</button>
-  </section>
+  <nav class="pagination">
+  {% if page_obj.has_previous %}
+    <a class="page-btn"
+       href="?page={{ page_obj.previous_page_number }}{% if request.GET.cat %}&cat={{ request.GET.cat }}{% endif %}">
+       ← Anterior
+    </a>
+  {% else %}
+    <button class="page-btn" disabled>← Anterior</button>
+  {% endif %}
+
+  <span class="page-info">
+    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+  </span>
+
+  {% if page_obj.has_next %}
+    <a class="page-btn"
+       href="?page={{ page_obj.next_page_number }}{% if request.GET.cat %}&cat={{ request.GET.cat }}{% endif %}">
+       Siguiente →
+    </a>
+  {% else %}
+    <button class="page-btn" disabled>Siguiente →</button>
+  {% endif %}
+</nav>
+
 {% endblock %}
 
 {% block extra_js %}
