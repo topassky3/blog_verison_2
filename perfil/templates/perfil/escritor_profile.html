@@ -419,29 +419,31 @@
       </section>
 
        <!-- Sección: Podcasts Subidos -->
-        <section id="podcasts" class="content-section section-podcasts">
-          <h2>Podcasts Subidos</h2>
-          <div class="content-grid">
-            {% for podcast in podcasts %}
-              <div class="content-card">
-                <a href="{% url 'podcast_update' podcast.pk %}" style="text-decoration:none; color:inherit;">
-                  <h3>{{ podcast.title }}</h3>
-                  <p>Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
-                </a>
-                <a href="#" class="delete-podcast" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
-                  Eliminar
-                </a>
-              </div>
-            {% empty %}
-              <p>No tienes podcasts subidos.</p>
-            {% endfor %}
-            <!-- Botón para subir nuevo podcast -->
-            <div class="content-card add-new">
-              <a href="{% url 'crear_podcart' %}" class="add-new-btn">&#43; Agregar Nuevo Podcast</a>
-            </div>
-          </div>
-          <!-- Paginación de podcasts (si aplica) -->
-        </section>
+      <!-- Sección: Podcasts Subidos -->
+<section id="podcasts" class="content-section section-podcasts">
+  <h2>Podcasts Subidos</h2>
+  <div class="content-grid">
+    {% for podcast in podcasts %}
+      <div class="content-card">
+        <a href="{% url 'podcast_update' podcast.pk %}" style="text-decoration:none; color:inherit;">
+          <h3>{{ podcast.title }}</h3>
+          <p>Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
+        </a>
+        <a href="{% url 'podcast_delete' podcast.pk %}" class="delete-podcast" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
+          Eliminar
+        </a>
+      </div>
+    {% empty %}
+      <p>No tienes podcasts subidos.</p>
+    {% endfor %}
+    <!-- Botón para subir nuevo podcast -->
+    <div class="content-card add-new">
+      <a href="{% url 'crear_podcart' %}" class="add-new-btn">&#43; Agregar Nuevo Podcast</a>
+    </div>
+  </div>
+  <!-- Paginación de podcasts (si aplica) -->
+</section>
+
 
 
 
@@ -530,15 +532,19 @@
 
     // -- ENLACES DE ELIMINACIÓN --
     // Asigna confirmación personalizada a todos los enlaces con clase "delete-tutorial"
-    document.querySelectorAll('.delete-tutorial').forEach(link => {
+    document.querySelectorAll('.delete-tutorial, .delete-podcast').forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         const url = this.href;
-        // Mostramos la confirmación
-        showConfirmModal('¿Estás seguro de eliminar este tutorial?')
+        // Define el mensaje de confirmación según el tipo de elemento
+        let message = '¿Estás seguro de eliminar este tutorial?';
+        if (this.classList.contains('delete-podcast')) {
+          message = '¿Estás seguro de eliminar este podcast?';
+        }
+        // Muestra el modal de confirmación
+        showConfirmModal(message)
           .then(confirmed => {
             if (confirmed) {
-              // Si el usuario confirmó, redireccionamos
               window.location.href = url;
             }
           });
