@@ -1,296 +1,277 @@
 {% extends "core/core.html" %}
-{% load podcast_comments_tags %} {# Carga nuestro tag específico para comentarios de podcasts #}
+{% load podcast_comments_tags %}  {# Carga el tag para renderizar comentarios de podcasts #}
 
 {% block title %}Escuchar Podcast | WebDev Blog{% endblock %}
 
 {% block extra_head %}
-  <style>
-    /* ======================
-       Variables de Estilo (Ejemplo)
-       ====================== */
-    :root {
-      --primary: #2563eb;
-      --secondary: #3b82f6;
-      --text: #1e293b;
-      --background: #ffffff;
-      --gray-100: #f1f5f9;
-      --gray-200: #e2e8f0;
-      --radius: 8px;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
+<style>
+  :root {
+    --primary: #2563eb;
+    --secondary: #3b82f6;
+    --text: #1e293b;
+    --background: #ffffff;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --radius: 8px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
 
-    /* ======================
-       Estilos para el Podcast
-       ====================== */
-    .podcast-main {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      font-family: 'Helvetica Neue', sans-serif;
-    }
-    /* Encabezado con fondo degradado (cabecera) */
-    .podcast-header {
-      text-align: center;
-      margin-bottom: 4rem;
-      padding: 2rem;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border-radius: var(--radius);
-      color: white;
-    }
-    .podcast-header h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .podcast-header p {
-      font-size: 1.25rem;
-      max-width: 800px;
-      margin: 0 auto;
-      opacity: 0.9;
-    }
-    /* Reproductor del episodio actual */
-    .podcast-player {
-      background: var(--gray-100);
-      border-radius: var(--radius);
-      padding: 2rem;
-      box-shadow: var(--shadow);
-      margin-bottom: 3rem;
-      text-align: center;
-      transition: transform 0.3s ease;
-    }
-    .podcast-player:hover {
-      transform: scale(1.02);
-    }
-    /* Imagen de portada */
-    .cover-art {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      margin: 0 auto 1.5rem;
-      overflow: hidden;
-      border: 4px solid var(--primary);
-    }
-    .cover-art img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    /* Meta información del episodio */
-    .podcast-meta {
-      margin-bottom: 2rem;
-    }
-    .podcast-meta h2 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: var(--primary);
-    }
-    .podcast-meta p {
-      color: var(--text);
-      max-width: 600px;
-      margin: 0 auto;
-      font-size: 1rem;
-      line-height: 1.5;
-    }
-    /* Controles de audio */
-    .audio-controls {
-      width: 100%;
-      margin-top: 2rem;
-    }
-    .audio-controls audio {
-      width: 100%;
-      border-radius: var(--radius);
-      outline: none;
-    }
-    /* Sección de episodios */
-    .episodes-section {
-      background: var(--gray-100);
-      border-radius: var(--radius);
-      padding: 2rem;
-      box-shadow: var(--shadow);
-    }
-    .episodes-section h2 {
-      font-size: 1.75rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid var(--gray-200);
-      padding-bottom: 0.5rem;
-      text-align: center;
-      color: var(--primary);
-    }
-    /* Tarjetas de episodio */
-    .episode-card {
-      display: flex;
-      gap: 1.5rem;
-      padding: 1.5rem;
-      background: var(--background);
-      border-radius: var(--radius);
-      margin-bottom: 1rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid var(--gray-200);
-    }
-    .episode-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    .episode-number {
-      font-size: 1.5rem;
-      color: var(--primary);
-      min-width: 50px;
-      text-align: center;
-    }
-    .episode-content {
-      flex-grow: 1;
-    }
-    .episode-content h3 {
-      font-size: 1.4rem;
-      margin: 0 0 0.5rem;
-      color: var(--text);
-    }
-    .episode-date {
-      color: var(--text);
-      opacity: 0.8;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-    .episode-content p {
-      margin: 0 0 0.5rem;
-      font-size: 0.95rem;
-      color: var(--text);
-    }
-    .episode-duration {
-      background: var(--primary);
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: var(--radius);
-      font-size: 0.85rem;
-      display: inline-block;
-      margin-top: 0.5rem;
-    }
-    @media (max-width: 768px) {
-      .podcast-main {
-        padding: 0 1rem;
-      }
-      .cover-art {
-        width: 150px;
-        height: 150px;
-      }
-      .episode-card {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      .episode-number {
-        text-align: center;
-      }
-    }
+  /* Estilos principales para Podcast */
+  .podcast-main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+  .podcast-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: var(--radius);
+    color: white;
+  }
+  .podcast-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .podcast-header p {
+    font-size: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.9;
+  }
+  .podcast-player {
+    background: var(--gray-100);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 3rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  .podcast-player:hover { transform: scale(1.02); }
+  .cover-art {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    overflow: hidden;
+    border: 4px solid var(--primary);
+  }
+  .cover-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .episodes-section {
+    background: var(--gray-100);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+  .episodes-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 0.5rem;
+    text-align: center;
+    color: var(--primary);
+  }
+  .episode-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--background);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--gray-200);
+  }
+  .episode-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  .episode-number {
+    font-size: 1.5rem;
+    color: var(--primary);
+    min-width: 50px;
+    text-align: center;
+  }
+  .episode-content h3 {
+    font-size: 1.4rem;
+    margin: 0 0 0.5rem;
+    color: var(--text);
+  }
+  .episode-date {
+    color: var(--text);
+    opacity: 0.8;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
 
-    /* ======================
-       Estilos para Comentarios
-       ====================== */
-    .comments-section {
-      margin-top: 4rem;
-      padding: 2.5rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      background-color: var(--background);
-      box-shadow: var(--shadow);
-    }
-    .comments-section h2 {
-      font-size: 1.75rem;
-      color: var(--primary);
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--primary);
-      text-align: center;
-    }
-    .comment-form .form-group {
-      margin-bottom: 1.5rem;
-    }
-    .comment-form label {
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 0.75rem;
-      display: block;
-    }
-    .comment-form textarea {
-      width: 100%;
-      min-height: 150px;
-      padding: 1rem;
-      border: 2px solid var(--gray-200);
-      border-radius: var(--radius);
-      background: var(--background);
-      color: var(--text);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    .comment-form textarea:focus {
-      border-color: var(--primary);
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-    }
-    .submit-comment {
-      width: 100%;
-      font-size: 1rem;
-      font-weight: 600;
-      background-color: var(--primary);
-      color: #fff;
-      padding: 0.75rem;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: transform 0.2s ease, background-color 0.3s ease;
-      margin-top: 1rem;
-    }
-    .submit-comment:hover {
-      transform: translateY(-2px);
-      background-color: var(--secondary);
-    }
-    .comments-list {
-      margin-top: 3rem;
-    }
-    /* Estilos para la calificación con estrellas */
-    .star-rating {
-      display: inline-flex;
-      flex-direction: row-reverse;
-      justify-content: flex-end;
-      gap: 0.25rem;
-    }
-    .star-rating input[type="radio"] {
-      display: none;
-    }
-    .star-rating label {
-      font-size: 1.5rem;
-      color: #d1d5db;
-      cursor: pointer;
-      transition: color 0.2s ease;
-    }
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-      color: #fcd34d;
-    }
-    .star-rating input[type="radio"]:checked ~ label {
-      color: #f59e0b;
-    }
-  </style>
+  /* Estilos para Comentarios */
+  .comments-section {
+    margin-top: 4rem;
+    padding: 2.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    background-color: var(--background);
+    box-shadow: var(--shadow);
+  }
+  .comments-section h2 {
+    font-size: 1.75rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary);
+    text-align: center;
+  }
+  .comment-form .form-group { margin-bottom: 1.5rem; }
+  .comment-form label {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .comment-form textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    background: var(--background);
+    color: var(--text);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .comment-form textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+  .submit-comment {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: var(--primary);
+    color: #fff;
+    padding: 0.75rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    margin-top: 1rem;
+  }
+  .submit-comment:hover {
+    transform: translateY(-2px);
+    background-color: var(--secondary);
+  }
+  .comments-list { margin-top: 3rem; }
+
+  /* Estrellas de calificación */
+  .star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.25rem;
+  }
+  .star-rating input[type="radio"] { display: none; }
+  .star-rating label {
+    font-size: 1.5rem;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .star-rating label:hover,
+  .star-rating label:hover ~ label {
+    color: #fcd34d;
+  }
+  .star-rating input[type="radio"]:checked ~ label {
+    color: #f59e0b;
+  }
+
+  /* Comentario general */
+  .comment {
+    position: relative;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    background: var(--gray-100);
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .comment:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .comment-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .comment-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+    padding: 2px;
+    background: var(--background);
+  }
+  .comment-body { margin-bottom: 1rem; }
+  .comment-reactions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+  }
+  .reaction-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .reaction-button:hover { transform: scale(1.1); }
+  .reaction-button svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--gray-400);
+    transition: fill 0.3s ease;
+  }
+  .reaction-button.active svg { fill: var(--primary); }
+  .reaction-button span { font-size: 0.875rem; color: var(--text); }
+  .comment-replies {
+    margin-left: 2rem;
+    border-left: 2px solid var(--secondary);
+    padding-left: 1rem;
+  }
+</style>
 {% endblock %}
 
 {% block content %}
 <main class="podcast-main">
-  <!-- Encabezado principal con fondo degradado -->
+  <!-- Cabecera del Podcast -->
   <header class="podcast-header">
     <h1 class="section-title">WebDev Podcast</h1>
     <p class="podcast-description">Explora el mundo del desarrollo web a través de conversaciones con expertos de la industria.</p>
   </header>
 
-  <!-- Reproductor del Podcast -->
-  <section class="podcast-player" aria-label="Reproductor del episodio actual">
+  <!-- Reproductor principal -->
+  <section class="podcast-player">
     <div class="cover-art">
       {% if podcast.cover %}
         <img src="{{ podcast.cover.url }}" alt="Cover del Podcast">
       {% else %}
-        <!-- SVG inline para el logo por defecto -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="podcast-logo" id="coverImagePreview" aria-label="Podcast Logo">
-          <circle cx="32" cy="32" r="30" fill="#2563eb"/>
-          <rect x="28" y="18" width="8" height="20" rx="4" fill="#fff"/>
-          <path d="M20 38a12 12 0 0 1 24 0v4H20v-4z" fill="#fff"/>
-          <rect x="30" y="42" width="4" height="8" fill="#fff"/>
+        <!-- SVG por defecto -->
+        <svg class="podcast-logo" width="200" height="200" viewBox="0 0 64 64" aria-label="Podcast Logo">
+          <!-- ... -->
         </svg>
       {% endif %}
     </div>
@@ -306,29 +287,29 @@
     </div>
   </section>
 
-  <!-- Lista de episodios anteriores -->
-<section class="episodes-section">
-  <h2 class="section-title">Episodios Anteriores</h2>
-  {% for episode in previous_episodes %}
-    <div class="episode-card">
-      <div class="episode-number">#{{ forloop.counter }}</div>
-      <div class="episode-content">
-        <h3>{{ episode.title }}</h3>
-        <div class="episode-date">{{ episode.created_at|date:"d M Y" }}</div>
-        <p>{{ episode.description }}</p>
-        <span class="episode-duration">{{ episode.duration }}</span>
+  <!-- Episodios Anteriores -->
+  <section class="episodes-section">
+    <h2 class="section-title">Episodios Anteriores</h2>
+    {% for episode in previous_episodes %}
+      <div class="episode-card">
+        <div class="episode-number">#{{ forloop.counter }}</div>
+        <div class="episode-content">
+          <h3>{{ episode.title }}</h3>
+          <div class="episode-date">{{ episode.created_at|date:"d M Y" }}</div>
+          <p>{{ episode.description }}</p>
+          <span class="episode-duration">{{ episode.duration }}</span>
+        </div>
       </div>
-    </div>
-  {% empty %}
-    <p>No hay episodios anteriores.</p>
-  {% endfor %}
-</section>
+    {% empty %}
+      <p>No hay episodios anteriores.</p>
+    {% endfor %}
+  </section>
 
-  <!-- Sección de Comentarios y Valoraciones -->
+  <!-- Comentarios y Valoraciones -->
   <section id="comments" class="comments-section">
     <h2>Comentarios y Valoraciones</h2>
 
-    <!-- Formulario para agregar un comentario -->
+    <!-- Formulario para comentar -->
     <form class="comment-form" method="post" action="{% url 'escuchar_podcast' podcast.pk %}#comments">
       {% csrf_token %}
       <div class="form-group">
@@ -359,20 +340,172 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log("La página de Escuchar Podcast se ha cargado exitosamente.");
-      // Seguimiento del audio
-      const audioPlayer = document.querySelector('.audio-controls audio');
-      if (audioPlayer) {
-        audioPlayer.addEventListener('play', () => {
-          console.log("El audio ha comenzado a reproducirse.");
-        });
-        audioPlayer.addEventListener('timeupdate', () => {
-          const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-          console.log(`Progreso del audio: ${progress.toFixed(1)}%`);
-        });
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  // Funciones para mostrar y ocultar el overlay de carga (spinner)
+  function showLoading() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+      loadingOverlay.style.display = 'flex'; // Usamos flex para centrar el contenido
+    }
+  }
+
+  function hideLoading() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+      loadingOverlay.style.display = 'none';
+    }
+  }
+
+  // --- Sección para peticiones AJAX en botones de reacciones ---
+  function sendPodcastReaction(url, commentId, callback) {
+    showLoading();
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': csrfToken
+      },
+      body: new URLSearchParams({ 'comment_id': commentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      hideLoading();
+      callback(data);
+    })
+    .catch(error => {
+      hideLoading();
+      console.error('Error:', error);
+    });
+  }
+
+  // Registro de botones "Me gusta"
+  document.querySelectorAll('.like-button').forEach(button => {
+    button.addEventListener('click', () => {
+      const commentId = button.dataset.commentId;
+      sendPodcastReaction("{% url 'toggle_podcast_comment_like' %}", commentId, data => {
+        if (!data.error) {
+          updatePodcastReactionUI(commentId, data);
+        } else {
+          console.error(data.error);
+        }
+      });
+    });
+  });
+
+  // Registro de botones "No me gusta"
+  document.querySelectorAll('.dislike-button').forEach(button => {
+    button.addEventListener('click', () => {
+      const commentId = button.dataset.commentId;
+      sendPodcastReaction("{% url 'toggle_podcast_comment_dislike' %}", commentId, data => {
+        if (!data.error) {
+          updatePodcastReactionUI(commentId, data);
+        } else {
+          console.error(data.error);
+        }
+      });
+    });
+  });
+
+  // Toggle del formulario de respuesta
+  document.querySelectorAll('.reply-button').forEach(button => {
+    button.addEventListener('click', () => {
+      const commentId = button.dataset.commentId;
+      const replyForm = document.getElementById(`reply-form-${commentId}`);
+      if (replyForm) {
+        replyForm.style.display = (replyForm.style.display === 'none' || replyForm.style.display === '')
+          ? 'block'
+          : 'none';
       }
     });
-  </script>
+  });
+
+  // Toggle para ver/ocultar respuestas
+  document.querySelectorAll('.toggle-replies-button').forEach(button => {
+    button.addEventListener('click', () => {
+      const commentId = button.dataset.commentId;
+      const repliesCount = button.dataset.repliesCount;
+      const repliesDiv = document.getElementById(`replies-${commentId}`);
+      if (repliesDiv) {
+        if (repliesDiv.style.display === 'none' || repliesDiv.style.display === '') {
+          repliesDiv.style.display = 'block';
+          button.querySelector('span').textContent = `Ocultar respuestas (${repliesCount})`;
+        } else {
+          repliesDiv.style.display = 'none';
+          button.querySelector('span').textContent = `Ver respuestas (${repliesCount})`;
+        }
+      }
+    });
+  });
+
+  // Registro de botones para borrar comentarios
+  document.querySelectorAll('.delete-comment-button').forEach(button => {
+    button.addEventListener('click', () => {
+      const commentId = button.dataset.commentId;
+      if (!confirm('¿Estás seguro de que deseas borrar este comentario?')) return;
+      sendPodcastReaction("{% url 'delete_podcast_comment' %}", commentId, data => {
+        if (data.success) {
+          const commentDiv = document.getElementById(`comment-${commentId}`);
+          if (commentDiv) commentDiv.remove();
+        } else {
+          alert(data.error || 'Error al borrar comentario.');
+        }
+      });
+    });
+  });
+
+  // Función para actualizar la UI de reacciones (ya definida en tu código)
+  function updatePodcastReactionUI(commentId, data) {
+    // Actualiza botón "Me gusta"
+    const likeButton = document.querySelector(`.like-button[data-comment-id="${commentId}"]`);
+    if (likeButton) {
+      const likeCountEl = likeButton.querySelector('.like-count');
+      if (likeCountEl) {
+        likeCountEl.textContent = data.like_count;
+      }
+      if (data.liked) {
+        likeButton.classList.add('active');
+      } else {
+        likeButton.classList.remove('active');
+      }
+    }
+    // Actualiza botón "No me gusta"
+    const dislikeButton = document.querySelector(`.dislike-button[data-comment-id="${commentId}"]`);
+    if (dislikeButton) {
+      const dislikeCountEl = dislikeButton.querySelector('.dislike-count');
+      if (dislikeCountEl) {
+        dislikeCountEl.textContent = data.dislike_count;
+      }
+      if (data.disliked) {
+        dislikeButton.classList.add('active');
+      } else {
+        dislikeButton.classList.remove('active');
+      }
+    }
+  }
+
+  // --- Nueva sección: Mostrar overlay al enviar formularios de comentario o respuesta ---
+  // Seleccionamos el formulario principal de comentarios
+  const commentForm = document.querySelector('.comment-form');
+  if (commentForm) {
+    commentForm.addEventListener('submit', () => {
+      showLoading();
+    });
+  }
+
+  // Seleccionamos todos los formularios de respuesta (dentro de contenedores con clase "reply-form")
+  const replyForms = document.querySelectorAll('.reply-form form');
+  replyForms.forEach(form => {
+    form.addEventListener('submit', () => {
+      showLoading();
+    });
+  });
+});
+
+
+</script>
+
 {% endblock %}
