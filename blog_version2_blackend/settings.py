@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'leer_tutoriales',
     'escuchar_podcast',
     'crear_podcast',
+    'politica_privacidad',
 ]
 
 SITE_ID = 2

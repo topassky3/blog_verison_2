@@ -38,6 +38,7 @@ urlpatterns = [
     path('tutoriales/', include('leer_tutoriales.urls')),
     path('escuchar-podcast/', include('escuchar_podcast.urls')),
     path('crear_podcast/', include('crear_podcast.urls')),
+    path('politica/', include('politica_privacidad.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,118 @@
+{% extends "core/core.html" %}
+{% load tutorial_tags %}
+
+{% block title %}Politica de privacidad | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  <!-- Estilos específicos para la Política de Privacidad -->
+  <style>
+    .privacy-policy {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 100px auto 0;
+      background-color: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .privacy-policy h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    .privacy-policy h2 {
+      font-size: 1.75rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: var(--secondary);
+    }
+    .privacy-policy p,
+    .privacy-policy li {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      color: var(--text);
+      text-align: justify;
+    }
+    .privacy-policy ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .privacy-policy a {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    .privacy-policy a:hover {
+      color: var(--secondary);
+    }
+
+    /* Ajustes para dispositivos móviles */
+    @media (max-width: 768px) {
+      .privacy-policy {
+        padding: 1rem;
+        margin: 80px auto 0;
+        width: 95%;
+      }
+      .privacy-policy h1 {
+        font-size: 2rem;
+      }
+      .privacy-policy h2 {
+        font-size: 1.5rem;
+      }
+      .privacy-policy p,
+      .privacy-policy li {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<article class="privacy-policy">
+  <h1>Política de Privacidad</h1>
+  <p><strong>&Uacute;ltima actualizaci&oacute;n:</strong> 06 de marzo de 2025</p>
+
+  <h2>1. Introducci&oacute;n</h2>
+  <p>En tucodigocotidiano, valoramos tu privacidad y estamos comprometidos a proteger tu informaci&oacute;n personal. Esta Pol&iacute;tica de Privacidad explica c&oacute;mo recopilamos, usamos, almacenamos y protegemos los datos que obtenemos de ti al utilizar nuestro sitio web.</p>
+
+  <h2>2. Informaci&oacute;n que Recopilamos</h2>
+  <ul>
+    <li><strong>Datos de contacto:</strong> Nombre, direcci&oacute;n de correo electr&oacute;nico y, en ocasiones, otros datos de contacto que nos facilites.</li>
+    <li><strong>Datos de navegaci&oacute;n:</strong> Informaci&oacute;n obtenida autom&aacute;ticamente, como direcci&oacute;n IP, tipo de navegador, p&aacute;ginas visitadas y tiempo de navegaci&oacute;n.</li>
+    <li><strong>Cookies:</strong> Utilizamos cookies para mejorar la experiencia del usuario y analizar el tr&aacute;fico del sitio. Puedes ajustar la configuraci&oacute;n de cookies en tu navegador.</li>
+  </ul>
+
+  <h2>3. Uso de la Informaci&oacute;n</h2>
+  <p>Utilizamos la informaci&oacute;n recopilada para:</p>
+  <ul>
+    <li>Proveer y mantener nuestros servicios.</li>
+    <li>Personalizar tu experiencia en el sitio.</li>
+    <li>Enviar comunicaciones, actualizaciones o boletines informativos, si has dado tu consentimiento.</li>
+    <li>Analizar el uso del sitio para mejorarlo y ofrecer contenido relevante.</li>
+  </ul>
+
+  <h2>4. Compartir Informaci&oacute;n</h2>
+  <p>No compartimos tu informaci&oacute;n personal con terceros, salvo en los siguientes casos:</p>
+  <ul>
+    <li>Cuando sea necesario para cumplir con una obligaci&oacute;n legal.</li>
+    <li>Con proveedores de servicios que nos asisten en la operaci&oacute;n del sitio, quienes est&aacute;n obligados a mantener la confidencialidad de los datos.</li>
+  </ul>
+
+  <h2>5. Seguridad de la Informaci&oacute;n</h2>
+  <p>Implementamos medidas de seguridad t&eacute;cnicas y organizativas para proteger tus datos personales contra p&eacute;rdida, acceso no autorizado o divulgaci&oacute;n.</p>
+
+  <h2>6. Tus Derechos</h2>
+  <p>Tienes derecho a acceder, rectificar o eliminar tu informaci&oacute;n personal. Para ejercer estos derechos, cont&aacute;ctanos a trav&eacute;s de [correo electr&oacute;nico de contacto].</p>
+
+  <h2>7. Cambios en la Pol&iacute;tica de Privacidad</h2>
+  <p>Nos reservamos el derecho de modificar esta pol&iacute;tica en cualquier momento. Las actualizaciones se publicar&aacute;n en esta p&aacute;gina con la fecha de la &uacute;ltima actualizaci&oacute;n. Se recomienda revisar esta pol&iacute;tica periódicamente.</p>
+
+  <h2>8. Contacto</h2>
+  <p>Si tienes preguntas o inquietudes sobre esta Pol&iacute;tica de Privacidad, cont&aacute;ctanos en <a href="mailto:orozjuanfelipe@gmail.com">orozjuanfelipe@gmail.com</a>.</p>
+</article>
+{% endblock %}
+
+{% block extra_js %}
+  <!-- Aquí puedes incluir JavaScript adicional si es necesario -->
+{% endblock %}

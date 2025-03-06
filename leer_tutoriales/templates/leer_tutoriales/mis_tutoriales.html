@@ -645,10 +645,10 @@ background-color: var(--primary);
   </section>
     <!-- Botón para descargar el proyecto -->
   <div class="download-project" style="text-align: center; margin: 2rem 0;">
-    <a href="#" class="download-button" download>
-      Descargar Proyecto
-    </a>
-  </div>
+  <a href="{% url 'download_code_file' tutorial.pk %}" class="download-button">
+    Descargar Proyecto
+  </a>
+</div>
   <a href="{% url 'tutoriales_home' %}" class="back-button">← Volver a Tutoriales</a>
 </article>
 

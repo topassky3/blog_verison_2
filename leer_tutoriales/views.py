@@ -152,3 +152,20 @@ def delete_comment(request):
     if parent_id:
         data['parent_id'] = parent_id  # Devolvemos el id del comentario padre si se borró una respuesta
     return JsonResponse(data)
+
+
+
+from django.views import View
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from core.models import Tutorial
+
+class DownloadCodeFileView(LoginRequiredMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        tutorial = get_object_or_404(Tutorial, pk=pk)
+        if not tutorial.code_file:
+            raise Http404("No se encontró el archivo de código para este tutorial.")
+        # Se abre el archivo en modo binario y se prepara para la descarga
+        response = FileResponse(tutorial.code_file.open('rb'), as_attachment=True, filename=tutorial.code_file.name)
+        return response
