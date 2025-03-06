@@ -252,6 +252,25 @@
     border-left: 2px solid var(--secondary);
     padding-left: 1rem;
   }
+  .delete-comment-button {
+      background-color: var(--secondary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 14px;
+      line-height: 20px;
+      text-align: center;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 1rem;
+      transition: background-color 0.3s;
+    }
+    .delete-comment-button:hover {
+      background-color: var(--primary);
+    }
+
 </style>
 {% endblock %}
 
@@ -443,19 +462,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Registro de botones para borrar comentarios
   document.querySelectorAll('.delete-comment-button').forEach(button => {
-    button.addEventListener('click', () => {
-      const commentId = button.dataset.commentId;
-      if (!confirm('¿Estás seguro de que deseas borrar este comentario?')) return;
-      sendPodcastReaction("{% url 'delete_podcast_comment' %}", commentId, data => {
-        if (data.success) {
-          const commentDiv = document.getElementById(`comment-${commentId}`);
-          if (commentDiv) commentDiv.remove();
-        } else {
-          alert(data.error || 'Error al borrar comentario.');
-        }
+      button.addEventListener('click', () => {
+        const commentId = button.dataset.commentId;
+        customConfirm('¿Estás seguro de que deseas borrar este comentario?')
+          .then(confirmed => {
+            if (confirmed) {
+              sendPodcastReaction("{% url 'delete_podcast_comment' %}", commentId, data => {
+                if (data.success) {
+                  const commentDiv = document.getElementById(`comment-${commentId}`);
+                  if (commentDiv) commentDiv.remove();
+                } else {
+                  alert(data.error || 'Error al borrar comentario.');
+                }
+              });
+            }
+          });
       });
     });
-  });
+
 
   // Función para actualizar la UI de reacciones (ya definida en tu código)
   function updatePodcastReactionUI(commentId, data) {
@@ -504,6 +528,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+function customConfirm(message) {
+  return new Promise((resolve) => {
+    // Creamos el modal con las clases definidas en tu CSS (modal y modal-content confirm)
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    modal.innerHTML = `
+      <div class="modal-content confirm">
+        <p>${message}</p>
+        <div class="confirm-buttons">
+          <button id="customConfirmOkButton">Aceptar</button>
+          <button id="customConfirmCancelButton" class="cancel-button">Cancelar</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Manejadores para los botones de confirmación
+    document.getElementById('customConfirmOkButton').addEventListener('click', function() {
+      modal.remove();
+      resolve(true);
+    });
+    document.getElementById('customConfirmCancelButton').addEventListener('click', function() {
+      modal.remove();
+      resolve(false);
+    });
+  });
+}
 
 
 </script>
