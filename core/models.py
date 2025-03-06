@@ -41,6 +41,9 @@ class Lector(AbstractUser):
         """Retorna True si el usuario pertenece al grupo 'Escritor'."""
         return self.groups.filter(name="Escritor").exists()
 
+from django.core.validators import FileExtensionValidator
+from django.db import models
+
 class Tutorial(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -62,9 +65,18 @@ class Tutorial(models.Model):
     publicado = models.BooleanField("Publicado", default=False)
     created_at = models.DateTimeField("Creado el", auto_now_add=True)
     updated_at = models.DateTimeField("Actualizado el", auto_now=True)
+    # Nuevo campo para el código en .zip
+    code_file = models.FileField(
+        "Código del Tutorial (.zip)",
+        upload_to='tutorial_codes/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['zip'])]
+    )
 
     def __str__(self):
         return self.title
+
 
 
 class TutorialBlock(models.Model):

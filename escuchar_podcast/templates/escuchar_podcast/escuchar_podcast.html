@@ -271,6 +271,22 @@
       background-color: var(--primary);
     }
 
+    .download-button {
+  display: inline-block;
+  background-color: var(--primary);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.download-button:hover {
+  background-color: var(--secondary);
+  transform: translateY(-2px);
+}
+
+
 </style>
 {% endblock %}
 
@@ -303,6 +319,12 @@
         <source src="{{ podcast.audio.url }}" type="audio/mpeg">
         Tu navegador no soporta el elemento de audio.
       </audio>
+    </div>
+    <!-- Botón para descargar el podcast -->
+    <div class="download-podcast" style="text-align: center; margin: 2rem 0;">
+      <a href="{{ podcast.audio.url }}" class="download-button" download>
+        Descargar Podcast
+      </a>
     </div>
   </section>
 
