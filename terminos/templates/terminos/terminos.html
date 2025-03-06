@@ -1,0 +1,108 @@
+{% extends "core/core.html" %}
+{% load tutorial_tags %}
+
+{% block title %}Términos de Servicio | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  <!-- Estilos específicos para los Términos de Servicio -->
+  <style>
+    .terms-service {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 100px auto 0;
+      background-color: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .terms-service h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    .terms-service h2 {
+      font-size: 1.75rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: var(--secondary);
+    }
+    .terms-service p,
+    .terms-service li {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      color: var(--text);
+      text-align: justify;
+    }
+    .terms-service ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .terms-service a {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    .terms-service a:hover {
+      color: var(--secondary);
+    }
+    
+    /* Ajustes para dispositivos móviles */
+    @media (max-width: 768px) {
+      .terms-service {
+        padding: 1rem;
+        margin: 80px auto 0;
+        width: 95%;
+      }
+      .terms-service h1 {
+        font-size: 2rem;
+      }
+      .terms-service h2 {
+        font-size: 1.5rem;
+      }
+      .terms-service p,
+      .terms-service li {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<article class="terms-service">
+  <h1>Términos de Servicio</h1>
+  <p><strong>Última actualización:</strong> 06 de marzo del 2025</p>
+
+  <h2>1. Aceptación de los Términos</h2>
+  <p>Al acceder y utilizar tucodigocotidiano (en adelante, "el sitio"), aceptas estos Términos de Servicio y te comprometes a cumplirlos. Si no estás de acuerdo, por favor, no utilices el sitio.</p>
+
+  <h2>2. Uso del Sitio</h2>
+  <ul>
+    <li><strong>Contenido:</strong> Todo el contenido del sitio es propiedad de tucodigocotidiano o de sus respectivos autores. No se permite la reproducción sin autorización previa.</li>
+    <li><strong>Acceso:</strong> Nos reservamos el derecho de modificar, suspender o interrumpir cualquier aspecto del sitio en cualquier momento.</li>
+    <li><strong>Conducta del Usuario:</strong> Te comprometes a utilizar el sitio de manera lícita y respetuosa, sin infringir derechos de terceros ni comprometer la seguridad del sitio.</li>
+  </ul>
+
+  <h2>3. Responsabilidad y Garantías</h2>
+  <ul>
+    <li><strong>Limitación de Responsabilidad:</strong> tucodigocotidiano no será responsable por daños directos, indirectos, incidentales o consecuentes derivados del uso o la imposibilidad de uso del sitio.</li>
+    <li><strong>Contenido de Terceros:</strong> El sitio puede incluir enlaces a sitios de terceros, cuya gestión y contenido no son responsabilidad de tucodigocotidiano.</li>
+  </ul>
+
+  <h2>4. Propiedad Intelectual</h2>
+  <p>Todo el contenido, diseños, textos, imágenes y logotipos disponibles en el sitio están protegidos por derechos de autor. El uso no autorizado de este contenido puede constituir una violación de la ley de propiedad intelectual.</p>
+
+  <h2>5. Modificaciones de los Términos</h2>
+  <p>Nos reservamos el derecho de actualizar estos Términos de Servicio en cualquier momento. Las modificaciones entrarán en vigor al momento de su publicación. Es responsabilidad del usuario revisar periódicamente estos términos.</p>
+
+  <h2>6. Ley Aplicable y Jurisdicción</h2>
+  <p>Estos términos se regirán e interpretarán de acuerdo con las leyes vigentes en Colombia. Cualquier disputa que surja del uso del sitio será sometida a la jurisdicción de los tribunales competentes en dicha localidad.</p>
+
+  <h2>7. Contacto</h2>
+  <p>Para cualquier consulta relacionada con estos Términos de Servicio, contáctanos a través de <a href="mailto:orozjuanfelipe@gmail.com">orozjuanfelipe@gmail.com</a>.</p>
+</article>
+{% endblock %}
+
+{% block extra_js %}
+  <!-- Aquí puedes incluir JavaScript adicional si es necesario -->
+{% endblock %}
