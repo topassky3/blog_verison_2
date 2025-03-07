@@ -1,0 +1,13 @@
+{% extends "core/core.html" %}
+
+{% block title %}Error de Autorización | WebDev Blog{% endblock %}
+
+{% block content %}
+  <h1>Error en la Autorización</h1>
+  <p>Se denegó el acceso a tu cuenta de Patreon.</p>
+  <p>Error: {{ error }}</p>
+  <p>Descripción: {{ error_description }}</p>
+  <a href="{% url 'iniciar_pago' plan='Premium' %}">Reintentar suscripción Premium</a>
+  <br>
+  <a href="{% url 'iniciar_pago' plan='Anual' %}">Reintentar suscripción Anual</a>
+{% endblock %}
