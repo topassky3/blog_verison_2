@@ -36,7 +36,7 @@ OAUTH_AUTHORIZE_URL = "https://www.patreon.com/oauth2/authorize"
 class IniciarPagoView(View):
     def get(self, request, plan):
         # Construir la URL de redirección (callback) que debe estar registrada en el panel de tu cliente
-        callback_url = "https://tucodigocotidiano.yarumaltech.com/auth/patreon/callback"
+        callback_url = "https://tucodigocotidiano.yarumaltech.com/suscripcion/auth/patreon/callback"
         # Parámetros para el flujo OAuth
         params = {
             "response_type": "code",
