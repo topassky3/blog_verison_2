@@ -28,7 +28,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG')
 
-ALLOWED_HOSTS = ["10.0.0.6", "localhost", "192.168.47.225", "192.168.0.105", "51.222.159.144", "tucodigocotidiano.yarumaltech.com"]
+ALLOWED_HOSTS = ["10.0.0.6", "localhost", "192.168.47.225", "192.168.0.105", "51.222.159.144",
+                 "tucodigocotidiano.yarumaltech.com", "www.tucodigocotidiano.yarumaltech.com"]
 
 
 # Application definition
@@ -202,5 +203,15 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://tucodigocotidiano.yarumaltech.com",
+    "http://tucodigocotidiano.yarumaltech.com",
+    "https://www.tucodigocotidiano.yarumaltech.com",
+    "http://www.tucodigocotidiano.yarumaltech.com",
+    "https://51.222.159.144",
+    "http://51.222.159.144",
+]
+
 
 
