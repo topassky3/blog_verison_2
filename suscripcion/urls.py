@@ -4,5 +4,5 @@ from .views import SuscripcionView, IniciarPagoView, PaymentCallbackView
 urlpatterns = [
     path('', SuscripcionView.as_view(), name='suscripcion_home'),
     path('pago/<str:plan>/', IniciarPagoView.as_view(), name='iniciar_pago'),
-    path('pago/callback/', PaymentCallbackView.as_view(), name='pago_callback'),
+    path('auth/patreon/callback/', PaymentCallbackView.as_view(), name='pago_callback'),
 ]

@@ -50,20 +50,21 @@ class IniciarPagoView(View):
 
 
 class PaymentCallbackView(View):
+    CALLBACK_URL = "https://tucodigocotidiano.yarumaltech.com/auth/patreon/callback"
+
     def get(self, request):
         code = request.GET.get("code")
         plan = request.GET.get("state")  # El plan se recupera desde state
         if not code:
             return HttpResponse("No se recibió código de autorización.", status=400)
 
-        callback_url = request.build_absolute_uri("/suscripcion/pago/callback/")
         token_url = "https://www.patreon.com/api/oauth2/token"
         data = {
             "code": code,
             "grant_type": "authorization_code",
             "client_id": CLIENT_ID,
             "client_secret": CLIENT_SECRET,
-            "redirect_uri": callback_url,
+            "redirect_uri": self.CALLBACK_URL,
         }
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         response = requests.post(token_url, data=data, headers=headers)
@@ -83,3 +84,4 @@ class PaymentCallbackView(View):
             mensaje = "Usuario no autenticado. Por favor inicia sesión para completar el proceso."
 
         return HttpResponse(mensaje)
+
