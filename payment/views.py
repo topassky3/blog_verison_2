@@ -10,7 +10,6 @@ def paypal_payment(request, plan):
     """
     Vista que genera el formulario de pago para el plan seleccionado.
     """
-    # Configura los datos de pago según el plan
     if plan.lower() == "premium":
         amount = "9.99"
         item_name = "Suscripción Premium"
@@ -25,7 +24,7 @@ def paypal_payment(request, plan):
         "business": settings.PAYPAL_RECEIVER_EMAIL,
         "amount": amount,
         "item_name": item_name,
-        # Agregamos un UUID para garantizar que el invoice sea único:
+        # Ahora el invoice tendrá tres partes: user_id, plan y un UUID único
         "invoice": f"{request.user.id}-{plan}-{uuid.uuid4()}",
         "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
         "return_url": request.build_absolute_uri(reverse('payment:payment_done')),
@@ -33,15 +32,12 @@ def paypal_payment(request, plan):
     }
 
     form = PayPalPaymentsForm(initial=paypal_dict)
-    # Define el endpoint manualmente
     if settings.PAYPAL_TEST:
         endpoint = "https://www.sandbox.paypal.com/cgi-bin/webscr"
     else:
         endpoint = "https://www.paypal.com/cgi-bin/webscr"
 
     return render(request, "payment/process_payment.html", {"form": form, "plan": plan, "endpoint": endpoint})
-
-
 def payment_done(request):
     """
     Vista que se muestra cuando el pago se realiza con éxito.
