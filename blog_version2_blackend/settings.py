@@ -68,7 +68,6 @@ INSTALLED_APPS = [
     'crear_podcast',
     'politica_privacidad',
     'terminos',
-
 ]
 
 SITE_ID = 3
@@ -218,3 +217,4 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Si usas environ:
 PAYPAL_RECEIVER_EMAIL = env('PAYPAL_RECEIVER_EMAIL')
+PAYPAL_TEST = True

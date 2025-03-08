@@ -6,6 +6,7 @@ from core.models import Subscription
 from paypal.standard.forms import PayPalPaymentsForm
 
 
+
 class SuscripcionView(TemplateView):
     template_name = "suscripcion/suscripcion.html"
 
