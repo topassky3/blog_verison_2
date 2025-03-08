@@ -28,22 +28,24 @@
     <h2>Planes de Suscripción</h2>
     <div class="plan-grid">
       <!-- Plan Básico -->
-      <div class="plan">
-        <h3>Básico</h3>
-        <p class="price">$0<span style="font-size: 1rem;">/mes</span></p>
-        <p>
-          Acceso limitado a artículos y podcasts. Ideal para comenzar a explorar nuestro contenido.
-        </p>
-        {% if user.is_authenticated %}
-          {% if subscription and subscription.plan == "Básico" %}
-            <span class="plan-current">Plan Actual</span>
+        <div class="plan">
+          <h3>Básico</h3>
+          <p class="price">$0<span style="font-size: 1rem;">/mes</span></p>
+          <p>
+            Acceso limitado a artículos y podcasts. Ideal para comenzar a explorar nuestro contenido.
+          </p>
+          {% if user.is_authenticated %}
+            {% if subscription and subscription.plan == "Básico" %}
+              <span class="plan-current">Plan Actual</span>
+            {% else %}
+              {# En caso de que el usuario esté autenticado y tenga otro plan, podrías mostrar su plan actual o un enlace para cambiarlo #}
+              <span class="plan-current">Tu suscripción actual: {{ subscription.plan }}</span>
+            {% endif %}
           {% else %}
-            <span class="plan-current">Tu suscripción actual: {{ subscription.plan }}</span>
+            <a class="cta" href="{% url 'registrarse_home' %}">Regístrate para obtener tu plan gratuito</a>
           {% endif %}
-        {% else %}
-          <a class="cta" href="{% url 'registrarse_home' %}">Regístrate para obtener tu plan gratuito</a>
-        {% endif %}
-      </div>
+        </div>
+
 
       <!-- Plan Premium -->
       <div class="plan">
@@ -52,13 +54,8 @@
         <p>
           Acceso ilimitado a tutoriales, guías completas, podcasts exclusivos y descargas de recursos.
         </p>
-        {% if user.is_authenticated %}
-          <a class="cta" href="{% url 'iniciar_pago' plan='Premium' %}">Suscribirse</a>
-        {% else %}
-          <a class="cta" href="{% url 'registrarse_home' %}">Regístrate para suscribirte</a>
-        {% endif %}
+        <a class="cta" href="#">Suscribirse</a>
       </div>
-
       <!-- Plan Anual -->
       <div class="plan">
         <h3>Anual</h3>
@@ -66,11 +63,7 @@
         <p>
           Aprovecha un gran descuento y obtén acceso premium durante todo el año, además de contenido exclusivo adicional.
         </p>
-        {% if user.is_authenticated %}
-          <a class="cta" href="{% url 'iniciar_pago' plan='Anual' %}">Suscribirse</a>
-        {% else %}
-          <a class="cta" href="{% url 'registrarse_home' %}">Regístrate para suscribirte</a>
-        {% endif %}
+        <a class="cta" href="#">Suscribirse</a>
       </div>
     </div>
   </section>
