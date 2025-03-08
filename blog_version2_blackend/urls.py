@@ -40,6 +40,9 @@ urlpatterns = [
     path('crear_podcast/', include('crear_podcast.urls')),
     path('politica-de-privacidad/', include('politica_privacidad.urls')),
     path('terminos-de-servicio/', include('terminos.urls')),
+    
+    path('paypal/', include('paypal.standard.ipn.urls')),
+    path('payment/', include('payment.urls')),
 ]
 
 if settings.DEBUG:

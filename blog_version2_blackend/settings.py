@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'paypal.standard.ipn',
+    'payment',
     'core',
     'inicio',
     'tutoriales',
@@ -66,6 +68,7 @@ INSTALLED_APPS = [
     'crear_podcast',
     'politica_privacidad',
     'terminos',
+
 ]
 
 SITE_ID = 3
@@ -213,5 +216,5 @@ CSRF_TRUSTED_ORIGINS = [
     "http://51.222.159.144",
 ]
 
-
-
+# Si usas environ:
+PAYPAL_RECEIVER_EMAIL = env('PAYPAL_RECEIVER_EMAIL')

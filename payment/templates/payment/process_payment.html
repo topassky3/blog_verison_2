@@ -1,0 +1,12 @@
+{% extends "core/core.html" %}
+
+{% block title %}Procesar Pago{% endblock %}
+
+{% block content %}
+  <h1>Procesar Pago - {{ plan|capfirst }}</h1>
+  <p>Haz clic en el botón para pagar con PayPal.</p>
+  <form action="{{ form.get_endpoint }}" method="post">
+    {{ form.as_p }}
+    <button type="submit">Pagar con PayPal</button>
+  </form>
+{% endblock %}
