@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Instalar Supervisor y dependencias del sistema necesarias
-RUN apt-get update && apt-get install -y supervisor
+RUN apt-get update && apt-get install -y supervisor && rm -rf /var/lib/apt/lists/*
 
 # Copiar el archivo de requerimientos e instalar dependencias
 COPY requirements.txt /app/
@@ -21,7 +21,7 @@ COPY . /app/
 # Ejecutar collectstatic para recopilar los archivos estáticos
 RUN python manage.py collectstatic --noinput
 
-# Copiar la configuración de Supervisor
+# Copiar la configuración de Supervisor (asegúrate de que supervisord.conf se encuentre en el contexto de build)
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Exponer el puerto que usará Gunicorn (en este caso el 7090)
