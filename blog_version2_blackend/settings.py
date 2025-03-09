@@ -169,10 +169,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
+
 # Configuración de redirección y allauth
 LOGOUT_REDIRECT_URL = 'inicio_home'
-LOGIN_REDIRECT_URL = 'https://tucodigocotidiano.yarumaltech.com/'
-SOCIALACCOUNT_LOGIN_REDIRECT_URL = 'https://tucodigocotidiano.yarumaltech.com/'
+LOGIN_REDIRECT_URL = 'http://tucodigocotidiano.yarumaltech.com/'
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = 'http://tucodigocotidiano.yarumaltech.com/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Configuración específica para los proveedores de redes sociales
@@ -232,3 +234,5 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 60.0,  # Cada 60 segundos
     },
 }
+
+
