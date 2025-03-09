@@ -170,8 +170,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuración de redirección y allauth
 LOGOUT_REDIRECT_URL = 'inicio_home'
-LOGIN_REDIRECT_URL = 'http://localhost:8000'
-SOCIALACCOUNT_LOGIN_REDIRECT_URL = 'http://localhost:8000'
+LOGIN_REDIRECT_URL = 'http://tucodigocotidiano.yarumaltech.com/'
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = 'http://tucodigocotidiano.yarumaltech.com/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Configuración específica para los proveedores de redes sociales
