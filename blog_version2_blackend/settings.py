@@ -218,3 +218,16 @@ CSRF_TRUSTED_ORIGINS = [
 # Si usas environ:
 PAYPAL_RECEIVER_EMAIL = env('PAYPAL_RECEIVER_EMAIL')
 PAYPAL_TEST = True
+
+CELERY_BROKER_URL = 'redis://51.222.159.144:6379/0'
+CELERY_RESULT_BACKEND = 'redis://51.222.159.144:6379/0'
+
+# Programación de tareas periódicas: en este ejemplo, se ejecuta cada 60 segundos.
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'revert_expired_subscriptions_every_minute': {
+        'task': 'suscripcion.tasks.revert_expired_subscriptions_task',
+        'schedule': 60.0,  # Cada 60 segundos
+    },
+}

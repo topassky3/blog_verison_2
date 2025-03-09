@@ -48,11 +48,11 @@ from django.utils import timezone
 from datetime import timedelta
 from core.models import Subscription
 
-
 def payment_done(request):
     """
     Vista que se muestra cuando el pago se realiza con éxito.
     Actualiza la suscripción según el plan que se guardó en sesión.
+    Para pruebas, asigna 1 minuto para 'Premium' y 2 minutos para 'Anual'.
     """
     # Recupera el plan pendiente y elimínalo de la sesión
     plan = request.session.pop('pending_subscription_plan', None)
@@ -62,17 +62,17 @@ def payment_done(request):
             subscription = Subscription.objects.get(user=request.user)
             subscription.plan = plan.capitalize()  # "Premium" o "Anual"
             now = timezone.now()
+            # Para pruebas, usamos minutos en lugar de días
             if plan == "premium":
-                subscription.expiration_date = now + timedelta(days=30)
+                subscription.expiration_date = now + timedelta(minutes=1)
             elif plan == "anual":
-                subscription.expiration_date = now + timedelta(days=365)
+                subscription.expiration_date = now + timedelta(minutes=2)
             subscription.save()
         except Subscription.DoesNotExist:
             # Si no existe, podrías crearla o loguear el error
             pass
 
     return render(request, "payment/payment_done.html")
-
 
 def payment_cancelled(request):
     """

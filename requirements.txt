@@ -17,4 +17,5 @@ urllib3==2.3.0
 gunicorn==20.1.0
 whitenoise==6.4.0
 django-paypal
-
+celery==5.4.0
+redis==4.6.0

@@ -14,13 +14,13 @@ class SuscripcionView(TemplateView):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             try:
-                context['subscription'] = Subscription.objects.get(user=self.request.user)
+                subscription = Subscription.objects.get(user=self.request.user)
+                context['subscription'] = subscription
             except Subscription.DoesNotExist:
                 context['subscription'] = None
         else:
             context['subscription'] = None
         return context
-
 
 def paypal_payment(request, plan):
     """
