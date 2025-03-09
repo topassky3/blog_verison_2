@@ -4,8 +4,7 @@ from django.urls import reverse
 from django.conf import settings
 from core.models import Subscription
 from paypal.standard.forms import PayPalPaymentsForm
-
-
+from django.contrib.auth.decorators import login_required
 
 class SuscripcionView(TemplateView):
     template_name = "suscripcion/suscripcion.html"
@@ -22,6 +21,7 @@ class SuscripcionView(TemplateView):
             context['subscription'] = None
         return context
 
+@login_required(login_url='/login/')
 def paypal_payment(request, plan):
     """
     Vista que genera el formulario de pago para el plan seleccionado.

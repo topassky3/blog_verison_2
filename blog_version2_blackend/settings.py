@@ -235,4 +235,4 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-
+LOGIN_URL = '/login/'

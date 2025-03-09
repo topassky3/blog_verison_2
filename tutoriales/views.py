@@ -54,6 +54,12 @@ class TutorialesView(TemplateView):
         context['selected_category'] = cat_slug
         return context
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic import DetailView
+from core.models import Tutorial
+
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class TutorialDetailView(DetailView):
     model = Tutorial
     template_name = "leer_tutoriales/mis_tutoriales.html"

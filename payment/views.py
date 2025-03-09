@@ -3,8 +3,9 @@ from django.urls import reverse
 from django.conf import settings
 from paypal.standard.forms import PayPalPaymentsForm
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='/login/')
 @csrf_exempt
 def paypal_payment(request, plan):
     """

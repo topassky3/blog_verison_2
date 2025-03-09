@@ -4,8 +4,10 @@ from django.urls import reverse
 from core.models import Podcast
 from core.models import PodcastComment  # Asegúrate de importar el modelo correcto
 from .forms import PodcastCommentForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
-
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class PodcastDetailView(FormMixin, DetailView):
     model = Podcast
     template_name = "escuchar_podcast/escuchar_podcast.html"
