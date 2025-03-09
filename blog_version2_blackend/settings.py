@@ -167,6 +167,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 # Configuración de redirección y allauth
 LOGOUT_REDIRECT_URL = 'inicio_home'
