@@ -171,7 +171,7 @@ SOCIALACCOUNT_AUTO_SIGNUP = True
 
 # Configuración de redirección y allauth
 LOGOUT_REDIRECT_URL = 'inicio_home'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'http://tucodigocotidiano.yarumaltech.com/'
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = 'http://tucodigocotidiano.yarumaltech.com/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
