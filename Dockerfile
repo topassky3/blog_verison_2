@@ -8,6 +8,9 @@ ENV PYTHONUNBUFFERED=1
 # Definir el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
+# Instalar Supervisor y dependencias del sistema necesarias
+RUN apt-get update && apt-get install -y supervisor
+
 # Copiar el archivo de requerimientos e instalar dependencias
 COPY requirements.txt /app/
 RUN pip install --upgrade pip && pip install -r requirements.txt
@@ -18,8 +21,11 @@ COPY . /app/
 # Ejecutar collectstatic para recopilar los archivos estáticos
 RUN python manage.py collectstatic --noinput
 
+# Copiar la configuración de Supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Exponer el puerto que usará Gunicorn (en este caso el 7090)
 EXPOSE 7090
 
-# Comando para ejecutar el servidor con Gunicorn usando el WSGI de blog_version2_blackend
-CMD ["gunicorn", "blog_version2_blackend.wsgi:application", "--bind", "0.0.0.0:7090", "--workers", "3"]
+# Comando para iniciar Supervisor, el cual gestionará Gunicorn, Celery Worker y Celery Beat
+CMD ["/usr/bin/supervisord", "-n"]
