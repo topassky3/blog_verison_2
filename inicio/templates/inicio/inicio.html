@@ -2,6 +2,69 @@
 
 {% block title %}Inicio - WebDev Blog{% endblock %}
 
+{% block extra_head %}
+  <style>
+    /* Estilo para las imágenes de los posts destacados */
+    .post-image {
+      width: 100%;
+      height: 250px; /* Altura fija para mantener la consistencia */
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    /* Estilos creativos para la grilla y las tarjetas */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 1rem;
+    }
+    .post-card {
+      background: var(--background);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+    .post-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+    .post-card:hover .post-image {
+      opacity: 0.9;
+    }
+    .post-content {
+      padding: 1rem;
+      background: linear-gradient(135deg, #ffffff, #f9f9f9);
+      text-align: center;
+    }
+    .post-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    .post-content p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .read-more {
+      text-decoration: none;
+      font-weight: bold;
+      color: var(--secondary);
+      border: 2px solid var(--secondary);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .read-more:hover {
+      background-color: var(--secondary);
+      color: #fff;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
   <!-- Hero Section -->
   <section class="hero" id="inicio">
@@ -26,7 +89,7 @@
     </div>
   </section>
 
-  {# Sección de Tutoriales Destacados solo si hay tutoriales con ranking #}
+  {# Sección de Tutoriales Destacados (ya limitados a 3 en la vista) #}
   {% if tutorials_destacados %}
     <section class="featured-posts" id="tutoriales">
       <h2 class="section-title">Tutoriales Destacados</h2>
@@ -34,9 +97,9 @@
         {% for tutorial in tutorials_destacados %}
           <article class="post-card">
             {% if tutorial.image %}
-              <img src="{{ tutorial.image.url }}" alt="{{ tutorial.title }}">
+              <img class="post-image" src="{{ tutorial.image.url }}" alt="{{ tutorial.title }}">
             {% else %}
-              <img src="https://via.placeholder.com/400x250" alt="{{ tutorial.title }}">
+              <img class="post-image" src="https://via.placeholder.com/400x250" alt="{{ tutorial.title }}">
             {% endif %}
             <div class="post-content">
               <h3>{{ tutorial.title }}</h3>
@@ -49,7 +112,7 @@
     </section>
   {% endif %}
 
-  {# Sección de Podcasts Destacados solo si hay podcasts con ranking #}
+  {# Sección de Podcasts Destacados (ya limitados a 3 en la vista) #}
   {% if podcasts_destacados %}
     <section class="featured-posts" id="podcast">
       <h2 class="section-title">Podcasts Destacados</h2>
@@ -57,14 +120,14 @@
         {% for podcast in podcasts_destacados %}
           <article class="post-card">
             {% if podcast.cover %}
-              <img src="{{ podcast.cover.url }}" alt="{{ podcast.title }}">
+              <img class="post-image" src="{{ podcast.cover.url }}" alt="{{ podcast.title }}">
             {% else %}
-              <img src="https://via.placeholder.com/400x250" alt="{{ podcast.title }}">
+              <img class="post-image" src="https://via.placeholder.com/400x250" alt="{{ podcast.title }}">
             {% endif %}
             <div class="post-content">
               <h3>{{ podcast.title }}</h3>
               <p>Ranking: {{ podcast.avg_rating|floatformat:1 }}</p>
-              <a href="{% url 'podcast_detail' podcast.pk %}" class="read-more">Escuchar →</a>
+              <a href="{% url 'escuchar_podcast' podcast.pk %}" class="read-more">Escuchar →</a>
             </div>
           </article>
         {% endfor %}
