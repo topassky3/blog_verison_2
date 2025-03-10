@@ -1,0 +1,87 @@
+{% extends "core/core.html" %}
+
+{% block title %}Buscador de Contenidos{% endblock %}
+
+{% block extra_head %}
+  <style>
+    /* Estilos específicos para la página de búsqueda */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .section-title {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    .lead {
+      text-align: center;
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+    .result-list {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 2rem 0;
+      border-top: 1px solid var(--gray-200);
+    }
+    .result-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-200);
+      transition: background-color 0.3s ease;
+    }
+    .result-item:hover {
+      background-color: var(--gray-100);
+    }
+    .result-item a {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .result-item a:hover {
+      color: var(--secondary);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="section-title">Resultados de búsqueda</h1>
+    {% if query %}
+      <p class="lead">Mostrando resultados para: "<strong>{{ query }}</strong>"</p>
+
+      {% if tutorials %}
+        <h2 class="section-title">Tutoriales encontrados</h2>
+        <ul class="result-list">
+          {% for tutorial in tutorials %}
+            <li class="result-item">
+              <a href="{% url 'tutorial_detail' tutorial.pk %}">{{ tutorial.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="lead">No se encontraron tutoriales.</p>
+      {% endif %}
+
+      {% if podcasts %}
+        <h2 class="section-title">Podcasts encontrados</h2>
+        <ul class="result-list">
+          {% for podcast in podcasts %}
+            <li class="result-item">
+              <a href="{% url 'escuchar_podcast' podcast.pk %}">{{ podcast.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="lead">No se encontraron podcasts.</p>
+      {% endif %}
+
+    {% else %}
+      <p class="lead">Introduce un término de búsqueda en el formulario.</p>
+    {% endif %}
+  </div>
+{% endblock %}

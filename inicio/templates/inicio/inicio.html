@@ -78,62 +78,70 @@
   <!-- Buscador Mejorado -->
   <section class="search" id="buscador">
     <div class="search-container">
-      <form action="/buscar" method="GET" class="search-form">
+      <form action="/buscar/" method="get" class="search-form">
         <input type="text" name="q" placeholder="Buscar en WebDev Blog..." required>
         <button type="submit">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" width="24px" height="24px">
-            <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.48-5.34C15.22 5.59 12.64 3 9.5 3S3.78 5.59 3.78 8.39 6.36 13.78 9.5 13.78c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l4.99 4.98L20.48 19l-4.98-4.99zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-          </svg>
+            <!-- SVG o ícono -->
+            Buscar
         </button>
-      </form>
+    </form>
+
     </div>
   </section>
 
   {# Sección de Tutoriales Destacados (ya limitados a 3 en la vista) #}
   {% if tutorials_destacados %}
-    <section class="featured-posts" id="tutoriales">
-      <h2 class="section-title">Tutoriales Destacados</h2>
-      <div class="posts-grid">
-        {% for tutorial in tutorials_destacados %}
-          <article class="post-card">
-            {% if tutorial.image %}
-              <img class="post-image" src="{{ tutorial.image.url }}" alt="{{ tutorial.title }}">
-            {% else %}
-              <img class="post-image" src="https://via.placeholder.com/400x250" alt="{{ tutorial.title }}">
-            {% endif %}
-            <div class="post-content">
-              <h3>{{ tutorial.title }}</h3>
-              <p>Ranking: {{ tutorial.avg_rating|floatformat:1 }}</p>
-              <a href="{% url 'tutorial_detail' tutorial.pk %}" class="read-more">Leer más →</a>
-            </div>
-          </article>
-        {% endfor %}
-      </div>
-    </section>
-  {% endif %}
+  <section class="featured-posts" id="tutoriales">
+    <h2 class="section-title">Tutoriales Destacados</h2>
+    <div class="posts-grid">
+      {% for tutorial in tutorials_destacados %}
+        <article class="post-card"
+                 onclick="window.location.href='{% url 'tutorial_detail' tutorial.pk %}'"
+                 style="cursor: pointer;">
+          {% if tutorial.image %}
+            <img class="post-image" src="{{ tutorial.image.url }}" alt="{{ tutorial.title }}">
+          {% else %}
+            <img class="post-image" src="https://via.placeholder.com/400x250" alt="{{ tutorial.title }}">
+          {% endif %}
+          <div class="post-content">
+            <h3>{{ tutorial.title }}</h3>
+            <p>Ranking: {{ tutorial.avg_rating|floatformat:1 }}</p>
+            <!-- El enlace "Leer más" se mantiene, pero ya es opcional -->
+            <a href="{% url 'tutorial_detail' tutorial.pk %}" class="read-more">Leer más →</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
+
 
   {# Sección de Podcasts Destacados (ya limitados a 3 en la vista) #}
-  {% if podcasts_destacados %}
-    <section class="featured-posts" id="podcast">
-      <h2 class="section-title">Podcasts Destacados</h2>
-      <div class="posts-grid">
-        {% for podcast in podcasts_destacados %}
-          <article class="post-card">
-            {% if podcast.cover %}
-              <img class="post-image" src="{{ podcast.cover.url }}" alt="{{ podcast.title }}">
-            {% else %}
-              <img class="post-image" src="https://via.placeholder.com/400x250" alt="{{ podcast.title }}">
-            {% endif %}
-            <div class="post-content">
-              <h3>{{ podcast.title }}</h3>
-              <p>Ranking: {{ podcast.avg_rating|floatformat:1 }}</p>
-              <a href="{% url 'escuchar_podcast' podcast.pk %}" class="read-more">Escuchar →</a>
-            </div>
-          </article>
-        {% endfor %}
-      </div>
-    </section>
-  {% endif %}
+    {% if podcasts_destacados %}
+  <section class="featured-posts" id="podcast">
+    <h2 class="section-title">Podcasts Destacados</h2>
+    <div class="posts-grid">
+      {% for podcast in podcasts_destacados %}
+        <article class="post-card"
+                 onclick="window.location.href='{% url 'escuchar_podcast' podcast.pk %}'"
+                 style="cursor: pointer;">
+          {% if podcast.cover %}
+            <img class="post-image" src="{{ podcast.cover.url }}" alt="{{ podcast.title }}">
+          {% else %}
+            <img class="post-image" src="https://via.placeholder.com/400x250" alt="{{ podcast.title }}">
+          {% endif %}
+          <div class="post-content">
+            <h3>{{ podcast.title }}</h3>
+            <p>Ranking: {{ podcast.avg_rating|floatformat:1 }}</p>
+            <!-- Se mantiene el enlace para enfatizar, aunque todo el card es clicable -->
+            <a href="{% url 'escuchar_podcast' podcast.pk %}" class="read-more">Escuchar →</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
+
 
   <!-- Newsletter Section -->
   <section class="newsletter" id="suscripcion">

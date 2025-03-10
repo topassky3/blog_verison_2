@@ -44,6 +44,7 @@ urlpatterns = [
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('payment/', include('payment.urls')),
     path('payment/', include('payment.urls')),
+    path('buscar/', include('buscador.urls')),
 ]
 
 if settings.DEBUG:

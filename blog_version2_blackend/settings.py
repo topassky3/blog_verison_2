@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'crear_podcast',
     'politica_privacidad',
     'terminos',
+    'buscador',
 ]
 
 SITE_ID = 3
