@@ -12,53 +12,66 @@
     </p>
   </section>
 
-    <!-- Buscador Mejorado con SVG -->
-    <section class="search" id="buscador">
-      <div class="search-container">
-        <form action="/buscar" method="GET" class="search-form">
-          <input type="text" name="q" placeholder="Buscar en WebDev Blog..." required>
-          <button type="submit">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" width="24px" height="24px">
-              <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.48-5.34C15.22 5.59 12.64 3 9.5 3S3.78 5.59 3.78 8.39 6.36 13.78 9.5 13.78c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l4.99 4.98L20.48 19l-4.98-4.99zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-          </button>
-        </form>
-      </div>
-    </section>
-
-
-
-  <!-- Featured Posts Section -->
-  <section class="featured-posts" id="tutoriales">
-    <h2 class="section-title">Artículos Destacados</h2>
-    <div class="posts-grid">
-      <article class="post-card">
-        <img src="https://via.placeholder.com/400x250" alt="Guía Completa de React 2023">
-        <div class="post-content">
-          <h3>Guía Completa de React 2023</h3>
-          <p>Aprende React desde cero con esta guía práctica y actualizada.</p>
-          <a href="#" class="read-more">Leer más →</a>
-        </div>
-      </article>
-      <article class="post-card">
-        <img src="https://via.placeholder.com/400x250" alt="Optimización Web">
-        <div class="post-content">
-          <h3>Optimización Web</h3>
-          <p>Técnicas avanzadas para mejorar el rendimiento de tus aplicaciones.</p>
-          <a href="#" class="read-more">Leer más →</a>
-        </div>
-      </article>
-      <article class="post-card">
-        <img src="https://via.placeholder.com/400x250" alt="TypeScript para Principiantes">
-        <div class="post-content">
-          <h3>TypeScript para Principiantes</h3>
-          <p>Domina TypeScript y lleva tu JavaScript al siguiente nivel.</p>
-          <a href="#" class="read-more">Leer más →</a>
-        </div>
-      </article>
+  <!-- Buscador Mejorado -->
+  <section class="search" id="buscador">
+    <div class="search-container">
+      <form action="/buscar" method="GET" class="search-form">
+        <input type="text" name="q" placeholder="Buscar en WebDev Blog..." required>
+        <button type="submit">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" width="24px" height="24px">
+            <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.48-5.34C15.22 5.59 12.64 3 9.5 3S3.78 5.59 3.78 8.39 6.36 13.78 9.5 13.78c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l4.99 4.98L20.48 19l-4.98-4.99zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </button>
+      </form>
     </div>
   </section>
-  
+
+  {# Sección de Tutoriales Destacados solo si hay tutoriales con ranking #}
+  {% if tutorials_destacados %}
+    <section class="featured-posts" id="tutoriales">
+      <h2 class="section-title">Tutoriales Destacados</h2>
+      <div class="posts-grid">
+        {% for tutorial in tutorials_destacados %}
+          <article class="post-card">
+            {% if tutorial.image %}
+              <img src="{{ tutorial.image.url }}" alt="{{ tutorial.title }}">
+            {% else %}
+              <img src="https://via.placeholder.com/400x250" alt="{{ tutorial.title }}">
+            {% endif %}
+            <div class="post-content">
+              <h3>{{ tutorial.title }}</h3>
+              <p>Ranking: {{ tutorial.avg_rating|floatformat:1 }}</p>
+              <a href="{% url 'tutorial_detail' tutorial.pk %}" class="read-more">Leer más →</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {# Sección de Podcasts Destacados solo si hay podcasts con ranking #}
+  {% if podcasts_destacados %}
+    <section class="featured-posts" id="podcast">
+      <h2 class="section-title">Podcasts Destacados</h2>
+      <div class="posts-grid">
+        {% for podcast in podcasts_destacados %}
+          <article class="post-card">
+            {% if podcast.cover %}
+              <img src="{{ podcast.cover.url }}" alt="{{ podcast.title }}">
+            {% else %}
+              <img src="https://via.placeholder.com/400x250" alt="{{ podcast.title }}">
+            {% endif %}
+            <div class="post-content">
+              <h3>{{ podcast.title }}</h3>
+              <p>Ranking: {{ podcast.avg_rating|floatformat:1 }}</p>
+              <a href="{% url 'podcast_detail' podcast.pk %}" class="read-more">Escuchar →</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
   <!-- Newsletter Section -->
   <section class="newsletter" id="suscripcion">
     <h2>Suscríbete a nuestro Newsletter</h2>
