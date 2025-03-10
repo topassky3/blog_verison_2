@@ -286,6 +286,74 @@
   transform: translateY(-2px);
 }
 
+@media (max-width: 600px) {
+  /* Contenedor en grid: 2 columnas */
+  .comment-reactions {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 0.5rem;                   /* Espacio entre celdas */
+  }
+
+  /* Estilo base de cada botón */
+  .comment-reactions .reaction-button {
+    display: flex;               /* Para alinear icono y texto en la misma fila */
+    align-items: center;
+    justify-content: center;     /* Centra contenido dentro del botón */
+    gap: 0.5rem;                 /* Espacio entre icono y texto */
+    padding: 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    background-color: var(--background);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .comment-reactions .reaction-button:hover {
+    background-color: var(--gray-100);
+    transform: scale(1.02);
+  }
+
+  /* Icono SVG dentro del botón */
+  .comment-reactions .reaction-button svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--gray-400);
+    transition: fill 0.3s ease;
+  }
+  /* Si está activo (like/dislike) */
+  .comment-reactions .reaction-button.active svg {
+    fill: var(--primary);
+  }
+
+  /* Texto dentro del botón */
+  .comment-reactions .reaction-button span {
+    font-size: 0.875rem;
+    color: var(--text);
+    white-space: nowrap; /* Mantiene el texto en una línea; cámbialo a 'normal' si quieres que se parta */
+  }
+
+  /* Ubicamos cada botón en la celda que queremos:
+     1er y 2do en la misma fila,
+     3er y 4to cada uno en fila propia */
+  .comment-reactions .reaction-button:nth-child(1) {
+    grid-column: 1; /* Fila 1, Columna 1 */
+    grid-row: 1;
+  }
+  .comment-reactions .reaction-button:nth-child(2) {
+    grid-column: 2; /* Fila 1, Columna 2 */
+    grid-row: 1;
+  }
+  .comment-reactions .reaction-button:nth-child(3) {
+    grid-column: 1 / span 2; /* Ocupa 2 columnas */
+    grid-row: 2;             /* Fila 2 */
+  }
+  .comment-reactions .reaction-button:nth-child(4) {
+    grid-column: 1 / span 2; /* Ocupa 2 columnas */
+    grid-row: 3;             /* Fila 3 */
+  }
+}
+
+
 
 </style>
 {% endblock %}
@@ -483,24 +551,46 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Registro de botones para borrar comentarios
-  document.querySelectorAll('.delete-comment-button').forEach(button => {
-      button.addEventListener('click', () => {
-        const commentId = button.dataset.commentId;
-        customConfirm('¿Estás seguro de que deseas borrar este comentario?')
-          .then(confirmed => {
-            if (confirmed) {
-              sendPodcastReaction("{% url 'delete_podcast_comment' %}", commentId, data => {
-                if (data.success) {
-                  const commentDiv = document.getElementById(`comment-${commentId}`);
-                  if (commentDiv) commentDiv.remove();
-                } else {
-                  alert(data.error || 'Error al borrar comentario.');
+  // Registro de botones para borrar comentarios
+document.querySelectorAll('.delete-comment-button').forEach(button => {
+  button.addEventListener('click', () => {
+    const commentId = button.dataset.commentId;
+    customConfirm('¿Estás seguro de que deseas borrar este comentario?')
+      .then(confirmed => {
+        if (confirmed) {
+          sendPodcastReaction("{% url 'delete_podcast_comment' %}", commentId, data => {
+            if (data.success) {
+              // Elimina el comentario borrado del DOM
+              const commentDiv = document.getElementById(`comment-${commentId}`);
+              if (commentDiv) commentDiv.remove();
+
+              // Si se borró una respuesta, actualiza el contador del comentario padre
+              if (data.parent_id) {
+                const parentButton = document.querySelector(`.toggle-replies-button[data-comment-id="${data.parent_id}"]`);
+                if (parentButton) {
+                  // Actualiza el atributo de datos
+                  parentButton.dataset.repliesCount = data.replies_count;
+                  // Actualiza el texto del span
+                  const span = parentButton.querySelector('span');
+                  if (span) {
+                    if (data.replies_count == 0) {
+                      // Si ya no hay respuestas, se puede ocultar el botón
+                      parentButton.style.display = 'none';
+                    } else {
+                      span.textContent = `Ver respuestas (${data.replies_count})`;
+                    }
+                  }
                 }
-              });
+              }
+            } else {
+              alert(data.error || 'Error al borrar comentario.');
             }
           });
+        }
       });
-    });
+  });
+});
+
 
 
   // Función para actualizar la UI de reacciones (ya definida en tu código)

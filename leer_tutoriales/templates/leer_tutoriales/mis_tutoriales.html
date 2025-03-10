@@ -614,6 +614,123 @@ background-color: var(--primary);
   transform: translateY(-2px);
 }
 
+@media (max-width: 768px) {
+  /* Layout principal: 1 columna en móvil */
+  .container {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+    padding: 1rem 0.5rem;
+    margin: 1rem auto;
+  }
+
+  /* Ocultar TOC o convertirlo en un menú colapsable (tú eliges) */
+  .toc {
+    display: none; /* Si prefieres ocultarlo por completo en móvil */
+    /*
+    // O podrías dejarlo como un acordeón colapsable:
+    position: static;
+    max-height: none;
+    border: none;
+    margin-top: 2rem;
+    */
+  }
+
+  /* Ajustes generales de tipografía */
+  .tutorial-title {
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  .tutorial-info span {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.4rem;
+  }
+  .tutorial-content {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* Ajustes en comentarios */
+  .comment {
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+  .comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .comment-author {
+    gap: 0.5rem;
+  }
+  .comment-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Para que los botones de reacciones no se desborden */
+  .comment-reactions {
+    flex-wrap: wrap;        /* Permite que los botones salten de línea */
+    gap: 0.5rem;
+  }
+  .reaction-button {
+    flex: 1 1 auto;         /* Ocupar todo el ancho disponible si es necesario */
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;    /* Para que el texto pueda hacer wrap si lo deseas: pon “normal” */
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius);
+    background-color: var(--background);
+    border: 1px solid var(--gray-200);
+  }
+  .reaction-button span {
+    font-size: 0.8rem;
+    white-space: normal;   /* Permitir que “Ver respuestas (X)” baje de línea */
+  }
+  .reaction-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Ajustes para el contenedor de respuestas */
+  .comment-replies {
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--secondary);
+    max-width: 100%;
+    overflow-x: hidden;
+    word-wrap: break-word;
+  }
+
+  /* Ajustes al formulario de respuesta */
+  .reply-form {
+    margin-top: 1rem;
+  }
+  .reply-form textarea {
+    min-height: 80px;
+    font-size: 0.9rem;
+  }
+
+  /* Ajustes a los botones */
+  .submit-comment,
+  .delete-comment-button {
+    font-size: 0.9rem;
+  }
+
+  /* Ajustes al botón de “Volver a Tutoriales” */
+  .back-button {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Ajustes al botón de descarga */
+  .download-button {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+
 </style>
 {% endblock %}
 

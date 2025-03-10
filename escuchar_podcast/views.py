@@ -121,14 +121,34 @@ def toggle_podcast_comment_dislike(request):
     }
     return JsonResponse(data)
 
+
+# views.py
+from django.http import JsonResponse, HttpResponseForbidden
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from core.models import PodcastComment
+
+
 @login_required
 @require_POST
 def delete_podcast_comment(request):
     comment_id = request.POST.get('comment_id')
     try:
         comment = PodcastComment.objects.get(id=comment_id, author=request.user)
-        comment.delete()
     except PodcastComment.DoesNotExist:
         return JsonResponse({'error': 'Comentario no encontrado o no tienes permiso para borrarlo.'}, status=404)
 
-    return JsonResponse({'success': True})
+    # Si el comentario es respuesta, guardamos el id del comentario padre
+    parent_id = comment.parent.id if comment.parent else None
+
+    # Borramos el comentario (si es comentario padre, se eliminarán sus respuestas en cascada)
+    comment.delete()
+
+    data = {'success': True}
+    if parent_id:
+        # Obtenemos el nuevo número de respuestas para el comentario padre
+        parent_comment = PodcastComment.objects.get(id=parent_id)
+        data['parent_id'] = parent_id
+        data['replies_count'] = parent_comment.replies.count()
+
+    return JsonResponse(data)
