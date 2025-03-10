@@ -69,3 +69,10 @@ class PodcastCategoryAdmin(admin.ModelAdmin):
 
     # En la lista, mostramos name y slug (opcional)
     list_display = ('name', 'slug')
+
+from django.contrib import admin
+from core.models import Contacto
+
+@admin.register(Contacto)
+class ContactoAdmin(admin.ModelAdmin):
+    list_display = ('correo', 'telefono', 'direccion', 'horario')

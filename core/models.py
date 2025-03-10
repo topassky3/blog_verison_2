@@ -256,3 +256,18 @@ class Subscription(models.Model):
         if self.expiration_date:
             return timezone.now() >= self.expiration_date
         return False
+
+from django.db import models
+
+class Contacto(models.Model):
+    correo = models.EmailField("Correo Electrónico", blank=True, null=True)
+    telefono = models.CharField("Teléfono", max_length=20, blank=True, null=True)
+    direccion = models.CharField("Dirección", max_length=200, blank=True, null=True)
+    horario = models.CharField("Horario", max_length=100, blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Contacto"
+        verbose_name_plural = "Contactos"
+
+    def __str__(self):
+        return f"Contacto: {self.correo or 'Sin correo'}"

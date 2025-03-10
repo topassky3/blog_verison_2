@@ -3,7 +3,45 @@
 {% block title %}Contacto | WebDev Blog{% endblock %}
 
 {% block extra_head %}
-  {# Si necesitas incluir estilos adicionales específicos para el contacto, puedes enlazarlos aquí #}
+  {# Se utilizarán los estilos generales, incluyendo los de modal definidos en tu CSS #}
+    <style>
+        /* Modal de alerta */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background-color: var(--background);
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: var(--radius);
+  max-width: 400px;
+  position: relative;
+  text-align: center;
+}
+.modal-content button {
+  margin-top: 1rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+.modal-content button:hover {
+  background-color: var(--secondary);
+}
+
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -12,27 +50,62 @@
     <h1>Contáctanos</h1>
     <p>¿Tienes alguna duda o sugerencia? Estamos aquí para ayudarte. Escríbenos y te responderemos a la brevedad.</p>
   </section>
-  
+
   <!-- Contact Section -->
   <section class="contact-section">
     <!-- Información de Contacto -->
     <div class="contact-info">
       <h2>Información de Contacto</h2>
-      <p><strong>Correo:</strong> contacto@webdevblog.com</p>
-      <p><strong>Teléfono:</strong> +34 912 345 678</p>
-      <p><strong>Dirección:</strong> Calle Ejemplo 123, Ciudad, País</p>
-      <p><strong>Horario:</strong> Lunes a Viernes, 9:00 - 18:00</p>
+      {% if contacto %}
+        {% if contacto.correo %}
+          <p><strong>Correo:</strong> {{ contacto.correo }}</p>
+        {% endif %}
+        {% if contacto.telefono %}
+          <p><strong>Teléfono:</strong> {{ contacto.telefono }}</p>
+        {% endif %}
+        {% if contacto.direccion %}
+          <p><strong>Dirección:</strong> {{ contacto.direccion }}</p>
+        {% endif %}
+        {% if contacto.horario %}
+          <p><strong>Horario:</strong> {{ contacto.horario }}</p>
+        {% endif %}
+      {% else %}
+        <p>No hay información de contacto disponible.</p>
+      {% endif %}
     </div>
     <!-- Formulario de Contacto -->
     <div class="contact-form">
       <h2>Envíanos un Mensaje</h2>
-      <form action="#" method="POST">
-        <input type="text" name="nombre" placeholder="Tu Nombre" required>
-        <input type="email" name="email" placeholder="Tu Correo Electrónico" required>
-        <input type="text" name="asunto" placeholder="Asunto" required>
-        <textarea name="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+      <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
         <button type="submit">Enviar Mensaje</button>
       </form>
     </div>
   </section>
+
+  {# Modal de alerta: se muestra si existen mensajes #}
+  {% if messages %}
+    <div id="alertModal" class="modal" style="display: block;">
+      <div class="modal-content">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+        <button id="closeAlertBtn">Aceptar</button>
+      </div>
+    </div>
+    <script>
+      // Cerrar el modal al hacer clic en el botón "Aceptar"
+      document.getElementById('closeAlertBtn').addEventListener('click', function() {
+        document.getElementById('alertModal').style.display = 'none';
+      });
+      // También se cierra si se hace clic fuera del contenido del modal
+      window.addEventListener('click', function(event) {
+        var modal = document.getElementById('alertModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    </script>
+  {% endif %}
 {% endblock %}
