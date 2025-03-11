@@ -10,12 +10,11 @@ def profile_view(request):
         form = ProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            # Si el usuario es escritor, redirige a la URL 'escritor_profile'
             return redirect('escritor_profile')
     else:
         form = ProfileForm(instance=user)
 
-    # Tutoriales del usuario (paginar 6 por página)
+    # Tutoriales del usuario (6 por página)
     tutorials = user.tutorials.order_by('-created_at')
     paginator = Paginator(tutorials, 6)
     page = request.GET.get('page')
@@ -26,7 +25,7 @@ def profile_view(request):
     except EmptyPage:
         tutorials_page = paginator.page(paginator.num_pages)
 
-    # Podcasts subidos por el usuario (paginar 6 por página)
+    # Podcasts subidos (6 por página)
     podcasts = user.podcasts.order_by('-created_at')
     paginator_podcasts = Paginator(podcasts, 6)
     podcast_page = request.GET.get('podcast_page')
@@ -37,7 +36,18 @@ def profile_view(request):
     except EmptyPage:
         podcasts_page = paginator_podcasts.page(paginator_podcasts.num_pages)
 
-    # Seleccionar plantilla según grupo
+    # Guías subidas (6 por página)
+    guias = user.guias.order_by('-created_at')
+    paginator_guides = Paginator(guias, 6)
+    guide_page = request.GET.get('guide_page')
+    try:
+        guias_page = paginator_guides.page(guide_page)
+    except PageNotAnInteger:
+        guias_page = paginator_guides.page(1)
+    except EmptyPage:
+        guias_page = paginator_guides.page(paginator_guides.num_pages)
+
+    # Selecciona la plantilla según el grupo del usuario
     if user.groups.filter(name="Escritor").exists():
         template_name = 'perfil/escritor_profile.html'
     else:
@@ -46,6 +56,7 @@ def profile_view(request):
     context = {
         'form': form,
         'tutorials': tutorials_page,
-        'podcasts': podcasts_page,  # Se agregan los podcasts al contexto
+        'podcasts': podcasts_page,
+        'guias': guias_page,  # Agregamos las guías al contexto
     }
     return render(request, template_name, context)

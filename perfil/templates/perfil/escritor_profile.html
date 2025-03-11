@@ -413,6 +413,7 @@
           <h3>{{ guia.title }}</h3>
           <p>Publicado: {{ guia.created_at|date:"d M Y" }}</p>
         </a>
+        <!-- Enlace para eliminar la guía -->
         <a href="{% url 'guia_delete' guia.pk %}" class="delete-guia" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
           Eliminar
         </a>
@@ -425,7 +426,31 @@
       <a href="{% url 'guia_create' %}" class="add-new-btn">&#43; Agregar Nueva Guía</a>
     </div>
   </div>
+  <!-- Paginación para guías -->
+  <div class="pagination">
+    {% if guias.has_previous %}
+      <a class="page-btn" href="?guide_page={{ guias.previous_page_number }}#guides">&laquo; Anterior</a>
+    {% else %}
+      <button class="page-btn" disabled>&laquo; Anterior</button>
+    {% endif %}
+
+    {% for num in guias.paginator.page_range %}
+      {% if guias.number == num %}
+        <button class="page-btn active">{{ num }}</button>
+      {% else %}
+        <a class="page-btn" href="?guide_page={{ num }}#guides">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if guias.has_next %}
+      <a class="page-btn" href="?guide_page={{ guias.next_page_number }}#guides">Siguiente &raquo;</a>
+    {% else %}
+      <button class="page-btn" disabled>Siguiente &raquo;</button>
+    {% endif %}
+  </div>
 </section>
+
+
 
 
        <!-- Sección: Podcasts Subidos -->
@@ -560,24 +585,26 @@
 
     // -- ENLACES DE ELIMINACIÓN --
     // Asigna confirmación personalizada a todos los enlaces con clase "delete-tutorial"
-    document.querySelectorAll('.delete-tutorial, .delete-podcast').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const url = this.href;
-        // Define el mensaje de confirmación según el tipo de elemento
-        let message = '¿Estás seguro de eliminar este tutorial?';
-        if (this.classList.contains('delete-podcast')) {
-          message = '¿Estás seguro de eliminar este podcast?';
+    document.querySelectorAll('.delete-tutorial, .delete-podcast, .delete-guia').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const url = this.href;
+    let message = '¿Estás seguro de eliminar este tutorial?';
+    if (this.classList.contains('delete-podcast')) {
+      message = '¿Estás seguro de eliminar este podcast?';
+    } else if (this.classList.contains('delete-guia')) {
+      message = '¿Estás seguro de eliminar esta guía?';
+    }
+    // Muestra el modal de confirmación
+    showConfirmModal(message)
+      .then(confirmed => {
+        if (confirmed) {
+          window.location.href = url;
         }
-        // Muestra el modal de confirmación
-        showConfirmModal(message)
-          .then(confirmed => {
-            if (confirmed) {
-              window.location.href = url;
-            }
-          });
       });
-    });
+  });
+});
+
 
     // -- LÓGICA DE TABS --
     // Cambiar entre secciones del panel
@@ -612,15 +639,13 @@
 
     <script>
     // Función para activar la pestaña correspondiente según el hash o parámetro
+// Función para activar la pestaña correspondiente según el hash o parámetro
 function activateTabFromURL() {
   const hash = window.location.hash;
   // Si el hash es #podcasts o se encuentra el parámetro 'podcast_page'
   if (hash === "#podcasts" || window.location.search.indexOf("podcast_page=") !== -1) {
-    // Remueve la clase active de todos los tabs y secciones
     tabLinks.forEach(link => link.classList.remove('active'));
     contentSections.forEach(section => section.classList.remove('active'));
-
-    // Activa la pestaña y sección de podcasts
     const podcastsTab = document.querySelector('.tab-link[data-tab="podcasts"]');
     const podcastsSection = document.getElementById('podcasts');
     if (podcastsTab && podcastsSection) {
@@ -628,9 +653,18 @@ function activateTabFromURL() {
       podcastsSection.classList.add('active');
     }
   }
+  // Nuevo: Si el hash es #guides, activar la pestaña de guías
+if (hash === "#guides") {
+  tabLinks.forEach(link => link.classList.remove('active'));
+  contentSections.forEach(section => section.classList.remove('active'));
+  const guidesTab = document.querySelector('.tab-link[data-tab="guides"]');
+  const guidesSection = document.getElementById('guides');
+  if (guidesTab && guidesSection) {
+    guidesTab.classList.add('active');
+    guidesSection.classList.add('active');
+  }
 }
-
-// Llama a la función al cargar la página
+}
 activateTabFromURL();
 
     </script>

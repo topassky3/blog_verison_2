@@ -101,3 +101,25 @@ class GuiaUpdateView(UpdateView):
                 'message': 'Error en el formulario.'
             }, status=400)
         return super().form_invalid(form)
+
+
+from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.views.generic import DeleteView
+from core.models import Guia
+
+
+class GuiaDeleteView(DeleteView):
+    model = Guia
+    template_name = 'crear_guia/guia_confirm_delete.html'
+
+    def get_success_url(self):
+        # Redirige al perfil con el fragmento #guides para activar la pestaña de guías
+        return reverse_lazy('profile') + "#guides"
+
+    def dispatch(self, request, *args, **kwargs):
+        guia = self.get_object()
+        # Solo el autor de la guía puede borrarla
+        if not request.user.is_authenticated or request.user != guia.author:
+            return redirect('login')
+        return super().dispatch(request, *args, **kwargs)
