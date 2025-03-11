@@ -45,6 +45,9 @@ urlpatterns = [
     path('payment/', include('payment.urls')),
     path('payment/', include('payment.urls')),
     path('buscar/', include('buscador.urls')),
+    path('crear_guia/', include('crear_guia.urls')),
+
+
 ]
 
 if settings.DEBUG:

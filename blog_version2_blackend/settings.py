@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'politica_privacidad',
     'terminos',
     'buscador',
+    'crear_guia',
 ]
 
 SITE_ID = 3

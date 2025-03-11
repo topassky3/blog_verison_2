@@ -271,3 +271,66 @@ class Contacto(models.Model):
 
     def __str__(self):
         return f"Contacto: {self.correo or 'Sin correo'}"
+
+from django.db import models
+from django.conf import settings
+from django.utils.text import slugify
+
+class GuiaCategory(models.Model):
+    name = models.CharField("Nombre", max_length=100, unique=True)
+    slug = models.SlugField("Slug", unique=True, blank=True)
+
+    class Meta:
+        verbose_name = "Categoría de Guía"
+        verbose_name_plural = "Categorías de Guías"
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+class Guia(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='guias',
+        verbose_name="Autor"
+    )
+    title = models.CharField("Título", max_length=200)
+    description = models.TextField("Descripción", blank=True, null=True)
+    category = models.ForeignKey(
+        GuiaCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Categoría"
+    )
+    image = models.ImageField("Imagen Representativa", upload_to='guia_images/', null=True, blank=True)
+    publicado = models.BooleanField("Publicado", default=False)
+    created_at = models.DateTimeField("Creado el", auto_now_add=True)
+    updated_at = models.DateTimeField("Actualizado el", auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+class GuiaBlock(models.Model):
+    BLOCK_TYPES = (
+        ('text', 'Texto'),
+        ('latex', 'LaTeX'),
+        ('code', 'Código'),
+    )
+    guia = models.ForeignKey(Guia, on_delete=models.CASCADE, related_name='blocks')
+    block_type = models.CharField("Tipo de Bloque", max_length=10, choices=BLOCK_TYPES)
+    content = models.TextField("Contenido")
+    order = models.PositiveIntegerField("Orden", default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.get_block_type_display()} - Orden: {self.order}"
+

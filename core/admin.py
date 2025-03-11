@@ -76,3 +76,12 @@ from core.models import Contacto
 @admin.register(Contacto)
 class ContactoAdmin(admin.ModelAdmin):
     list_display = ('correo', 'telefono', 'direccion', 'horario')
+
+from django.contrib import admin
+from .models import GuiaCategory
+
+@admin.register(GuiaCategory)
+class GuiaCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)  # En la lista solo se mostrará el nombre
+    fields = ('name',)  # En el formulario solo se mostrará el campo "Nombre"
+

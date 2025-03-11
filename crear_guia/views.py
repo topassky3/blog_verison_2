@@ -1,0 +1,103 @@
+import json
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import redirect
+from django.views.generic import CreateView, UpdateView
+from core.models import Guia, GuiaBlock
+
+class GuiaCreateView(CreateView):
+    model = Guia
+    # Definimos los campos básicos para la guía
+    fields = ['title', 'description', 'category', 'image']
+    template_name = 'crear_guia/crear_guia.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Solo usuarios autenticados pueden crear una guía
+        if not request.user.is_authenticated:
+            return redirect('login')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        # Asignamos el autor y guardamos la guía
+        form.instance.author = self.request.user
+        self.object = form.save()
+
+        # Procesamos los bloques enviados (editor similar al tutorial)
+        blocks_json = self.request.POST.get('blocks')
+        if blocks_json:
+            try:
+                blocks_data = json.loads(blocks_json)
+                for index, block in enumerate(blocks_data):
+                    GuiaBlock.objects.create(
+                        guia=self.object,
+                        block_type=block.get('type'),
+                        content=block.get('content'),
+                        order=index
+                    )
+            except Exception as e:
+                self.object.delete()
+                form.add_error(None, 'Error al guardar los bloques de la guía.')
+                return self.form_invalid(form)
+
+        # Si la petición es AJAX devolvemos JSON; si no, redirigimos a la vista de edición
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'message': 'Guía creada exitosamente.',
+                'guia_pk': self.object.pk
+            })
+        else:
+            return redirect('guia_update', pk=self.object.pk)
+
+    def form_invalid(self, form):
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'errors': form.errors,
+                'message': 'Error en el formulario.'
+            }, status=400)
+        return super().form_invalid(form)
+
+
+class GuiaUpdateView(UpdateView):
+    model = Guia
+    fields = ['title', 'description', 'category', 'image']
+    template_name = 'crear_guia/crear_guia.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        guia = self.get_object()
+        # Solo el autor de la guía puede editarla
+        if not request.user.is_authenticated or request.user != guia.author:
+            return redirect('login')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        # Se procesan y actualizan los bloques:
+        # Se eliminan los anteriores y se crean nuevos a partir del JSON enviado.
+        blocks_json = self.request.POST.get('blocks')
+        if blocks_json:
+            try:
+                blocks_data = json.loads(blocks_json)
+                self.object.blocks.all().delete()
+                for index, block in enumerate(blocks_data):
+                    GuiaBlock.objects.create(
+                        guia=self.object,
+                        block_type=block.get('type'),
+                        content=block.get('content'),
+                        order=index
+                    )
+            except Exception as e:
+                form.add_error(None, 'Error al actualizar los bloques de la guía.')
+                return self.form_invalid(form)
+
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'message': 'Guía actualizada exitosamente.'})
+        else:
+            return HttpResponse("<script>alert('Guía actualizada.');history.back();</script>")
+
+    def form_invalid(self, form):
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'errors': form.errors,
+                'message': 'Error en el formulario.'
+            }, status=400)
+        return super().form_invalid(form)

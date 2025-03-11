@@ -404,19 +404,29 @@
 
 
       <!-- Sección: Guías Subidas -->
-      <section id="guides" class="content-section section-guides">
-        <h2>Guías Subidas</h2>
-        <div class="content-grid">
-          <div class="content-card">
-            <h3>Guía de CSS Moderno</h3>
-            <p>Publicado: 10 Mar 2025</p>
-          </div>
-          <div class="content-card">
-            <h3>Accesibilidad Web</h3>
-            <p>Publicado: 05 Abr 2025</p>
-          </div>
-        </div>
-      </section>
+<section id="guides" class="content-section section-guides">
+  <h2>Guías Subidas</h2>
+  <div class="content-grid">
+    {% for guia in guias %}
+      <div class="content-card">
+        <a href="{% url 'guia_update' guia.pk %}" style="text-decoration:none; color:inherit;">
+          <h3>{{ guia.title }}</h3>
+          <p>Publicado: {{ guia.created_at|date:"d M Y" }}</p>
+        </a>
+        <a href="{% url 'guia_delete' guia.pk %}" class="delete-guia" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
+          Eliminar
+        </a>
+      </div>
+    {% empty %}
+      <p>No tienes guías subidas.</p>
+    {% endfor %}
+    <!-- Botón para agregar una nueva guía -->
+    <div class="content-card add-new">
+      <a href="{% url 'guia_create' %}" class="add-new-btn">&#43; Agregar Nueva Guía</a>
+    </div>
+  </div>
+</section>
+
 
        <!-- Sección: Podcasts Subidos -->
       <section id="podcasts" class="content-section section-podcasts">

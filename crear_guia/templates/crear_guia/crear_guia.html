@@ -1,0 +1,167 @@
+{% extends "core/core.html" %}
+{% block title %}{% if object %}Editar Guía{% else %}Crear Nueva Guía{% endif %}{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Estilos basados en el template de tutoriales */
+  .container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+  .container h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #2563eb;
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 0.5rem;
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  input[type="text"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  input[type="text"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+  #submit-btn {
+    background-color: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #submit-btn:hover {
+    background-color: #3b82f6;
+  }
+  /* Estilos para el editor de bloques */
+  #editor {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #fff;
+    margin-bottom: 1rem;
+  }
+  .editor-block {
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>{% if object %}Editar Guía{% else %}Crear Nueva Guía{% endif %}</h1>
+  <form id="guia-form" method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <div>
+      <label for="id_title">Título:</label>
+      {{ form.title }}
+    </div>
+    <div>
+      <label for="id_description">Descripción:</label>
+      {{ form.description }}
+    </div>
+    <div>
+      <label for="id_category">Categoría:</label>
+      {{ form.category }}
+    </div>
+    <div>
+      <label for="id_image">Imagen Representativa:</label>
+      {{ form.image }}
+    </div>
+
+    <!-- Área para bloques (opcional) -->
+    <div id="editor">
+      {% if object and object.blocks.exists %}
+        {% for block in object.blocks.all %}
+          {% if block.block_type == 'text' %}
+            <div class="editor-block block-text" draggable="true">
+              <textarea rows="5">{{ block.content|safe }}</textarea>
+            </div>
+          {% elif block.block_type == 'latex' %}
+            <div class="editor-block block-latex" draggable="true">
+              <textarea rows="5">{{ block.content|safe }}</textarea>
+            </div>
+          {% elif block.block_type == 'code' %}
+            <div class="editor-block block-code" draggable="true">
+              <textarea rows="5">{{ block.content|safe }}</textarea>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <div class="editor-block block-text" draggable="true">
+          <textarea rows="5" placeholder="Escribe el contenido de la guía aquí..."></textarea>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Campo oculto para enviar los bloques en JSON -->
+    <input type="hidden" id="blocks-input" name="blocks" />
+
+    <button type="submit" id="submit-btn">{% if object %}Guardar Guía{% else %}Crear Guía{% endif %}</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Al enviar el formulario se recogen los bloques y se envían mediante AJAX
+  document.getElementById('guia-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Recolectar bloques del editor
+    const blocks = [];
+    document.querySelectorAll('.editor-block').forEach(block => {
+      let blockType = 'text';
+      if (block.classList.contains('block-latex')) blockType = 'latex';
+      if (block.classList.contains('block-code')) blockType = 'code';
+      const textArea = block.querySelector('textarea');
+      const content = textArea ? textArea.value.trim() : '';
+      blocks.push({ type: blockType, content });
+    });
+    document.getElementById('blocks-input').value = JSON.stringify(blocks);
+
+    // Enviar el formulario vía fetch
+    const formData = new FormData(this);
+    fetch(this.action, {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Si se creó la guía, redirige a la URL de edición; si ya existe, recarga la página
+      if (!{{ object.pk|default_if_none:"" }}) {
+        window.location.href = '/crear_guia/editar/' + data.guia_pk + '/';
+      } else {
+        window.location.reload();
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  });
+</script>
+{% endblock %}
