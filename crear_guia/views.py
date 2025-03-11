@@ -1,6 +1,5 @@
 import json
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import redirect
 from django.views.generic import CreateView, UpdateView
 from core.models import Guia, GuiaBlock
 
@@ -123,3 +122,19 @@ class GuiaDeleteView(DeleteView):
         if not request.user.is_authenticated or request.user != guia.author:
             return redirect('login')
         return super().dispatch(request, *args, **kwargs)
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from core.models import Guia
+
+@login_required
+@require_POST
+def toggle_publish(request, pk):
+    guia = get_object_or_404(Guia, pk=pk, author=request.user)
+    guia.publicado = not guia.publicado
+    guia.save()
+    return JsonResponse({'published': guia.publicado})
+
+

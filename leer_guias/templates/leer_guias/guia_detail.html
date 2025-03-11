@@ -1,0 +1,14 @@
+{% extends "core/core.html" %}
+
+{% block title %}Detalle de la Guía{% endblock %}
+
+{% block content %}
+  <article>
+    <h1>{{ guia.title }}</h1>
+    <p>{{ guia.description }}</p>
+    {% if guia.image %}
+      <img src="{{ guia.image.url }}" alt="{{ guia.title }}">
+    {% endif %}
+    {# Puedes agregar más detalles o formatear el contenido según tus necesidades #}
+  </article>
+{% endblock %}

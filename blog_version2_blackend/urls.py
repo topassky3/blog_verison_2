@@ -46,6 +46,7 @@ urlpatterns = [
     path('payment/', include('payment.urls')),
     path('buscar/', include('buscador.urls')),
     path('crear_guia/', include('crear_guia.urls')),
+    path('leer_guias/', include('leer_guias.urls')),
 
 
 ]

@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'terminos',
     'buscador',
     'crear_guia',
+    'leer_guias',
 ]
 
 SITE_ID = 3
