@@ -334,3 +334,50 @@ class GuiaBlock(models.Model):
     def __str__(self):
         return f"{self.get_block_type_display()} - Orden: {self.order}"
 
+# core/models.py (o donde manejes los modelos de Guías)
+
+class GuiaComment(models.Model):
+    guia = models.ForeignKey(
+        'Guia',
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name="Guía"
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='guia_comments',
+        verbose_name="Autor"
+    )
+    content = models.TextField("Contenido")
+    rating = models.PositiveSmallIntegerField(
+        "Valoración",
+        choices=[(i, i) for i in range(1, 6)],
+        blank=True,
+        null=True
+    )
+    created_at = models.DateTimeField("Fecha de Creación", auto_now_add=True)
+
+    # Para reacciones (Me gusta / No me gusta)
+    likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='liked_guia_comments',
+        blank=True
+    )
+    dislikes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='disliked_guia_comments',
+        blank=True
+    )
+
+    # Para permitir respuesta a comentarios
+    parent = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='replies',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f"Comentario de {self.author} en {self.guia}"

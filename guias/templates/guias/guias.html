@@ -412,6 +412,57 @@
       box-shadow: var(--shadow);
       transition: all 0.3s ease;
     }
+
+    /* Variables y estilos base (ya definidos en tu template) */
+    :root {
+      --primary: #2563eb;
+      --secondary: #3b82f6;
+      --text: #1d1d1d;
+      --background: #ffffff;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    [data-theme="dark"] {
+      --primary: #60a5fa;
+      --secondary: #3b82f6;
+      --text: #f8fafc;
+      --background: #0f172a;
+      --gray-100: #1e293b;
+      --gray-200: #334155;
+    }
+    /* Estilos de paginación */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .pagination .page-btn {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .pagination .page-btn:hover {
+      background-color: var(--secondary);
+      transform: translateY(-1px);
+    }
+    .pagination .page-btn:disabled {
+      background-color: var(--gray-200);
+      cursor: not-allowed;
+    }
+    .pagination .page-info {
+      font-size: 1rem;
+      color: var(--text);
+    }
   </style>
 {% endblock %}
 
@@ -467,7 +518,26 @@
         <p>No hay guías publicadas en este momento.</p>
       {% endfor %}
     </section>
+
+  <nav class="pagination">
+  {% if guias.has_previous %}
+    <a class="page-btn" href="?page={{ guias.previous_page_number }}">← Anterior</a>
+  {% else %}
+    <button class="page-btn" disabled>← Anterior</button>
+  {% endif %}
+
+  <span class="page-info">Página {{ guias.number }} de {{ guias.paginator.num_pages }}</span>
+
+  {% if guias.has_next %}
+    <a class="page-btn" href="?page={{ guias.next_page_number }}">Siguiente →</a>
+  {% else %}
+    <button class="page-btn" disabled>Siguiente →</button>
+  {% endif %}
+</nav>
+
   </main>
+
+
 {% endblock %}
 
 {% block extra_js %}

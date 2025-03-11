@@ -1,14 +1,754 @@
 {% extends "core/core.html" %}
+{% load static %}
+{% load toc_tags %}
+{% load guia_comments_tags %}
 
-{% block title %}Detalle de la Guía{% endblock %}
+
+{% block title %}{{ guia.title }} | WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #3b82f6;
+      --text: #1e293b;
+      --background: #ffffff;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    [data-theme="dark"] {
+      --primary: #60a5fa;
+      --secondary: #3b82f6;
+      --text: #f8fafc;
+      --background: #0f172a;
+      --gray-100: #1e293b;
+      --gray-200: #334155;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background-color: var(--background);
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    a { text-decoration: none; color: var(--primary); }
+    img { max-width: 100%; display: block; }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      background-color: rgba(241,245,249, 0.8);
+      z-index: 1000;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); transition: color 0.3s; }
+    .nav-menu { display: flex; gap: 2rem; align-items: center; list-style: none; }
+    .nav-link {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      transition: all 0.3s ease;
+      color: var(--text);
+    }
+    .nav-link:hover,
+    .nav-link.active { background-color: var(--gray-100); }
+    .nav-cta {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      transition: background-color 0.3s ease;
+    }
+    .nav-cta:hover { background-color: var(--secondary); }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--background);
+        padding: 1rem;
+        flex-direction: column;
+        box-shadow: var(--shadow);
+      }
+      .nav-menu.active { display: flex; }
+      .mobile-menu-btn { display: block; }
+    }
+
+    /* Layout Principal */
+    .container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 1024px) { .container { grid-template-columns: 3fr 1fr; } }
+    article {
+      padding: 2rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background-color: var(--background);
+    }
+    .tutorial-header {
+      border-bottom: 1px solid var(--gray-200);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+    .tutorial-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .tutorial-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .tutorial-info span {
+      background-color: var(--gray-100);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .tutorial-content {
+      font-size: 1.125rem;
+      line-height: 1.8;
+    }
+    .tutorial-content h2 {
+      margin: 2rem 0 1rem;
+      font-size: 1.75rem;
+      color: var(--primary);
+    }
+    .tutorial-content p { margin-bottom: 1rem; }
+    .back-button {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background-color: var(--primary);
+      color: #fff;
+      border-radius: var(--radius);
+      transition: background-color 0.3s;
+    }
+    .back-button:hover { background-color: var(--secondary); }
+
+    /* Bloques de la Guía */
+    .tutorial-block { margin-bottom: 1rem; }
+    .block-text { text-align: justify; }
+    .block-latex {
+      background-color: #f9f9f9;
+      border-left: 4px solid var(--primary);
+      padding: 1rem;
+    }
+    .block-code {
+      background-color: var(--gray-100);
+      border-left: 4px solid var(--secondary);
+      padding: 0.25rem 0.5rem;
+      font-family: "Courier New", monospace;
+      white-space: pre-wrap;
+    }
+    .hljs {
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: 1.2 !important;
+      background: none !important;
+    }
+    .block-code pre,
+    .block-code code {
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: 1.2 !important;
+      display: block;
+    }
+
+    /* TOC */
+    .toc {
+      position: sticky;
+      top: 2rem;
+      background-color: var(--gray-100);
+      padding: 1rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .toc h2 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary); }
+    .toc ul { list-style: none; padding-left: 0; }
+    .toc ul li { margin-bottom: 0.5rem; }
+    .toc ul li a {
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+    .toc ul li a:hover { color: var(--secondary); }
+
+    /* Sección de Comentarios */
+    .comments-section {
+      margin-top: 4rem;
+      padding: 2.5rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background-color: var(--background);
+      box-shadow: var(--shadow);
+    }
+    .comments-section h2 {
+      font-size: 1.75rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary);
+    }
+    .comment-form .form-group { margin-bottom: 1.5rem; }
+    .comment-form label {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .comment-form textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      background: var(--background);
+      color: var(--text);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .comment-form textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    .submit-comment {
+      width: 100%;
+      font-size: 1rem;
+      font-weight: 600;
+      background-color: var(--primary);
+      color: #fff;
+      padding: 0.75rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+      margin-top: 1rem;
+    }
+    .submit-comment:hover {
+      transform: translateY(-2px);
+      background-color: var(--secondary);
+    }
+
+    .comments-list { margin-top: 3rem; }
+
+    .comment {
+      position: relative;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .comment:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .comment-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .comment-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+      padding: 2px;
+      background: var(--background);
+    }
+    .comment-author-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .comment-author-name { font-weight: 600; color: var(--primary); }
+    .comment-date { font-size: 0.875rem; color: var(--gray-500); }
+
+    /* Sistema de Valoración */
+    .star-rating {
+      display: inline-flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .star-rating input[type="radio"] { display: none; }
+    .star-rating label {
+      cursor: pointer;
+      font-size: 1.25rem;
+      transition: color 0.2s ease;
+    }
+    .star-rating .fas.fa-star { color: var(--gray-300); }
+    .star-rating .fas.fa-star.active,
+    .star-rating input[type="radio"]:checked ~ label .fas.fa-star {
+      color: #f59e0b;
+    }
+
+    /* Respuestas */
+    .comment-replies {
+      margin-left: 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid var(--secondary);
+      max-width: 100%;
+      overflow-x: hidden;
+      word-wrap: break-word;
+    }
+
+    /* Botón de cambio de tema */
+    .theme-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background-color: var(--gray-100);
+      border: none;
+      padding: 0.75rem;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+    }
+    .theme-toggle:hover { transform: scale(1.1); }
+    /* Reacciones en Comentarios */
+.comment-reactions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.comment-reactions .reaction-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.comment-reactions .reaction-button:hover {
+  transform: scale(1.1);
+}
+
+.comment-reactions .reaction-button svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--gray-400);
+  transition: fill 0.3s ease;
+}
+
+.comment-reactions .reaction-button.active svg {
+  fill: var(--primary);
+}
+
+.comment-reactions .reaction-button span {
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+/* Estilos para los botones de reacciones (guías) */
+.comment-reactions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.comment-reactions .reaction-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.comment-reactions .reaction-button:hover {
+  transform: scale(1.1);
+}
+
+.comment-reactions .reaction-button svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--gray-400);
+  transition: fill 0.3s ease;
+}
+
+.comment-reactions .reaction-button.active svg {
+  fill: var(--primary);
+}
+
+.comment-reactions .reaction-button span {
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+/* --- Botón de borrar comentario --- */
+.delete-comment-button {
+  background-color: var(--secondary);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+  margin-left: 1rem;
+  transition: background-color 0.3s ease;
+}
+.delete-comment-button:hover {
+  background-color: var(--primary);
+}
+
+/* --- Modal de confirmación para borrar comentario --- */
+.modal.confirm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 2500;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content.confirm {
+  background-color: var(--background);
+  padding: 2rem;
+  border-radius: var(--radius);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.modal-content.confirm button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+.modal-content.confirm button:hover {
+  background-color: var(--secondary);
+}
+.modal-content.confirm .cancel-button {
+  background-color: #cbd5e1;
+  color: var(--text);
+}
+.modal-content.confirm .cancel-button:hover {
+  background-color: #94a3b8;
+}
+
+  </style>
+{% endblock %}
 
 {% block content %}
+<main class="container">
   <article>
-    <h1>{{ guia.title }}</h1>
-    <p>{{ guia.description }}</p>
-    {% if guia.image %}
-      <img src="{{ guia.image.url }}" alt="{{ guia.title }}">
-    {% endif %}
-    {# Puedes agregar más detalles o formatear el contenido según tus necesidades #}
+    <header class="tutorial-header">
+      <h1 class="tutorial-title">{{ guia.title }}</h1>
+      <div class="tutorial-info">
+        <span class="tutorial-date">Publicado: {{ guia.created_at|date:"d/m/Y" }}</span>
+        <span class="tutorial-author">Por: {{ guia.author.get_full_name|default:guia.author.username }}</span>
+      </div>
+    </header>
+
+    <!-- Bloques de contenido de la Guía -->
+    <section class="tutorial-content">
+      {% for block in guia.blocks.all %}
+        {% if block.block_type == 'text' %}
+          <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+        {% elif block.block_type == 'latex' %}
+          <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
+        {% elif block.block_type == 'code' %}
+          <div class="tutorial-block block-code">{{ block.content|safe }}</div>
+        {% else %}
+          <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+        {% endif %}
+      {% endfor %}
+    </section>
+    <a href="{% url 'guias_home' %}" class="back-button">← Volver a Guías</a>
   </article>
+
+  <!-- Tabla de contenido -->
+  <aside class="toc">
+    <h2>Contenido</h2>
+    <ul>
+      {% build_toc guia as toc_list %}
+      {% for item in toc_list %}
+        <li style="margin-left: {% if item.level == 3 %}1.5em{% else %}0em{% endif %};">
+          <a href="#{{ item.id }}">{{ item.text }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </aside>
+
+  <!-- Sección de Comentarios y Valoraciones -->
+  <section id="comments" class="comments-section">
+    <h2>Comentarios y Valoraciones</h2>
+    <form class="comment-form" method="post" action="">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="form-group">
+        {{ form.content.label_tag }}
+        {{ form.content }}
+        {% for error in form.content.errors %}
+          <div class="error">{{ error }}</div>
+        {% endfor %}
+      </div>
+      <div class="star-rating">
+        {% for i in "54321" %}
+          <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+                 {% if form.rating.value|stringformat:"s" == i %}checked{% endif %}>
+          <label for="star{{ i }}" title="{{ i }} estrella{% if i != '1' %}s{% endif %}">
+            <i class="fas fa-star"></i>
+          </label>
+        {% endfor %}
+      </div>
+      <button type="submit" class="submit-comment">Enviar Comentario</button>
+    </form>
+
+    <div class="comments-list">
+      {% for comment in top_level_comments %}
+        {% render_guia_comentario comment %}
+      {% empty %}
+        <p>No hay comentarios aún. ¡Sé el primero en opinar!</p>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  // Funciones para mostrar/ocultar overlay de carga (si lo tienes)
+  function showLoading() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+      loadingOverlay.style.display = 'flex';
+    }
+  }
+  function hideLoading() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+      loadingOverlay.style.display = 'none';
+    }
+  }
+
+  // Función genérica para enviar peticiones AJAX
+  function sendReaction(url, commentId, callback) {
+    showLoading();
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': csrfToken
+      },
+      body: new URLSearchParams({ 'comment_id': commentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      hideLoading();
+      callback(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      hideLoading();
+    });
+  }
+
+  // Actualiza la UI de reacciones (likes/dislikes)
+  function updateReactionUI(commentId, data) {
+    document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="like"]`).forEach(el => {
+      const likeCount = el.querySelector('.like-count');
+      if (likeCount) {
+        likeCount.textContent = data.like_count;
+      }
+      if (data.liked) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+    });
+    document.querySelectorAll(`.reaction-button[data-comment-id="${commentId}"][data-reaction="dislike"]`).forEach(el => {
+      const dislikeCount = el.querySelector('.dislike-count');
+      if (dislikeCount) {
+        dislikeCount.textContent = data.dislike_count;
+      }
+      if (data.disliked) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+    });
+  }
+
+  // Registro de botones "Me gusta"
+  document.querySelectorAll('.like-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const commentId = button.getAttribute('data-comment-id');
+      sendReaction("{% url 'toggle_guia_comment_like' %}", commentId, function(data) {
+        if (data.error) {
+          console.error(data.error);
+        } else {
+          updateReactionUI(commentId, data);
+        }
+      });
+    });
+  });
+
+  // Registro de botones "No me gusta"
+  document.querySelectorAll('.dislike-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const commentId = button.getAttribute('data-comment-id');
+      sendReaction("{% url 'toggle_guia_comment_dislike' %}", commentId, function(data) {
+        if (data.error) {
+          console.error(data.error);
+        } else {
+          updateReactionUI(commentId, data);
+        }
+      });
+    });
+  });
+
+  // Registro de botones para borrar comentarios
+  document.querySelectorAll('.delete-comment-button').forEach(button => {
+  button.addEventListener('click', function() {
+    const commentId = button.getAttribute('data-comment-id');
+    customConfirm('¿Estás seguro de que deseas borrar este comentario?')
+      .then((confirmed) => {
+        if (confirmed) {
+          sendReaction("{% url 'delete_guia_comment' %}", commentId, function(data) {
+            if (data.success) {
+              const commentDiv = document.getElementById(`comment-${commentId}`);
+              if (commentDiv) {
+                commentDiv.remove();
+              }
+            } else {
+              alert(data.error || 'Error al borrar el comentario.');
+            }
+          });
+        }
+      });
+  });
+});
+
+
+  // Toggle para mostrar/ocultar respuestas
+  document.querySelectorAll('.toggle-replies-button').forEach(button => {
+    const repliesCount = button.getAttribute('data-replies-count');
+    button.addEventListener('click', function() {
+      const commentId = button.getAttribute('data-comment-id');
+      const repliesDiv = document.getElementById('replies-' + commentId);
+      if (repliesDiv.style.display === 'none' || repliesDiv.style.display === '') {
+        repliesDiv.style.display = 'block';
+        button.querySelector('span').textContent = 'Ocultar respuestas (' + repliesCount + ')';
+      } else {
+        repliesDiv.style.display = 'none';
+        button.querySelector('span').textContent = 'Ver respuestas (' + repliesCount + ')';
+      }
+    });
+  });
+
+  // Toggle para mostrar/ocultar formularios de respuesta
+  document.querySelectorAll('.reply-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const commentId = button.getAttribute('data-comment-id');
+      const replyForm = document.getElementById(`reply-form-${commentId}`);
+      replyForm.style.display = (replyForm.style.display === 'none' || replyForm.style.display === '')
+        ? 'block'
+        : 'none';
+    });
+  });
+});
+
+function customConfirm(message) {
+  return new Promise((resolve) => {
+    // Creamos el modal con las clases 'modal' y 'confirm'
+    const modal = document.createElement('div');
+    modal.className = 'modal confirm';
+    modal.innerHTML = `
+      <div class="modal-content confirm">
+        <p>${message}</p>
+        <div class="confirm-buttons">
+          <button id="customConfirmOkButton">Aceptar</button>
+          <button id="customConfirmCancelButton" class="cancel-button">Cancelar</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Registro de eventos en los botones del modal
+    document.getElementById('customConfirmOkButton').addEventListener('click', function() {
+      modal.remove();
+      resolve(true);  // Usuario aceptó
+    });
+    document.getElementById('customConfirmCancelButton').addEventListener('click', function() {
+      modal.remove();
+      resolve(false); // Usuario canceló
+    });
+  });
+}
+
+</script>
 {% endblock %}
