@@ -575,4 +575,67 @@
       });
     });
   </script>
+
+    <script>
+  // Función para obtener y actualizar la grilla y la paginación de guías
+  function fetchGuias(params) {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    loadingOverlay.style.display = 'block';
+
+    fetch(`?${new URLSearchParams(params)}`)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Actualizar la grilla de guías
+        const newGrid = doc.querySelector('.guias-grid');
+        if (newGrid) {
+          document.querySelector('.guias-grid').innerHTML = newGrid.innerHTML;
+        }
+
+        // Actualizar la paginación
+        const newPagination = doc.querySelector('.pagination');
+        if (newPagination) {
+          document.querySelector('.pagination').innerHTML = newPagination.innerHTML;
+        }
+        loadingOverlay.style.display = 'none';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        loadingOverlay.style.display = 'none';
+      });
+  }
+
+  // Eventos para el filtrado por categoría
+  document.querySelectorAll('.filter-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      // Remover clase activa de todos y asignar al botón clicado
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      const params = {
+        category: button.dataset.filter,
+        search: document.querySelector('.search-box input').value
+      };
+      // Actualizar la URL (opcional, para navegabilidad)
+      window.history.pushState({}, '', '?' + new URLSearchParams(params));
+      fetchGuias(params);
+    });
+  });
+
+  // Evento para el campo de búsqueda
+  document.querySelector('.search-box input').addEventListener('input', () => {
+    const activeCategory = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    const params = {
+      category: activeCategory,
+      search: document.querySelector('.search-box input').value
+    };
+    window.history.pushState({}, '', '?' + new URLSearchParams(params));
+    fetchGuias(params);
+  });
+</script>
+
+
+
 {% endblock %}
