@@ -383,17 +383,30 @@
       <p class="podcast-description">{{ podcast.description }}</p>
     </div>
     <div class="audio-controls">
-      <audio controls>
-        <source src="{{ podcast.audio.url }}" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
-      </audio>
-    </div>
-    <!-- Botón para descargar el podcast -->
-    <div class="download-podcast" style="text-align: center; margin: 2rem 0;">
-      <a href="{{ podcast.audio.url }}" class="download-button" download>
-        Descargar Podcast
-      </a>
-    </div>
+  {% if request.user.subscription.plan == "Básico" %}
+    <!-- Usuario Básico: reproduce sin opción de descarga en el menú (no se muestra la opción de descarga en el reproductor) -->
+    <audio controls controlsList="nodownload">
+      <source src="{{ podcast.audio.url }}" type="audio/mpeg">
+      Tu navegador no soporta el elemento de audio.
+    </audio>
+  {% else %}
+    <!-- Usuarios Premium/Anual: reproducción normal -->
+    <audio controls>
+      <source src="{{ podcast.audio.url }}" type="audio/mpeg">
+      Tu navegador no soporta el elemento de audio.
+    </audio>
+  {% endif %}
+</div>
+
+{% if request.user.subscription.plan != "Básico" %}
+  <!-- Botón para descargar el podcast (solo para planes superiores a Básico) -->
+  <div class="download-podcast" style="text-align: center; margin: 2rem 0;">
+    <a href="{{ podcast.audio.url }}" class="download-button" download>
+      Descargar Podcast
+    </a>
+  </div>
+{% endif %}
+
   </section>
 
   <!-- Episodios Anteriores -->

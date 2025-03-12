@@ -80,6 +80,19 @@
         <p class="lead">No se encontraron podcasts.</p>
       {% endif %}
 
+      {% if guias %}
+        <h2 class="section-title">Guías encontradas</h2>
+        <ul class="result-list">
+          {% for guia in guias %}
+            <li class="result-item">
+              <a href="{% url 'guia_detail' guia.pk %}">{{ guia.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="lead">No se encontraron guías.</p>
+      {% endif %}
+
     {% else %}
       <p class="lead">Introduce un término de búsqueda en el formulario.</p>
     {% endif %}
