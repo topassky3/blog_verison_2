@@ -459,7 +459,7 @@
           <div class="content-grid">
             {% for podcast in podcasts %}
               <div class="content-card">
-                <a href="{% url 'podcast_update' podcast.pk %}" style="text-decoration:none; color:inherit;">
+                <a href="{% url 'crear_podcast:podcast_update' podcast.pk %}" style="text-decoration:none; color:inherit;">
                   <h3>{{ podcast.title }}</h3>
                   <p>Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
                 </a>
@@ -472,7 +472,7 @@
             {% endfor %}
             <!-- Botón para subir nuevo podcast -->
             <div class="content-card add-new">
-              <a href="{% url 'crear_podcart' %}" class="add-new-btn">&#43; Agregar Nuevo Podcast</a>
+              <a href="{% url 'crear_podcast:crear_podcart' %}" class="add-new-btn">&#43; Agregar Nuevo Podcast</a>
             </div>
           </div>
 

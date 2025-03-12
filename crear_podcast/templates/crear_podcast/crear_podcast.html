@@ -51,8 +51,14 @@
     .crear-podcast-form textarea {
       resize: vertical;
     }
+    .buttons-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      justify-content: center;
+    }
     .crear-podcast-form button {
-      align-self: center;
       background-color: #2563eb;
       color: #fff;
       border: none;
@@ -64,6 +70,13 @@
     }
     .crear-podcast-form button:hover {
       background-color: #3b82f6;
+    }
+    /* Botón de publicar */
+    .publish-btn {
+      background-color: #3b82f6;
+    }
+    .publish-btn:hover {
+      background-color: #2563eb;
     }
     /* Vista previa de la portada */
     .cover-preview {
@@ -85,31 +98,31 @@
       border-radius: 50%;
       border: 4px solid #2563eb;
     }
-      .form-group {
-        margin-bottom: 1rem;
-      }
-      .form-group label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: var(--text);
-      }
-      .form-group select,
-      .form-group input[type="text"] {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid var(--gray-200);
-        border-radius: var(--radius);
-        font-size: 1rem;
-        color: var(--text);
-        background-color: var(--background);
-        transition: border-color 0.3s ease;
-      }
-      .form-group select:focus,
-      .form-group input[type="text"]:focus {
-        outline: none;
-        border-color: var(--primary);
-      }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .form-group select,
+    .form-group input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: var(--text);
+      background-color: #ffffff;
+      transition: border-color 0.3s ease;
+    }
+    .form-group select:focus,
+    .form-group input[type="text"]:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
   </style>
 {% endblock %}
 
@@ -125,7 +138,7 @@
       {% endif %}
     </p>
   </div>
-  <form class="crear-podcast-form" method="post" enctype="multipart/form-data">
+  <form class="crear-podcast-form" method="post" enctype="multipart/form-data" action="">
     {% csrf_token %}
     <div class="cover-preview" id="coverPreview">
       {% if object and object.cover %}
@@ -140,55 +153,95 @@
         </svg>
       {% endif %}
     </div>
+
     <div class="form-group">
       <label for="id_title">Título del Podcast</label>
       {{ form.title }}
     </div>
+
     <div class="form-group">
       <label for="id_description">Descripción</label>
       {{ form.description }}
     </div>
+
     <div class="form-group">
       <label for="id_category">Categoría del Podcast</label>
       {{ form.category }}
     </div>
+
     <div class="form-group">
       <label for="id_audio">Archivo de Audio</label>
       {{ form.audio }}
     </div>
+
     <div class="form-group">
       <label for="id_cover">Portada del Podcast</label>
       {{ form.cover }}
     </div>
-    <button type="submit">{% if object %}Guardar Cambios{% else %}Subir Podcast{% endif %}</button>
+
+    <div class="buttons-container">
+      <!-- Botón de guardar cambios -->
+      <button type="submit">
+        {% if object %}Guardar Cambios{% else %}Subir Podcast{% endif %}
+      </button>
+
+      {% if object %}
+      <!-- Botón de publicar, solo visible si hay un objeto con pk -->
+        <button type="button" id="publish-btn"
+                class="publish-btn"
+                data-podcast-id="{{ object.pk }}"
+                data-url="{% url 'crear_podcast:toggle_publish' object.pk %}">
+          {% if object.publicado %}
+            Publicado
+          {% else %}
+            Publicar Podcast
+          {% endif %}
+        </button>
+      {% endif %}
+    </div>
   </form>
 </div>
 {% endblock %}
 
 {% block extra_js %}
   <script>
-    // Actualiza la vista previa de la portada cuando se selecciona una imagen
+    // Muestra la vista previa de la portada
     document.getElementById('id_cover').addEventListener('change', function(event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          // Reemplaza el contenido del contenedor de vista previa con un <img>
           const previewContainer = document.getElementById('coverPreview');
           previewContainer.innerHTML = '<img id="coverImagePreview" src="' + e.target.result + '" alt="Vista previa de portada">';
         }
         reader.readAsDataURL(file);
       }
     });
-  </script>
 
-    <script>
-    // Selecciona el formulario de creación de podcast
-    const podcastForm = document.querySelector('.crear-podcast-form');
-
-    // Al enviar el formulario, muestra el overlay de carga
-    podcastForm.addEventListener('submit', function() {
-      document.getElementById('loadingOverlay').style.display = 'block';
-    });
+    // Botón para publicar
+    const publishBtn = document.getElementById('publish-btn');
+    if (publishBtn) {
+      publishBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const toggleUrl = this.getAttribute('data-url');
+        fetch(toggleUrl, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.published) {
+            // Cambiar el texto del botón a "Publicado"
+            publishBtn.textContent = 'Publicado';
+          } else {
+            publishBtn.textContent = 'Publicar Podcast';
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    }
   </script>
 {% endblock %}

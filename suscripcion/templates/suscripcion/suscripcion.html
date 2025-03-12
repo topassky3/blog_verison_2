@@ -90,15 +90,16 @@
     </div>
   {% endif %}
 
-  <!-- Subscription Form Section (opcional) -->
-  <section class="subscription-section">
-    <h2>Forma Parte de Nuestra Comunidad</h2>
-    <p>Suscríbete para obtener contenido exclusivo, actualizaciones y ofertas especiales.</p>
-    <form class="subscription-form">
-      <input type="email" placeholder="Ingresa tu correo electrónico" required>
-      <button type="submit">Suscribirse</button>
-    </form>
-  </section>
+  <!-- Sección para Suscribirse al Newsletter -->
+    <section class="subscription-section">
+      <h2>Forma Parte de Nuestra Comunidad</h2>
+      <p>Suscríbete para recibir contenido exclusivo, actualizaciones y ofertas especiales.</p>
+      <form class="subscription-form" method="post" action="{% url 'newsletter:subscribe' %}">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Ingresa tu correo electrónico" required>
+        <button type="submit">Suscribirse</button>
+      </form>
+    </section>
 
   <!-- Sección de Planes de Suscripción -->
   <section class="subscriptions">

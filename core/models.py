@@ -183,6 +183,9 @@ class Podcast(models.Model):
     created_at = models.DateTimeField("Creado el", auto_now_add=True)
     updated_at = models.DateTimeField("Actualizado el", auto_now=True)
 
+    # Campo para alternar el estado de publicación
+    publicado = models.BooleanField("Publicado", default=False)
+
     def __str__(self):
         return self.title
 

@@ -36,3 +36,48 @@ class PodcastUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         # Permite la edición solo si el usuario es autenticado, es escritor y es el autor del podcast
         podcast = self.get_object()
         return self.request.user.is_authenticated and self.request.user == podcast.author and self.request.user.es_escritor
+
+import json
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
+from core.models import Podcast, Subscriber  # Ajusta si está en otra app
+
+@login_required
+@require_POST
+def toggle_publish(request, pk):
+    podcast = get_object_or_404(Podcast, pk=pk, author=request.user)
+    # Alterna el estado
+    podcast.publicado = not podcast.publicado
+    podcast.save()
+
+    if podcast.publicado:
+        # Enviar correo a los suscriptores
+        subscribers = Subscriber.objects.all()  # Filtra si tienes 'active=True'
+        recipient_list = [sub.email for sub in subscribers]
+        if recipient_list:
+            subject = "Nuevo Podcast Publicado en WebDev Blog"
+            # Ajusta la URL según tu configuración real
+            podcast_url = request.build_absolute_uri(f"/escuchar-podcast/{podcast.pk}/")
+            html_message = render_to_string("emails/new_podcast_email.html", {
+                "podcast": podcast,
+                "podcast_url": podcast_url,
+            })
+            plain_message = (
+                f"Se ha publicado un nuevo podcast: {podcast.title}.\n"
+                f"Escúchalo aquí: {podcast_url}\n\n"
+                "¡Gracias por suscribirte a WebDev Blog!"
+            )
+            send_mail(
+                subject,
+                plain_message,
+                settings.DEFAULT_FROM_EMAIL,
+                recipient_list,
+                fail_silently=False,
+                html_message=html_message,
+            )
+    return JsonResponse({'published': podcast.publicado})
