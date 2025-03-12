@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nueva Guía Publicada en WebDev Blog</title>
+  <style>
+    /* Estilos inline para compatibilidad en clientes de correo */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+      color: #1e293b;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 24px;
+      color: #2563eb;
+      text-align: center;
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    a.button {
+      display: inline-block;
+      background-color: #2563eb;
+      color: #ffffff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+    a.button:hover {
+      background-color: #3b82f6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Nueva Guía Publicada</h1>
+    <p>Hola,</p>
+    <p>Se ha publicado una nueva guía en <strong>WebDev Blog</strong>:</p>
+    <p style="text-align: center; font-size: 18px; font-weight: bold;">{{ guia.title }}</p>
+    <p>Puedes verla haciendo clic en el siguiente botón:</p>
+    <p style="text-align: center;">
+      <a href="{{ guia_url }}" class="button">Ver Guía</a>
+    </p>
+    <p>¡Gracias por suscribirte!</p>
+    <p>Saludos,<br>El equipo de WebDev Blog</p>
+  </div>
+</body>
+</html>
