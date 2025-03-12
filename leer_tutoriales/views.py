@@ -19,9 +19,22 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tutorial'] = self.object
-        # Calculamos el score: diferencia de me gusta y no me gusta.
-        top_level_comments = self.object.comments.filter(parent__isnull=True).annotate(
+        tutorial = self.object
+        all_blocks = tutorial.blocks.all()
+        total_blocks = all_blocks.count()
+
+        # Si el usuario es Escritor, no se limita el contenido, de lo contrario,
+        # se muestra solo el 60% si tiene plan "Básico"
+        if not self.request.user.es_escritor and self.request.user.subscription.plan == "Básico" and total_blocks > 0:
+            visible_count = int(total_blocks * 0.6)
+            context['visible_blocks'] = all_blocks[:visible_count]
+            context['mostrar_limite'] = True
+        else:
+            context['visible_blocks'] = all_blocks
+            context['mostrar_limite'] = False
+
+        # Comentarios y demás datos de contexto
+        top_level_comments = tutorial.comments.filter(parent__isnull=True).annotate(
             like_count=Count('likes'),
             dislike_count=Count('dislikes'),
             score=ExpressionWrapper(Count('likes') - Count('dislikes'), output_field=IntegerField())
@@ -29,6 +42,7 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
         context['top_level_comments'] = top_level_comments
         if 'form' not in context:
             context['form'] = self.get_form()
+        context['tutorial'] = tutorial
         return context
 
     def get_success_url(self):

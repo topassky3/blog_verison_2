@@ -293,6 +293,8 @@ class GuiaCategory(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+from django.core.validators import FileExtensionValidator
+
 class Guia(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -313,9 +315,18 @@ class Guia(models.Model):
     publicado = models.BooleanField("Publicado", default=False)
     created_at = models.DateTimeField("Creado el", auto_now_add=True)
     updated_at = models.DateTimeField("Actualizado el", auto_now=True)
+    # Nuevo campo para el código en .zip
+    code_file = models.FileField(
+        "Código de la Guía (.zip)",
+        upload_to='guia_codes/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['zip'])]
+    )
 
     def __str__(self):
         return self.title
+
 
 class GuiaBlock(models.Model):
     BLOCK_TYPES = (

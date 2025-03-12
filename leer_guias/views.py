@@ -18,19 +18,35 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['guia'] = self.object
 
+        # Obtenemos todos los bloques de la guía
+        blocks = self.object.blocks.all()
+        total_blocks = blocks.count()
+
+        # Intentamos obtener la suscripción del usuario (asegúrate de que siempre exista o maneja el caso nulo)
+        subscription = None
+        try:
+            subscription = self.request.user.subscription
+        except Exception:
+            pass
+
+        # Si el usuario tiene plan Básico, limitamos a mostrar solo el 60% de los bloques
+        if subscription and subscription.plan == "Básico" and total_blocks > 0:
+            visible_count = int(total_blocks * 0.6)
+            context['visible_blocks'] = blocks[:visible_count]
+            context['mostrar_limite'] = True
+        else:
+            context['visible_blocks'] = blocks
+            context['mostrar_limite'] = False
+
         # Comentarios de nivel superior (sin padre), ordenados por "score"
         top_level_comments = self.object.comments.filter(parent__isnull=True).annotate(
             like_count=Count('likes'),
             dislike_count=Count('dislikes'),
-            score=ExpressionWrapper(
-                Count('likes') - Count('dislikes'),
-                output_field=IntegerField()
-            )
+            score=ExpressionWrapper(Count('likes') - Count('dislikes'), output_field=IntegerField())
         ).order_by('-score', '-created_at')
-
         context['top_level_comments'] = top_level_comments
 
-        # Si no existe el form, lo inyectamos
+        # Si no existe el form en el contexto, lo inyectamos
         if 'form' not in context:
             context['form'] = self.get_form()
 
@@ -145,3 +161,33 @@ def delete_guia_comment(request):
     if parent_id:
         data['parent_id'] = parent_id
     return JsonResponse(data)
+
+
+from django.core.exceptions import PermissionDenied
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from core.models import Guia
+
+
+class DownloadGuiaCodeFileView(LoginRequiredMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        guia = get_object_or_404(Guia, pk=pk)
+        if not guia.code_file:
+            raise Http404("No se encontró el archivo de código para esta guía.")
+
+        # Si el usuario tiene el plan Básico, denegamos el acceso
+        try:
+            subscription = request.user.subscription
+        except Exception:
+            subscription = None
+
+        if subscription and subscription.plan == "Básico":
+            raise PermissionDenied("No tienes permiso para descargar este archivo. Actualiza tu suscripción.")
+
+        return FileResponse(
+            guia.code_file.open('rb'),
+            as_attachment=True,
+            filename=guia.code_file.name
+        )

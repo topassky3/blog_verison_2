@@ -748,18 +748,25 @@ background-color: var(--primary);
     </header>
 
   <section class="tutorial-content">
-    {% for block in tutorial.blocks.all %}
-      {% if block.block_type == 'text' %}
-        <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-      {% elif block.block_type == 'latex' %}
-        <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
-      {% elif block.block_type == 'code' %}
-        <div class="tutorial-block block-code">{{ block.content|safe }}</div>
-      {% else %}
-        <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-      {% endif %}
-    {% endfor %}
-  </section>
+  {% for block in visible_blocks %}
+    {% if block.block_type == 'text' %}
+      <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+    {% elif block.block_type == 'latex' %}
+      <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
+    {% elif block.block_type == 'code' %}
+      <div class="tutorial-block block-code">{{ block.content|safe }}</div>
+    {% else %}
+      <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+    {% endif %}
+  {% endfor %}
+
+  {% if mostrar_limite %}
+    <div class="content-limited-message" style="text-align: center; margin: 2rem 0;">
+      <p>Estás viendo solo el 60% del contenido. <a href="{% url 'suscripcion_home' %}">¡Suscríbete a Premium</a> para acceder al contenido completo!</p>
+    </div>
+  {% endif %}
+</section>
+
     <!-- Botón para descargar el proyecto -->
   {% if request.user.subscription.plan != "Básico" %}
       <!-- Botón para descargar el proyecto -->

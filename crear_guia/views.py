@@ -1,12 +1,14 @@
 import json
 from django.http import JsonResponse, HttpResponse
-from django.views.generic import CreateView, UpdateView
+from django.shortcuts import redirect, get_object_or_404
+from django.views.generic import CreateView, UpdateView, DeleteView
 from core.models import Guia, GuiaBlock
+from .forms import GuiaForm  # El formulario debe incluir el campo "code_file"
 
+# Vista para crear una nueva Guía
 class GuiaCreateView(CreateView):
     model = Guia
-    # Definimos los campos básicos para la guía
-    fields = ['title', 'description', 'category', 'image']
+    form_class = GuiaForm
     template_name = 'crear_guia/crear_guia.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -16,11 +18,14 @@ class GuiaCreateView(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        # Asignamos el autor y guardamos la guía
+        # Asignamos el autor
         form.instance.author = self.request.user
+        # Si el usuario NO es escritor, ignoramos el archivo subido
+        if not self.request.user.es_escritor:
+            form.instance.code_file = None
         self.object = form.save()
 
-        # Procesamos los bloques enviados (editor similar al tutorial)
+        # Procesamos los bloques enviados desde el editor (campo oculto "blocks" en formato JSON)
         blocks_json = self.request.POST.get('blocks')
         if blocks_json:
             try:
@@ -33,11 +38,12 @@ class GuiaCreateView(CreateView):
                         order=index
                     )
             except Exception as e:
+                # Si ocurre algún error, eliminamos la guía y devolvemos el error en el formulario
                 self.object.delete()
                 form.add_error(None, 'Error al guardar los bloques de la guía.')
                 return self.form_invalid(form)
 
-        # Si la petición es AJAX devolvemos JSON; si no, redirigimos a la vista de edición
+        # Si la petición es AJAX se devuelve JSON; de lo contrario se redirige a la vista de edición
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({
                 'message': 'Guía creada exitosamente.',
@@ -55,9 +61,10 @@ class GuiaCreateView(CreateView):
         return super().form_invalid(form)
 
 
+# Vista para actualizar una Guía existente
 class GuiaUpdateView(UpdateView):
     model = Guia
-    fields = ['title', 'description', 'category', 'image']
+    form_class = GuiaForm
     template_name = 'crear_guia/crear_guia.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -68,10 +75,12 @@ class GuiaUpdateView(UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        # Si el usuario NO es escritor, se mantiene el archivo de código ya existente
+        if not self.request.user.es_escritor:
+            form.instance.code_file = self.get_object().code_file
         self.object = form.save()
 
-        # Se procesan y actualizan los bloques:
-        # Se eliminan los anteriores y se crean nuevos a partir del JSON enviado.
+        # Se actualizan los bloques: se eliminan los anteriores y se crean nuevos a partir del JSON enviado
         blocks_json = self.request.POST.get('blocks')
         if blocks_json:
             try:
@@ -100,7 +109,6 @@ class GuiaUpdateView(UpdateView):
                 'message': 'Error en el formulario.'
             }, status=400)
         return super().form_invalid(form)
-
 
 from django.urls import reverse_lazy
 from django.shortcuts import redirect

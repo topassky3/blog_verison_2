@@ -206,6 +206,13 @@
       {{ form.image }}
     </div>
 
+    {% if request.user.es_escritor %}
+      <div>
+        <label for="id_code_file">Código de la Guía (.zip):</label>
+        {{ form.code_file }}
+      </div>
+    {% endif %}
+
     <!-- Barra de herramientas para agregar bloques -->
     <div class="toolbar">
       <button type="button" data-type="text">Agregar Texto</button>
