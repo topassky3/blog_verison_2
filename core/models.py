@@ -392,3 +392,12 @@ class GuiaComment(models.Model):
 
     def __str__(self):
         return f"Comentario de {self.author} en {self.guia}"
+
+from django.db import models
+
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True, verbose_name="Correo Electrónico")
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

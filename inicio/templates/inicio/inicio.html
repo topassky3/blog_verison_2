@@ -144,12 +144,14 @@
 
 
   <!-- Newsletter Section -->
-  <section class="newsletter" id="suscripcion">
-    <h2>Suscríbete a nuestro Newsletter</h2>
-    <p>Suscríbete para recibir contenido exclusivo, novedades y las últimas tendencias en desarrollo web.</p>
-    <form class="newsletter-form">
-      <input type="email" placeholder="Tu correo electrónico" required>
-      <button type="submit">Suscribirse</button>
-    </form>
-  </section>
+<section class="newsletter" id="suscripcion">
+  <h2>Suscríbete a nuestro Newsletter</h2>
+  <p>Suscríbete para recibir contenido exclusivo, novedades y las últimas tendencias en desarrollo web.</p>
+  <form action="{% url 'newsletter:subscribe' %}" method="post" class="newsletter-form">
+    {% csrf_token %}
+    <input type="email" name="email" placeholder="Tu correo electrónico" required>
+    <button type="submit">Suscribirse</button>
+  </form>
+</section>
+
 {% endblock %}

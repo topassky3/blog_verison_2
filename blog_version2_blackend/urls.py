@@ -47,8 +47,7 @@ urlpatterns = [
     path('buscar/', include('buscador.urls')),
     path('crear_guia/', include('crear_guia.urls')),
     path('leer_guias/', include('leer_guias.urls')),
-
-
+    path('newsletter/', include('newsletter.urls')),
 ]
 
 if settings.DEBUG:

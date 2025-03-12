@@ -98,13 +98,14 @@
         </div>
       </div>
       <!-- Newsletter Footer -->
-      <div class="footer-section">
-        <h4>Newsletter</h4>
-        <form class="footer-newsletter">
-          <input type="email" placeholder="Tu correo" required>
-          <button type="submit">Suscribirse</button>
-        </form>
-      </div>
+    <div class="footer-section">
+      <h4>Newsletter</h4>
+      <form action="{% url 'newsletter:subscribe' %}" method="post" class="footer-newsletter">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Tu correo" required>
+        <button type="submit">Suscribirse</button>
+      </form>
+    </div>
     </div>
     <div class="footer-bottom">
       <p>© 2023 WebDev Blog. Todos los derechos reservados.</p>

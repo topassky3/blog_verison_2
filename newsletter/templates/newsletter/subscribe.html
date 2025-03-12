@@ -1,0 +1,58 @@
+{% extends "core/core.html" %}
+{% block title %}Suscribirse al Newsletter{% endblock %}
+
+{% block extra_head %}
+  <style>
+    .subscription-form-container {
+      max-width: 500px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background-color: var(--gray-100);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .subscription-form-container h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+    .subscription-form-container form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .subscription-form-container form input[type="email"] {
+      padding: 0.75rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      width: 100%;
+      max-width: 100%;
+    }
+    .subscription-form-container form button {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: 1rem;
+    }
+    .subscription-form-container form button:hover {
+      background-color: var(--secondary);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="subscription-form-container">
+    <h1>Suscribirse al Newsletter</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Suscribirse</button>
+    </form>
+  </div>
+{% endblock %}

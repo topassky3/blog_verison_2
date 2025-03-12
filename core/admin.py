@@ -85,3 +85,12 @@ class GuiaCategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)  # En la lista solo se mostrará el nombre
     fields = ('name',)  # En el formulario solo se mostrará el campo "Nombre"
 
+
+from django.contrib import admin
+from .models import Subscriber
+
+@admin.register(Subscriber)
+class SubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'subscribed_at')
+    search_fields = ('email',)
+    list_filter = ('subscribed_at',)

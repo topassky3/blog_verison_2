@@ -1,0 +1,50 @@
+{% extends "core/core.html" %}
+
+{% block title %}Suscripción Exitosa - WebDev Blog{% endblock %}
+
+{% block extra_head %}
+  <style>
+    .subscription-success {
+      max-width: 500px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background-color: var(--gray-100);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .subscription-success h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    .subscription-success p {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+    .subscription-success a {
+      display: inline-block;
+      background-color: var(--primary);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .subscription-success a:hover {
+      background-color: var(--secondary);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="subscription-success">
+    <h1>¡Gracias por suscribirte!</h1>
+    <p>Tu correo se ha registrado correctamente. Revisa tu bandeja de entrada para recibir nuestras novedades y actualizaciones.</p>
+    <a href="{% url 'inicio_home' %}">Volver al Inicio</a>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

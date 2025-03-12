@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'buscador',
     'crear_guia',
     'leer_guias',
+    'newsletter',
 ]
 
 SITE_ID = 3
