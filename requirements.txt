@@ -19,5 +19,5 @@ whitenoise==6.4.0
 django-paypal
 celery==5.4.0
 redis==4.6.0
-django-gridfs-storage==0.1.7
-pymongo==4.3.3
+django-gridfs-storage==0.0.2
+pymongo==4.11.2
