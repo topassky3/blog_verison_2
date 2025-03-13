@@ -205,6 +205,16 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 AUTH_USER_MODEL = 'core.Lector'
 
+# Django usará este backend para guardar todos los archivos (FileField, ImageField, etc.)
+DEFAULT_FILE_STORAGE = 'django_gridfs_storage.storage.GridFSStorage'
+
+# Le indicamos la URL de conexión a MongoDB (reemplaza con la tuya)
+GRIDFS_STORAGE_URL = "mongodb://admin:Kamejo23.@51.222.159.144:27017/admin"
+
+# Nombre de la colección “base” en GridFS (por defecto suele ser “fs”)
+GRIDFS_STORAGE_COLLECTION = "fs"
+
+# MEDIA_URL se usa para armar la ruta en la que Django servirá tus archivos
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'  # Si usas Pathlib; alternativamente: os.path.join(BASE_DIR, 'media')
 
