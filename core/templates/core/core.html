@@ -4,8 +4,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}WebDev Blog{% endblock %}</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%232563eb'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'>W</text></svg>">
+  <meta name="description" content="TuCodigoCotidiano Blog es tu recurso definitivo para tutoriales, guías, podcasts y recursos de desarrollo web. Descubre consejos prácticos y aprende a programar con nosotros.">
+    <meta name="keywords" content="TuCodigoCotidiano, blog, tutoriales, guías, podcasts, desarrollo web, programación">
+    <link rel="canonical" href="https://tucodigocotidiano.com/">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph: para redes sociales -->
+    <meta property="og:title" content="TuCodigoCotidiano Blog">
+    <meta property="og:description" content="Descubre tutoriales, guías y podcasts que te ayudarán a dominar el desarrollo web.">
+    <meta property="og:url" content="https://tucodigocotidiano.com/">
+    <meta property="og:image" content="https://tucodigocotidiano.com/static/core/img/og-image.jpg">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TuCodigoCotidiano Blog">
+    <meta name="twitter:description" content="Tu recurso definitivo para tutoriales, guías y recursos profesionales en desarrollo web.">
+    <meta name="twitter:image" content="https://tucodigocotidiano.com/static/core/img/twitter-card.jpg">
+
+  <title>{% block title %}Tu codigo cotidiano Blog{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%232563eb'/><text x='50' y='65' font-size='30' text-anchor='middle' fill='white' font-family='sans-serif'>TCC</text>
+</svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,7 +37,7 @@
   <header>
     <nav class="navbar">
       <div class="nav-container">
-        <a href="/" class="logo">WebDev</a>
+        <a href="/" class="logo">TuCodigoCotidiano</a>
         <button class="mobile-menu-btn" aria-label="Abrir menú">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M3 12h18M3 6h18M3 18h18"/>
@@ -72,29 +91,29 @@
     <div class="footer-container">
       <!-- About -->
       <div class="footer-section">
-        <h3>WebDev Blog</h3>
+        <h3>TuCodigoCotidiano Blog</h3>
         <p>Tu recurso definitivo para desarrollo web moderno. Tutoriales, guías y recursos profesionales.</p>
       </div>
       <!-- Quick Links -->
       <div class="footer-section">
         <h4>Enlaces Rápidos</h4>
         <ul>
-          <li><a href="#inicio">Inicio</a></li>
-          <li><a href="#tutoriales">Tutoriales</a></li>
-          <li><a href="#guias">Guías</a></li>
-          <li><a href="#podcast">Podcast</a></li>
-          <li><a href="#suscripcion">Suscripción</a></li>
-          <li><a href="#contacto">Contacto</a></li>
-        </ul>
+            <li><a href="{% url 'inicio_home' %}">Inicio</a></li>
+            <li><a href="{% url 'tutoriales_home' %}">Tutoriales</a></li>
+            <li><a href="{% url 'guias_home' %}">Guías</a></li>
+            <li><a href="{% url 'podcast_home' %}">Podcast</a></li>
+            <li><a href="{% url 'suscripcion_home' %}">Suscripción</a></li>
+            <li><a href="{% url 'contacto_home' %}">Contacto</a></li>
+          </ul>
       </div>
       <!-- Social Media -->
       <div class="footer-section">
         <h4>Síguenos</h4>
         <div class="social-links">
-          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="https://x.com/tucodigocotiano" aria-label="X"><i class="fab fa-x"></i></a>
+          <a href="https://github.com/tucodigocotidiano" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://www.youtube.com/@Tucodigocotidiano" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61573873961551" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
         </div>
       </div>
       <!-- Newsletter Footer -->
@@ -108,7 +127,7 @@
     </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2023 WebDev Blog. Todos los derechos reservados.</p>
+      <p>© 2025 TuCodigoCotidiano Blog. Todos los derechos reservados.</p>
       <ul class="legal-links">
         <li><a href="#privacidad">Política de Privacidad</a></li>
         <li><a href="#terminos">Términos de Servicio</a></li>
