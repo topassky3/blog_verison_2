@@ -115,6 +115,31 @@
   </section>
 {% endif %}
 
+    {# Sección de Guías Destacadas #}
+{% if guias_destacadas %}
+<section class="featured-posts" id="guias">
+  <h2 class="section-title">Guías Destacadas</h2>
+  <div class="posts-grid">
+    {% for guia in guias_destacadas %}
+      <article class="post-card"
+               onclick="window.location.href='{% url 'guia_detail' guia.pk %}'"
+               style="cursor: pointer;">
+        {% if guia.image %}
+          <img class="post-image" src="{{ guia.image.url }}" alt="{{ guia.title }}">
+        {% else %}
+          <img class="post-image" src="https://via.placeholder.com/400x250" alt="{{ guia.title }}">
+        {% endif %}
+        <div class="post-content">
+          <h3>{{ guia.title }}</h3>
+          <p>Ranking: {{ guia.avg_rating|floatformat:1 }}</p>
+          <a href="{% url 'guia_detail' guia.pk %}" class="read-more">Leer más →</a>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
 
   {# Sección de Podcasts Destacados (ya limitados a 3 en la vista) #}
     {% if podcasts_destacados %}
