@@ -61,15 +61,37 @@
       font-weight: bold;
       margin-bottom: 0.5rem;
     }
+
+    .full-name {
+  display: inline;
+}
+.short-name {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .full-name {
+    display: none;
+  }
+  .short-name {
+    display: inline;
+  }
+}
+
   </style>
 {% endblock %}
 
 {% block content %}
   <!-- Hero Section -->
-  <section class="hero" id="inicio">
-    <h1>Suscríbete a TuCodigoCotidiano Blog</h1>
-    <p>Únete a nuestra comunidad y recibe las últimas novedades, tutoriales y recursos de desarrollo web directamente en tu correo.</p>
-  </section>
+    <section class="hero" id="inicio">
+      <h1>
+        Suscríbete a
+        <span class="full-name">TuCodigoCotidiano</span>
+        <span class="short-name">TCC</span>
+        Blog
+      </h1>
+      <p>Únete a nuestra comunidad y recibe las últimas novedades, tutoriales y recursos de desarrollo web directamente en tu correo.</p>
+    </section>
 
   <!-- Información de Suscripción Actual -->
   {% if user.is_authenticated and subscription %}

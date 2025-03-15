@@ -62,18 +62,42 @@
       background-color: var(--secondary);
       color: #fff;
     }
+
+    /* Mostrar por defecto el nombre completo */
+.full-name {
+  display: inline;
+}
+.short-name {
+  display: none;
+}
+
+/* En dispositivos móviles (por ejemplo, menos de 600px) mostrar solo el nombre abreviado */
+@media (max-width: 600px) {
+  .full-name {
+    display: none;
+  }
+  .short-name {
+    display: inline;
+  }
+}
+
   </style>
 {% endblock %}
 
 {% block content %}
   <!-- Hero Section -->
   <section class="hero" id="inicio">
-    <h1>Bienvenido a TuCodigoCotidiano Blog</h1>
-    <p>
-      Descubre el camino para potenciar tu código cotidiano:
-      Aprende con tutoriales, explora guías detalladas y accede a recursos prácticos.
-    </p>
-  </section>
+  <h1>
+    Bienvenido a
+    <span class="full-name">TuCodigoCotidiano</span>
+    <span class="short-name">TCC</span>
+    Blog
+  </h1>
+  <p>
+    Descubre el camino para potenciar tu código cotidiano:
+    Aprende con tutoriales, explora guías detalladas y accede a recursos prácticos.
+  </p>
+</section>
 
   <!-- Buscador Mejorado -->
   <section class="search" id="buscador">

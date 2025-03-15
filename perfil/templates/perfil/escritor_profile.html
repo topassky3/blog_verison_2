@@ -255,6 +255,50 @@
     .modal-content button:hover {
       background-color: var(--secondary);
     }
+
+    @media (max-width: 768px) {
+  /* Cambiar la dirección del contenedor principal para que sidebar y main-content se apilen */
+  .admin-container {
+    flex-direction: column;
+  }
+
+  /* Sidebar al 100% de ancho en pantallas pequeñas */
+  .sidebar {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  /* El área principal también ocupa el 100% */
+  .main-content {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  /* Ajusta el tamaño del avatar si deseas */
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Asegúrate de que los inputs y textareas no se salgan del contenedor */
+  .profile-form input,
+  .profile-form textarea {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* El botón también al 100% si quieres que no se desborde */
+  .update-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Ajusta la grilla de tarjetas para que solo tenga 1 columna en pantallas muy pequeñas */
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
   </style>
 {% endblock %}
 

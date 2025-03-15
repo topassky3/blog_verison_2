@@ -55,3 +55,22 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         loginModal.style.display = 'none';
       }
     });
+
+document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn = document.getElementById('userMenuToggle');
+      const dropdownMenu = document.querySelector('.dropdown-menu');
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function (event) {
+          event.stopPropagation(); // Evita que el clic se propague y cierre inmediatamente el menú
+          dropdownMenu.classList.toggle('show');
+        });
+      }
+
+      // Cierra el menú si se hace clic fuera del mismo
+      document.addEventListener('click', function () {
+        if (dropdownMenu.classList.contains('show')) {
+          dropdownMenu.classList.remove('show');
+        }
+      });
+    });

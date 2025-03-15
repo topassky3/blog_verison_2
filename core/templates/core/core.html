@@ -39,7 +39,11 @@
   <header>
     <nav class="navbar">
       <div class="nav-container">
-        <a href="/" class="logo">TuCodigoCotidiano</a>
+        <a href="/" class="logo">
+          <span class="full-logo">TuCodigoCotidiano</span>
+          <span class="short-logo">TCC</span>
+        </a>
+
         <button class="mobile-menu-btn" aria-label="Abrir menú">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M3 12h18M3 6h18M3 18h18"/>
@@ -164,26 +168,6 @@
   {% block extra_js %}{% endblock %}
   <!-- FontAwesome (kit) -->
   <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
-  <!-- Lógica para el modal de Login -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const toggleBtn = document.getElementById('userMenuToggle');
-      const dropdownMenu = document.querySelector('.dropdown-menu');
 
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', function (event) {
-          event.stopPropagation(); // Evita que el clic se propague y cierre inmediatamente el menú
-          dropdownMenu.classList.toggle('show');
-        });
-      }
-
-      // Cierra el menú si se hace clic fuera del mismo
-      document.addEventListener('click', function () {
-        if (dropdownMenu.classList.contains('show')) {
-          dropdownMenu.classList.remove('show');
-        }
-      });
-    });
-  </script>
 </body>
 </html>

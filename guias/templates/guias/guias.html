@@ -463,16 +463,40 @@
       font-size: 1rem;
       color: var(--text);
     }
-  </style>
+
+    /* Por defecto, mostrar el nombre completo */
+    .full-name {
+      display: inline;
+    }
+    .short-name {
+      display: none;
+    }
+
+    /* En pantallas móviles (menos de 600px, por ejemplo), se muestra el nombre abreviado */
+    @media (max-width: 600px) {
+      .full-name {
+        display: none;
+      }
+      .short-name {
+        display: inline;
+      }
+    }
+
+      </style>
 {% endblock %}
 
 {% block content %}
   <main class="container">
     <!-- Hero Section -->
     <section class="hero" id="inicio">
-      <h1>Guías de TuCodigoCotidiano</h1>
+      <h1>
+        Guías de
+        <span class="full-name">TuCodigoCotidiano</span>
+        <span class="short-name">TCC</span>
+      </h1>
       <p>Descubre guías completas y detalladas para potenciar tu código cotidiano y llevar tus proyectos al siguiente nivel.</p>
     </section>
+
 
     <!-- Guías Filter -->
     <section class="guias-filter">

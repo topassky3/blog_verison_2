@@ -106,6 +106,40 @@
     .update-btn:hover {
       background-color: var(--secondary);
     }
+
+@media (max-width: 768px) {
+  /* Ajusta márgenes y padding del contenedor */
+  .profile-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  /* Para que el header no se desborde */
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Ajusta tamaño del avatar */
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Asegúrate de que inputs y botón ocupen 100% */
+  .profile-form .form-group input,
+  .profile-form .form-group textarea {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Botón a ancho completo */
+  .update-btn {
+    width: 100%;
+  }
+}
+
   </style>
 {% endblock %}
 

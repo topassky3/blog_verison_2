@@ -1,0 +1,41 @@
+/* Estilos específicos para la página de búsqueda */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .section-title {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    .lead {
+      text-align: center;
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+    .result-list {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 2rem 0;
+      border-top: 1px solid var(--gray-200);
+    }
+    .result-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-200);
+      transition: background-color 0.3s ease;
+    }
+    .result-item:hover {
+      background-color: var(--gray-100);
+    }
+    .result-item a {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .result-item a:hover {
+      color: var(--secondary);
+    }

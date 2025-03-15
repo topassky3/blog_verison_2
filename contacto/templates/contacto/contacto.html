@@ -1,47 +1,10 @@
 {% extends "core/core.html" %}
+{% load static %}
 
 {% block title %}Contacto | TuCodigoCotidiano Blog{% endblock %}
 
 {% block extra_head %}
-  {# Se utilizarán los estilos generales, incluyendo los de modal definidos en tu CSS #}
-    <style>
-        /* Modal de alerta */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 2000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.modal-content {
-  background-color: var(--background);
-  margin: 10% auto;
-  padding: 2rem;
-  border-radius: var(--radius);
-  max-width: 400px;
-  position: relative;
-  text-align: center;
-}
-.modal-content button {
-  margin-top: 1rem;
-  background-color: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-}
-.modal-content button:hover {
-  background-color: var(--secondary);
-}
-
-    </style>
+  <link rel="stylesheet" href="{% static 'contacto/css/contacto.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -107,5 +70,11 @@
         }
       });
     </script>
+  {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+  {% if messages %}
+    <script src="{% static 'contacto/js/contacto.js' %}"></script>
   {% endif %}
 {% endblock %}

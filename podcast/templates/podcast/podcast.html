@@ -35,17 +35,37 @@
       font-size: 1rem;
       color: var(--text);
     }
+    .full-name {
+  display: inline;
+}
+.short-name {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .full-name {
+    display: none;
+  }
+  .short-name {
+    display: inline;
+  }
+}
+
   </style>
 {% endblock %}
 
 
 {% block content %}
   <!-- Hero Section -->
-  <section class="hero" id="inicio">
-    <h1>Podcast de TuCodigoCotidiano Blog</h1>
-    <p>Escucha entrevistas, debates y tips de desarrollo web para inspirarte y aprender de los mejores.</p>
-  </section>
-
+    <section class="hero" id="inicio">
+      <h1>
+        Podcast de
+        <span class="full-name">TuCodigoCotidiano</span>
+        <span class="short-name">TCC</span>
+        Blog
+      </h1>
+      <p>Escucha entrevistas, debates y tips de desarrollo web para inspirarte y aprender de los mejores.</p>
+    </section>
 <!-- Podcast Filter -->
 <section class="podcast-filter">
     <div class="filter-options">

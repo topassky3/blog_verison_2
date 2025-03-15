@@ -1363,3 +1363,21 @@ img {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Por defecto, mostrar el logo completo y ocultar el abreviado */
+.logo .full-logo {
+  display: inline;
+}
+.logo .short-logo {
+  display: none;
+}
+
+/* En pantallas móviles (por ejemplo, menos de 600px) se oculta el logo completo y se muestra el abreviado */
+@media (max-width: 600px) {
+  .logo .full-logo {
+    display: none;
+  }
+  .logo .short-logo {
+    display: inline;
+  }
+}
