@@ -16,6 +16,7 @@ class TutorialCreateView(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        print("FILES:", self.request.FILES)
         # Asigna el autor y guarda el tutorial
         form.instance.author = self.request.user
         self.object = form.save()

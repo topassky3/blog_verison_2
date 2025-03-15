@@ -21,3 +21,17 @@ def confirmar_email(request, uidb64, token):
     else:
         return render(request, "emails/confirmacion_fallida.html")
 
+
+# core/views.py
+
+from django.http import HttpResponse, Http404
+from .storage import GridFSStorage
+
+def serve_media(request, filename):
+    storage = GridFSStorage()
+    if not storage.exists(filename):
+        raise Http404("Archivo no encontrado")
+    file_obj = storage._open(filename)
+    # Puedes ajustar content_type según el tipo de archivo; aquí se usa un valor genérico.
+    return HttpResponse(file_obj.read(), content_type="application/octet-stream")
+

@@ -205,8 +205,6 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 AUTH_USER_MODEL = 'core.Lector'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'  # Si usas Pathlib; alternativamente: os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -240,3 +238,17 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 LOGIN_URL = '/login/'
+
+# ...
+DEFAULT_FILE_STORAGE = 'core.storage.GridFSStorage'
+
+MONGO_USERNAME = "admin"
+MONGO_PASSWORD = "Kamejo23."
+MONGO_URI = "mongodb://51.222.159.144:27017"  # URI sin credenciales embebidas
+MONGO_DATABASE = "admin"
+
+# Para los archivos estáticos se mantiene tu configuración, pero NO uses:
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# ya que queremos que se sirvan mediante serve_media.
+
+MEDIA_URL = '/media2/'

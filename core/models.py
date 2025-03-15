@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
+from core.storage import GridFSStorage
 
 class Category(models.Model):
     name = models.CharField("Nombre", max_length=100, unique=True)
@@ -28,6 +29,7 @@ class Lector(AbstractUser):
     bio = models.TextField(blank=True, null=True)  # Campo para la biografía
     profile_image = models.ImageField(
         upload_to='profile_images/',
+        storage=GridFSStorage(),
         blank=True,
         null=True
     )  # Campo opcional para la imagen de perfil
@@ -61,7 +63,7 @@ class Tutorial(models.Model):
         blank=True,
         verbose_name="Categoría"
     )
-    image = models.ImageField("Imagen Representativa", upload_to='tutorial_images/', null=True, blank=True)
+    image = models.ImageField("Imagen Representativa", upload_to='tutorial_images/', storage=GridFSStorage(),null=True, blank=True)
     publicado = models.BooleanField("Publicado", default=False)
     created_at = models.DateTimeField("Creado el", auto_now_add=True)
     updated_at = models.DateTimeField("Actualizado el", auto_now=True)
@@ -69,6 +71,7 @@ class Tutorial(models.Model):
     code_file = models.FileField(
         "Código del Tutorial (.zip)",
         upload_to='tutorial_codes/',
+        storage=GridFSStorage(),
         blank=True,
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=['zip'])]
@@ -171,8 +174,8 @@ class Podcast(models.Model):
     )
     title = models.CharField("Título", max_length=200)
     description = models.TextField("Descripción")
-    audio = models.FileField("Archivo de Audio", upload_to='podcast_audio/')
-    cover = models.ImageField("Portada", upload_to='podcast_covers/', blank=True, null=True)
+    audio = models.FileField("Archivo de Audio", upload_to='podcast_audio/', storage=GridFSStorage())
+    cover = models.ImageField("Portada", upload_to='podcast_covers/', storage=GridFSStorage(),blank=True, null=True)
     category = models.ForeignKey(
         PodcastCategory,
         on_delete=models.SET_NULL,
@@ -314,7 +317,7 @@ class Guia(models.Model):
         blank=True,
         verbose_name="Categoría"
     )
-    image = models.ImageField("Imagen Representativa", upload_to='guia_images/', null=True, blank=True)
+    image = models.ImageField("Imagen Representativa", upload_to='guia_images/', storage=GridFSStorage(),null=True, blank=True)
     publicado = models.BooleanField("Publicado", default=False)
     created_at = models.DateTimeField("Creado el", auto_now_add=True)
     updated_at = models.DateTimeField("Actualizado el", auto_now=True)
@@ -322,6 +325,7 @@ class Guia(models.Model):
     code_file = models.FileField(
         "Código de la Guía (.zip)",
         upload_to='guia_codes/',
+        storage=GridFSStorage(),
         blank=True,
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=['zip'])]
