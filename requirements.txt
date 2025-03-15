@@ -19,3 +19,4 @@ whitenoise==6.4.0
 django-paypal
 celery==5.4.0
 redis==4.6.0
+pymongo==4.11.2
