@@ -75,7 +75,7 @@ INSTALLED_APPS = [
     'newsletter',
 ]
 
-SITE_ID = 1
+SITE_ID = 5
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
