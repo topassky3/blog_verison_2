@@ -25,7 +25,7 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
 
         # Si el usuario es Escritor, no se limita el contenido, de lo contrario,
         # se muestra solo el 60% si tiene plan "Básico"
-        if not self.request.user.es_escritor and self.request.user.subscription.plan == "Básico" and total_blocks > 0:
+        if self.request.user != tutorial.author and self.request.user.subscription.plan == "Básico" and total_blocks > 0:
             visible_count = int(total_blocks * 0.6)
             context['visible_blocks'] = all_blocks[:visible_count]
             context['mostrar_limite'] = True

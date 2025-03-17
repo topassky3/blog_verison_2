@@ -30,7 +30,7 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
             pass
 
         # Si el usuario tiene plan Básico, limitamos a mostrar solo el 60% de los bloques
-        if subscription and subscription.plan == "Básico" and total_blocks > 0:
+        if self.request.user != self.object.author and subscription and subscription.plan == "Básico" and total_blocks > 0:
             visible_count = int(total_blocks * 0.6)
             context['visible_blocks'] = blocks[:visible_count]
             context['mostrar_limite'] = True

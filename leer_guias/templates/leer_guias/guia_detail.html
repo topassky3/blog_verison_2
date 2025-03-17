@@ -536,13 +536,14 @@
 </section>
 
   {# Botón de descarga: solo si existe archivo y el usuario tiene plan superior a "Básico" #}
-    {% if guia.code_file and request.user.subscription.plan != "Básico" %}
+    {% if guia.code_file and request.user == guia.author or guia.code_file and request.user.subscription.plan != "Básico" %}
       <div class="download-project" style="text-align: center; margin: 2rem 0;">
         <a href="{% url 'download_guia_code_file' guia.pk %}" class="download-button">
           Descargar Código
         </a>
       </div>
     {% endif %}
+
 
     <a href="{% url 'guias_home' %}" class="back-button">← Volver a Guías</a>
   </article>

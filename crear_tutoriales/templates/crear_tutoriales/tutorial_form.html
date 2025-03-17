@@ -272,7 +272,13 @@
           {% endif %}
         </button>
       {% endif %}
+      {% if object.pk %}
+          <button type="button" onclick="window.location.href='{% url 'tutorial_detail' object.pk %}'">
+            Previsualizar
+          </button>
+        {% endif %}
     </div>
+
   </form>
 </div>
 
