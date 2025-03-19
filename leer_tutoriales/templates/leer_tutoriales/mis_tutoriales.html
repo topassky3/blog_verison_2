@@ -747,34 +747,21 @@ background-color: var(--primary);
       </div>
     </header>
 
-  <section class="tutorial-content">
-  {% for block in visible_blocks %}
-    {% if block.block_type == 'text' %}
-      <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-    {% elif block.block_type == 'latex' %}
-      <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
-    {% elif block.block_type == 'code' %}
-      <div class="tutorial-block block-code">{{ block.content|safe }}</div>
-    {% else %}
-      <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-    {% endif %}
-  {% endfor %}
+  <!-- Contenedor donde se insertarán los bloques -->
+    <section class="tutorial-content" id="tutorial-blocks-container">
+      <!-- Aquí se cargarán dinámicamente los bloques -->
+    </section>
 
-  {% if mostrar_limite %}
-    <div class="content-limited-message" style="text-align: center; margin: 2rem 0;">
-      <p>Estás viendo solo el 60% del contenido. <a href="{% url 'suscripcion_home' %}">¡Suscríbete a Premium</a> para acceder al contenido completo!</p>
-    </div>
-  {% endif %}
-</section>
 
     <!-- Botón para descargar el proyecto -->
-  {% if request.user == tutorial.author or request.user.subscription.plan != "Básico" %}
-    <div class="download-project" style="text-align: center; margin: 2rem 0;">
-      <a href="{% url 'download_code_file' tutorial.pk %}" class="download-button">
-        Descargar Proyecto
-      </a>
+{% if mostrar_limite %}
+    <div class="content-limited-message" style="text-align: center; margin: 2rem 0;">
+      <p>
+        Estás viendo solo el 60% del contenido.
+        <a href="{% url 'suscripcion_home' %}">¡Suscríbete a Premium</a> para acceder al contenido completo!
+      </p>
     </div>
-{% endif %}
+  {% endif %}
 
   <a href="{% url 'tutoriales_home' %}" class="back-button">← Volver a Tutoriales</a>
 </article>
@@ -833,6 +820,46 @@ background-color: var(--primary);
 {% endblock %}
 
 {% block extra_js %}
+
+        <script>
+// Función para cargar todos los bloques mediante Ajax
+function loadAllBlocks() {
+  // Muestra el overlay de carga antes de iniciar la petición
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.style.display = 'flex';
+
+  fetch("{% url 'load_all_tutorial_blocks' tutorial_id=tutorial.id %}")
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('tutorial-blocks-container');
+      data.blocks.forEach(function(block) {
+        const div = document.createElement('div');
+        div.classList.add('tutorial-block');
+        // Agrega la clase según el tipo de bloque
+        if (block.block_type === 'text') {
+          div.classList.add('block-text');
+        } else if (block.block_type === 'latex') {
+          div.classList.add('block-latex');
+        } else if (block.block_type === 'code') {
+          div.classList.add('block-code');
+        }
+        // Inserta el contenido; asegúrate de que block.content sea seguro
+        div.innerHTML = block.content;
+        container.appendChild(div);
+      });
+      // Oculta el overlay al terminar la carga
+      overlay.style.display = 'none';
+    })
+    .catch(error => {
+      console.error('Error al cargar bloques:', error);
+      // Oculta el overlay aun en caso de error
+      overlay.style.display = 'none';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', loadAllBlocks);
+
+</script>
 <script>
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn'),
       navMenu = document.querySelector('.nav-menu'),

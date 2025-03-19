@@ -101,6 +101,9 @@ class TutorialBlock(models.Model):
     def __str__(self):
         return f"{self.get_block_type_display()} - Orden: {self.order}"
 
+
+
+
 class Comment(models.Model):
     tutorial = models.ForeignKey(
         'Tutorial',
