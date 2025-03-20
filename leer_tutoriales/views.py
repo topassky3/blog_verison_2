@@ -184,26 +184,33 @@ class DownloadCodeFileView(LoginRequiredMixin, View):
         response = FileResponse(tutorial.code_file.open('rb'), as_attachment=True, filename=tutorial.code_file.name)
         return response
 
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 from core.models import Tutorial
+from django.utils.html import escape
 
 def load_all_tutorial_blocks(request, tutorial_id):
     tutorial = get_object_or_404(Tutorial, pk=tutorial_id)
     blocks = tutorial.blocks.all().order_by('order')
     total = blocks.count()
 
-    # Si el usuario no es el autor y tiene plan "Básico", limitar al 60% de los bloques.
+    # Limita el contenido si el usuario tiene plan "Básico"
     if request.user != tutorial.author and hasattr(request.user, 'subscription') and request.user.subscription.plan == "Básico" and total > 0:
         visible_count = int(total * 0.6)
         blocks = blocks[:visible_count]
 
-    blocks_data = [{
-        'id': block.id,
-        'block_type': block.block_type,
-        'content': block.content,
-        'order': block.order,
-    } for block in blocks]
+    blocks_data = []
+    for block in blocks:
+        content = block.content
+        # Si es un bloque de código, escapa su contenido para que se muestre de forma literal
+        if block.block_type == 'code':
+            content = escape(content)
+        blocks_data.append({
+            'id': block.id,
+            'block_type': block.block_type,
+            'content': content,
+            'order': block.order,
+        })
 
     print(f"Enviando {len(blocks_data)} bloques para Tutorial ID {tutorial_id}")
     return JsonResponse({'blocks': blocks_data})
