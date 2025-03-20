@@ -194,7 +194,7 @@ def load_all_tutorial_blocks(request, tutorial_id):
     blocks = tutorial.blocks.all().order_by('order')
     total = blocks.count()
 
-    # Limita el contenido si el usuario tiene plan "Básico"
+    # Limitar contenido si el usuario tiene plan "Básico"
     if request.user != tutorial.author and hasattr(request.user, 'subscription') and request.user.subscription.plan == "Básico" and total > 0:
         visible_count = int(total * 0.6)
         blocks = blocks[:visible_count]
@@ -202,9 +202,12 @@ def load_all_tutorial_blocks(request, tutorial_id):
     blocks_data = []
     for block in blocks:
         content = block.content
-        # Si es un bloque de código, escapa su contenido para que se muestre de forma literal
         if block.block_type == 'code':
+            # Escapa el contenido para que se muestre como texto literal
             content = escape(content)
+        elif block.block_type == 'text':
+            # Envolver el contenido del bloque de texto en un contenedor aislado
+            content = '<div class="text-block-wrapper">' + content + '</div>'
         blocks_data.append({
             'id': block.id,
             'block_type': block.block_type,
