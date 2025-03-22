@@ -411,3 +411,24 @@ class Subscriber(models.Model):
 
     def __str__(self):
         return self.email
+
+from django.db import models
+from core.storage import GridFSStorage
+from core.models import Tutorial  # o ajusta la importación según tu estructura
+
+class TutorialCarouselImage(models.Model):
+    tutorial = models.ForeignKey(
+        Tutorial,
+        on_delete=models.CASCADE,
+        related_name='carousel_images',
+        verbose_name="Tutorial"
+    )
+    image = models.ImageField(
+        "Imagen del Carrusel",
+        upload_to='tutorial_carousel/',
+        storage=GridFSStorage()
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Imagen para {self.tutorial.title}"
