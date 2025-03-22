@@ -213,6 +213,32 @@
       <label for="id_image">Imagen Representativa:</label>
       {{ form.image }}
     </div>
+    <!-- Sección para imágenes del carrusel -->
+    <div>
+      <label for="id_carousel_images">Imágenes del Carrusel:</label>
+      <input type="file" name="carousel_images" id="id_carousel_images" multiple>
+    </div>
+    <!-- Vista previa de nuevas imágenes a subir -->
+    <div id="carousel-images-preview" style="margin-top: 1rem;"></div>
+    {% if object.carousel_images.all %}
+  <div id="existing-carousel-images" style="margin-top:1rem;">
+    <h3>Imágenes ya subidas:</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+      {% for img in object.carousel_images.all %}
+        <div class="carousel-image-item" data-image-id="{{ img.pk }}" style="position: relative;">
+          <img src="{{ img.image.url }}" alt="Imagen del carrusel" style="max-width: 150px; border-radius: var(--radius);">
+          <button type="button" class="delete-carousel-image-btn" data-image-id="{{ img.pk }}"
+                  style="position: absolute; top: 5px; right: 5px; background-color: #ef4444; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer;">
+            ×
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+    <div id="carousel-images-preview" style="margin-top: 1rem;"></div>
+
     <div>
         <label for="id_code_file">Código del Tutorial (.zip):</label>
         {{ form.code_file }}
@@ -290,6 +316,40 @@
   </div>
 </div>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInput = document.getElementById('id_carousel_images');
+  const clearBtn = document.getElementById('clear-carousel-images');
+  const previewContainer = document.getElementById('carousel-images-preview');
+
+  // Mostrar preview de imágenes seleccionadas
+  fileInput.addEventListener('change', function() {
+    previewContainer.innerHTML = '';
+    Array.from(fileInput.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.style.maxWidth = '150px';
+        img.style.marginRight = '10px';
+        img.style.borderRadius = 'var(--radius)';
+        previewContainer.appendChild(img);
+      }
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Botón para limpiar la selección
+  clearBtn.addEventListener('click', function() {
+    fileInput.value = ''; // Resetea la selección de archivos
+    previewContainer.innerHTML = ''; // Elimina los previews
+  });
+
+  // (Si ya tienes implementada la eliminación de imágenes guardadas, aquí se puede incluir el código AJAX para borrar cada imagen)
+});
+</script>
+
 <script>
   // Obtener CSRF
   function getCookie(name) {
@@ -306,6 +366,40 @@
     }
     return cookieValue;
   }
+
+  // Selecciona todos los botones de eliminación de imágenes.
+  const deleteButtons = document.querySelectorAll('.delete-carousel-image-btn');
+  deleteButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      const imageId = this.getAttribute('data-image-id');
+      const csrfToken = getCookie('csrftoken');
+
+      // Envía la petición POST para eliminar la imagen.
+      fetch(`/crear_tutoriales/delete_carousel_image/${imageId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Remueve el contenedor de la imagen del DOM.
+          const imageItem = document.querySelector(`.carousel-image-item[data-image-id="${imageId}"]`);
+          if (imageItem) {
+            imageItem.remove();
+          }
+        } else {
+          alert('Error al eliminar la imagen.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error al eliminar la imagen.');
+      });
+    });
+  });
 
   // Publicar
   const publishBtn = document.getElementById('publish-btn');

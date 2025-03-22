@@ -1,4 +1,5 @@
 {% extends "core/core.html" %}
+{% load static %}
 {% load toc_tags %}
 {% load comments_tags %}
 {% block title %}{{ tutorial.title }} | WebDev Blog{% endblock %}
@@ -747,6 +748,59 @@ background-color: var(--primary);
   }
 }
 
+/* Estilos para el carrusel de imágenes */
+.image-carousel {
+  position: relative;
+  margin-bottom: 1rem; /* Ajusta el espacio inferior según convenga */
+  overflow: hidden;
+}
+
+.carousel-container {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  display: none; /* Se ocultan todas por defecto */
+}
+
+.carousel-slide.active {
+  display: block;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 300px; /* Puedes ajustar esta altura según tus necesidades */
+  object-fit: cover; /* Asegura que la imagen cubra todo el contenedor, recortando si es necesario */
+  border-radius: var(--radius);
+}
+
+/* Botones de navegación */
+.carousel-prev,
+.carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: var(--radius);
+  font-size: 1.5rem;
+  z-index: 10;
+}
+
+.carousel-prev {
+  left: 1rem;
+}
+
+.carousel-next {
+  right: 1rem;
+}
+
+
 
 </style>
 {% endblock %}
@@ -763,6 +817,29 @@ background-color: var(--primary);
         <span class="tutorial-author">Por: {{ tutorial.author.get_full_name|default:tutorial.author.username }}</span>
       </div>
     </header>
+
+<!-- Carrusel de Imágenes -->
+
+{% if tutorial.carousel_images.all %}
+  <section class="image-carousel">
+    <div class="carousel-container">
+      {% for img in tutorial.carousel_images.all %}
+        <div class="carousel-slide {% if forloop.first %}active{% endif %}">
+          <img src="{{ img.image.url }}" alt="Imagen del carrusel">
+        </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-prev">&#10094;</button>
+    <button class="carousel-next">&#10095;</button>
+  </section>
+{% endif %}
+
+
+<!-- Contenedor donde se insertarán los bloques -->
+<section class="tutorial-content" id="tutorial-blocks-container">
+  <!-- Aquí se cargarán dinámicamente los bloques -->
+</section>
+
 
   <!-- Contenedor donde se insertarán los bloques -->
     <section class="tutorial-content" id="tutorial-blocks-container">
@@ -837,6 +914,42 @@ background-color: var(--primary);
 {% endblock %}
 
 {% block extra_js %}
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const slides = document.querySelectorAll('.carousel-slide');
+  const prevBtn = document.querySelector('.carousel-prev');
+  const nextBtn = document.querySelector('.carousel-next');
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  nextBtn.addEventListener('click', nextSlide);
+  prevBtn.addEventListener('click', prevSlide);
+
+  // Autoplay cada 5 segundos
+  setInterval(nextSlide, 5000);
+
+  // Muestra la primera imagen al cargar
+  showSlide(currentSlide);
+});
+</script>
+
+
 
         <script>
 // Función para cargar todos los bloques mediante Ajax

@@ -2,7 +2,7 @@ import json
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import CreateView, UpdateView
-from core.models import Tutorial, TutorialBlock
+from core.models import Tutorial, TutorialBlock, TutorialCarouselImage
 
 class TutorialCreateView(CreateView):
     model = Tutorial
@@ -20,6 +20,14 @@ class TutorialCreateView(CreateView):
         # Asigna el autor y guarda el tutorial
         form.instance.author = self.request.user
         self.object = form.save()
+
+        # Procesa las imágenes del carrusel
+        carousel_images = self.request.FILES.getlist('carousel_images')
+        for image in carousel_images:
+            TutorialCarouselImage.objects.create(
+                tutorial=self.object,
+                image=image
+            )
 
         # Procesa los bloques enviados en formato JSON
         blocks_json = self.request.POST.get('blocks')
@@ -89,6 +97,14 @@ class TutorialUpdateView(UpdateView):
             except Exception as e:
                 form.add_error(None, 'Error al actualizar los bloques del tutorial.')
                 return self.form_invalid(form)
+
+        # Procesa nuevas imágenes del carrusel (si se subieron)
+        carousel_images = self.request.FILES.getlist('carousel_images')
+        for image in carousel_images:
+            TutorialCarouselImage.objects.create(
+                tutorial=self.object,
+                image=image
+            )
 
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {
@@ -170,3 +186,19 @@ def toggle_publish(request, pk):
             )
 
     return JsonResponse({'published': tutorial.publicado})
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from core.models import TutorialCarouselImage
+
+@login_required
+def delete_carousel_image(request, pk):
+    # Obtiene la imagen del carrusel o devuelve 404 si no existe.
+    image_obj = get_object_or_404(TutorialCarouselImage, pk=pk)
+    # Verifica que el usuario sea el autor del tutorial al que pertenece la imagen.
+    if request.user != image_obj.tutorial.author:
+        return JsonResponse({'error': 'No autorizado'}, status=403)
+    # Elimina la imagen
+    image_obj.delete()
+    return JsonResponse({'success': True})

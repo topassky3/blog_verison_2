@@ -1,0 +1,15 @@
+<!-- logo.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Fondo de "pizza" -->
+  <circle cx="100" cy="100" r="90" fill="#FDD835" stroke="#E65100" stroke-width="5"/>
+
+  <!-- Toppings -->
+  <circle cx="70" cy="70" r="10" fill="#D32F2F"/>
+  <circle cx="130" cy="70" r="10" fill="#D32F2F"/>
+  <circle cx="100" cy="110" r="10" fill="#D32F2F"/>
+
+  <!-- Título principal (puedes omitirlo si prefieres un favicon más simple) -->
+  <text x="50%" y="190" font-family="Verdana" font-size="20" fill="#E65100" text-anchor="middle">
+    Pizzería Mamma Mia
+  </text>
+</svg>
