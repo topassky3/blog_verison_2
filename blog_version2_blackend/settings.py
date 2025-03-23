@@ -239,6 +239,10 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'heartbeat': 60,  # Envía un ping cada 60 segundos
+}
+
 LOGIN_URL = '/login/'
 
 # ...
