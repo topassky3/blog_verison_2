@@ -12,10 +12,25 @@ from django.db.models import Count, ExpressionWrapper, IntegerField
 from core.models import Tutorial
 from .forms import CommentForm
 
-class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
+from django.urls import reverse
+from django.views.generic import DetailView
+from django.views.generic.edit import FormMixin
+from django.db.models import Count, ExpressionWrapper, IntegerField
+from django.shortcuts import get_object_or_404
+from core.models import Tutorial, Lector
+from .forms import CommentForm
+
+class TutorialDetailView(FormMixin, DetailView):
     model = Tutorial
     template_name = 'leer_tutoriales/mis_tutoriales.html'
     form_class = CommentForm
+
+    def get_user(self):
+        # Si el usuario está autenticado se usa el real,
+        # en caso contrario se asigna el usuario por defecto "electro"
+        if self.request.user.is_authenticated:
+            return self.request.user
+        return get_object_or_404(Lector, username="electro")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,9 +38,11 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
         all_blocks = tutorial.blocks.all()
         total_blocks = all_blocks.count()
 
-        # Si el usuario es Escritor, no se limita el contenido, de lo contrario,
-        # se muestra solo el 60% si tiene plan "Básico"
-        if self.request.user != tutorial.author and self.request.user.subscription.plan == "Básico" and total_blocks > 0:
+        user = self.get_user()
+
+        # Se aplica la restricción (mostrar solo el 60%) si el usuario (real o por defecto)
+        # no es el autor y tiene plan "Básico"
+        if user != tutorial.author and hasattr(user, 'subscription') and user.subscription.plan == "Básico" and total_blocks > 0:
             visible_count = int(total_blocks * 0.6)
             context['visible_blocks'] = all_blocks[:visible_count]
             context['mostrar_limite'] = True
@@ -40,6 +57,7 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
             score=ExpressionWrapper(Count('likes') - Count('dislikes'), output_field=IntegerField())
         ).order_by('-score', '-created_at')
         context['top_level_comments'] = top_level_comments
+
         if 'form' not in context:
             context['form'] = self.get_form()
         context['tutorial'] = tutorial
@@ -58,10 +76,14 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
+        # Si el usuario no está autenticado, se le impide comentar y se agrega un error al formulario
+        if not self.request.user.is_authenticated:
+            form.add_error(None, "Para comentar, por favor inicia sesión.")
+            return self.form_invalid(form)
+
         comment = form.save(commit=False)
         comment.tutorial = self.object
-        comment.author = self.request.user
-        # Si se envía el campo 'parent', se asigna el comentario padre
+        comment.author = self.request.user  # El usuario real, ya que está autenticado
         parent_id = self.request.POST.get('parent')
         if parent_id:
             try:
@@ -72,7 +94,6 @@ class TutorialDetailView(LoginRequiredMixin, FormMixin, DetailView):
                 pass
         comment.save()
         return super().form_valid(form)
-
 
 # core/views.py (o donde centralices las vistas para interacciones AJAX)
 from django.http import JsonResponse
@@ -186,16 +207,23 @@ class DownloadCodeFileView(LoginRequiredMixin, View):
 
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-from core.models import Tutorial
 from django.utils.html import escape
+from core.models import Tutorial, Lector
 
 def load_all_tutorial_blocks(request, tutorial_id):
     tutorial = get_object_or_404(Tutorial, pk=tutorial_id)
     blocks = tutorial.blocks.all().order_by('order')
     total = blocks.count()
 
-    # Limitar contenido si el usuario tiene plan "Básico"
-    if request.user != tutorial.author and hasattr(request.user, 'subscription') and request.user.subscription.plan == "Básico" and total > 0:
+    # Si el usuario no está autenticado, se asigna el usuario "electro"
+    if not request.user.is_authenticated:
+        user = get_object_or_404(Lector, username="electro")
+    else:
+        user = request.user
+
+    # Verificar si se debe limitar el contenido:
+    # Si el usuario (real o por defecto) no es el autor y tiene plan "Básico"
+    if user != tutorial.author and (user.username == "electro" or (hasattr(user, 'subscription') and user.subscription.plan == "Básico")) and total > 0:
         visible_count = int(total * 0.6)
         blocks = blocks[:visible_count]
 
@@ -206,7 +234,7 @@ def load_all_tutorial_blocks(request, tutorial_id):
             # Escapa el contenido para que se muestre como texto literal
             content = escape(content)
         elif block.block_type == 'text':
-            # Envolver el contenido del bloque de texto en un contenedor aislado
+            # Envolver el contenido en un contenedor aislado
             content = '<div class="text-block-wrapper">' + content + '</div>'
         blocks_data.append({
             'id': block.id,
