@@ -40,7 +40,7 @@ urlpatterns = [
     path('confirmar-email/<uidb64>/<token>/', confirmar_email, name='confirmar_email'),
     path('perfil/', include('perfil.urls')),
     path('crear_tutoriales/', include('crear_tutoriales.urls')),
-    path('tutoriales/', include('leer_tutoriales.urls')),
+    path('leer_tutoriales/', include('leer_tutoriales.urls')),
     path('escuchar-podcast/', include('escuchar_podcast.urls')),
     path('crear_podcast/', include('crear_podcast.urls')),
     path('politica-de-privacidad/', include('politica_privacidad.urls')),
