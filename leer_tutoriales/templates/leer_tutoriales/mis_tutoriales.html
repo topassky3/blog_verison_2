@@ -857,6 +857,12 @@ background-color: var(--primary);
     </div>
   {% endif %}
 
+    {% if mostrar_descarga %}
+      <a href="{% url 'download_code_file' tutorial.pk %}" class="download-button">
+        Descargar Código
+      </a>
+    {% endif %}
+
   <a href="{% url 'tutoriales_home' %}" class="back-button">← Volver a Tutoriales</a>
 </article>
 
