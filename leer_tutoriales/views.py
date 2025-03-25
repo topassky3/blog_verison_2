@@ -50,6 +50,13 @@ class TutorialDetailView(FormMixin, DetailView):
             context['visible_blocks'] = all_blocks
             context['mostrar_limite'] = False
 
+        # Lógica para mostrar el botón de descarga:
+        # Permitimos la descarga si el usuario es el autor o si tiene una suscripción distinta a "Básico"
+        if user == tutorial.author or (hasattr(user, 'subscription') and user.subscription.plan != "Básico"):
+            context['mostrar_descarga'] = True
+        else:
+            context['mostrar_descarga'] = False
+
         # Comentarios y demás datos de contexto
         top_level_comments = tutorial.comments.filter(parent__isnull=True).annotate(
             like_count=Count('likes'),
@@ -199,11 +206,13 @@ from core.models import Tutorial
 class DownloadCodeFileView(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         tutorial = get_object_or_404(Tutorial, pk=pk)
+        # Verifica si el usuario tiene permiso (es el autor o tiene suscripción premium/anual)
+        if not (request.user == tutorial.author or (hasattr(request.user, 'subscription') and request.user.subscription.plan != "Básico")):
+            raise Http404("No tienes permiso para descargar este código.")
+
         if not tutorial.code_file:
             raise Http404("No se encontró el archivo de código para este tutorial.")
-        # Se abre el archivo en modo binario y se prepara para la descarga
-        response = FileResponse(tutorial.code_file.open('rb'), as_attachment=True, filename=tutorial.code_file.name)
-        return response
+        return FileResponse(tutorial.code_file.open('rb'), as_attachment=True, filename=tutorial.code_file.name)
 
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
