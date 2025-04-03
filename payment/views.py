@@ -65,9 +65,9 @@ def payment_done(request):
             now = timezone.now()
             # Para pruebas, usamos minutos en lugar de días
             if plan == "premium":
-                subscription.expiration_date = now + timedelta(minutes=1)
+                subscription.expiration_date = now + timedelta(days=30)
             elif plan == "anual":
-                subscription.expiration_date = now + timedelta(minutes=2)
+                subscription.expiration_date = now + timedelta(days=365)
             subscription.save()
         except Subscription.DoesNotExist:
             # Si no existe, podrías crearla o loguear el error
