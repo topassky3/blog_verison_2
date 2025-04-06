@@ -7,6 +7,7 @@ from django.db.models import Count, ExpressionWrapper, IntegerField
 
 from core.models import Guia, GuiaComment
 from .forms import GuiaCommentForm
+from django.utils.html import escape
 
 class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
     model = Guia
@@ -18,27 +19,41 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['guia'] = self.object
 
-        # Obtenemos todos los bloques de la guía
-        blocks = self.object.blocks.all()
-        total_blocks = blocks.count()
+        # Obtenemos todos los bloques y los ordenamos
+        blocks = self.object.blocks.all().order_by('order')
+        processed_blocks = []
 
-        # Intentamos obtener la suscripción del usuario (asegúrate de que siempre exista o maneja el caso nulo)
+        # Iteramos sobre cada bloque y escapamos el contenido si es de tipo 'code'
+        for block in blocks:
+            content = block.content
+            if block.block_type == 'code':
+                content = escape(content)
+            processed_blocks.append({
+                'id': block.id,
+                'block_type': block.block_type,
+                'content': content,
+                'order': block.order,
+            })
+
+        total_blocks = len(processed_blocks)
+
+        # Intentamos obtener la suscripción del usuario
         subscription = None
         try:
             subscription = self.request.user.subscription
         except Exception:
             pass
 
-        # Si el usuario tiene plan Básico, limitamos a mostrar solo el 60% de los bloques
+        # Si el usuario tiene plan Básico y no es el autor, limitamos a mostrar solo el 60% de los bloques
         if self.request.user != self.object.author and subscription and subscription.plan == "Básico" and total_blocks > 0:
             visible_count = int(total_blocks * 0.6)
-            context['visible_blocks'] = blocks[:visible_count]
+            context['visible_blocks'] = processed_blocks[:visible_count]
             context['mostrar_limite'] = True
         else:
-            context['visible_blocks'] = blocks
+            context['visible_blocks'] = processed_blocks
             context['mostrar_limite'] = False
 
-        # Comentarios de nivel superior (sin padre), ordenados por "score"
+        # Procesamiento de comentarios, etc.
         top_level_comments = self.object.comments.filter(parent__isnull=True).annotate(
             like_count=Count('likes'),
             dislike_count=Count('dislikes'),
@@ -46,7 +61,6 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
         ).order_by('-score', '-created_at')
         context['top_level_comments'] = top_level_comments
 
-        # Si no existe el form en el contexto, lo inyectamos
         if 'form' not in context:
             context['form'] = self.get_form()
 

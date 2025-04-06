@@ -514,16 +514,17 @@
     <!-- Bloques de contenido de la Guía -->
 <section class="tutorial-content">
   {% for block in visible_blocks %}
-    {% if block.block_type == 'text' %}
-      <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-    {% elif block.block_type == 'latex' %}
-      <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
-    {% elif block.block_type == 'code' %}
-      <div class="tutorial-block block-code">{{ block.content|safe }}</div>
-    {% else %}
-      <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-    {% endif %}
-  {% endfor %}
+  {% if block.block_type == 'code' %}
+    <div class="tutorial-block block-code">{{ block.content|safe }}</div>
+  {% elif block.block_type == 'text' %}
+    <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+  {% elif block.block_type == 'latex' %}
+    <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
+  {% else %}
+    <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+  {% endif %}
+{% endfor %}
+
 
   {% if mostrar_limite %}
     <div class="content-limited-message" style="text-align: center; margin: 2rem 0;">
