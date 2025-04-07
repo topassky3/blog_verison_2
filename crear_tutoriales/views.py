@@ -144,11 +144,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import render_to_string
-from core.models import Tutorial
-from core.models import Subscriber
+from core.models import Tutorial, Subscriber
 
 @login_required
 @require_POST
@@ -160,30 +159,34 @@ def toggle_publish(request, pk):
 
     # Si se acaba de publicar el tutorial, enviamos el email a los suscriptores
     if tutorial.publicado:
-        # Obtener todos los suscriptores activos (si tienes un filtro, por ejemplo, active=True)
+        # Obtener todos los suscriptores activos (puedes aplicar un filtro si es necesario)
         subscribers = Subscriber.objects.all()
         recipient_list = [sub.email for sub in subscribers]
         if recipient_list:
             subject = "Nuevo tutorial publicado en WebDev Blog"
-            # Renderiza el template HTML para el correo
+            # Construir la URL absoluta del tutorial
+            tutorial_url = request.build_absolute_uri(f"/leer_tutoriales/{tutorial.pk}/")
+            # Renderizar el template HTML para el correo
             html_message = render_to_string("emails/new_tutorial_email.html", {
                 "tutorial": tutorial,
-                "tutorial_url": request.build_absolute_uri(f"/tutoriales/{tutorial.pk}/")
+                "tutorial_url": tutorial_url,
             })
             # Mensaje plano de respaldo
             plain_message = (
                 f"Se ha publicado un nuevo tutorial: {tutorial.title}.\n"
-                f"Visítalo aquí: {request.build_absolute_uri(f'/tutoriales/{tutorial.pk}/')}\n\n"
+                f"Visítalo aquí: {tutorial_url}\n\n"
                 "¡Gracias por suscribirte a WebDev Blog!"
             )
-            send_mail(
-                subject,
-                plain_message,
-                settings.DEFAULT_FROM_EMAIL,
-                recipient_list,
-                fail_silently=False,
-                html_message=html_message,
+            # Usamos EmailMultiAlternatives para enviar el correo con copia oculta (bcc)
+            email = EmailMultiAlternatives(
+                subject=subject,
+                body=plain_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[settings.DEFAULT_FROM_EMAIL],  # Dirección genérica en 'to'
+                bcc=recipient_list  # Los suscriptores en copia oculta
             )
+            email.attach_alternative(html_message, "text/html")
+            email.send()
 
     return JsonResponse({'published': tutorial.publicado})
 

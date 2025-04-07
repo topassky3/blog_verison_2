@@ -20,7 +20,7 @@ def notify_tutorial_author(sender, instance, created, **kwargs):
                 'tutorial': tutorial,
                 'comment': instance,
                 # Asegúrate de ajustar la URL base según tu dominio o usar request.build_absolute_uri si está disponible
-                'url_tutorial': f"https://tucodigocotidiano.yarumaltech.com/tutoriales/{tutorial.pk}/#comments",
+                'url_tutorial': f"https://tucodigocotidiano.yarumaltech.com/leer_tutoriales/{tutorial.pk}/#comments",
             }
             # Renderizamos la plantilla HTML
             html_content = render_to_string("emails/new_comment_notification.html", context)

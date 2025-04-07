@@ -42,7 +42,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import render_to_string
 from core.models import Podcast, Subscriber  # Ajusta si está en otra app
@@ -51,7 +51,7 @@ from core.models import Podcast, Subscriber  # Ajusta si está en otra app
 @require_POST
 def toggle_publish(request, pk):
     podcast = get_object_or_404(Podcast, pk=pk, author=request.user)
-    # Alterna el estado
+    # Alterna el estado de publicación
     podcast.publicado = not podcast.publicado
     podcast.save()
 
@@ -61,8 +61,9 @@ def toggle_publish(request, pk):
         recipient_list = [sub.email for sub in subscribers]
         if recipient_list:
             subject = "Nuevo Podcast Publicado en WebDev Blog"
-            # Ajusta la URL según tu configuración real
+            # Construir la URL absoluta al podcast
             podcast_url = request.build_absolute_uri(f"/escuchar-podcast/{podcast.pk}/")
+            # Renderizar el contenido HTML a partir del template
             html_message = render_to_string("emails/new_podcast_email.html", {
                 "podcast": podcast,
                 "podcast_url": podcast_url,
@@ -72,12 +73,15 @@ def toggle_publish(request, pk):
                 f"Escúchalo aquí: {podcast_url}\n\n"
                 "¡Gracias por suscribirte a WebDev Blog!"
             )
-            send_mail(
-                subject,
-                plain_message,
-                settings.DEFAULT_FROM_EMAIL,
-                recipient_list,
-                fail_silently=False,
-                html_message=html_message,
+            # Se utiliza EmailMultiAlternatives para enviar el correo con copia oculta
+            email = EmailMultiAlternatives(
+                subject=subject,
+                body=plain_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[settings.DEFAULT_FROM_EMAIL],  # Dirección genérica en "to"
+                bcc=recipient_list  # Los destinatarios en copia oculta
             )
+            email.attach_alternative(html_message, "text/html")
+            email.send()
+
     return JsonResponse({'published': podcast.publicado})

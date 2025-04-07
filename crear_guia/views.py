@@ -131,16 +131,14 @@ class GuiaDeleteView(DeleteView):
             return redirect('login')
         return super().dispatch(request, *args, **kwargs)
 
-import json
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
-from django.conf import settings
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from core.models import Guia
-from core.models import Subscriber
+from django.conf import settings
+from core.models import Guia, Subscriber
 
 @login_required
 @require_POST
@@ -150,12 +148,12 @@ def toggle_publish(request, pk):
     guia.save()
 
     if guia.publicado:
-        # Obtenemos todos los suscriptores (puedes filtrar por active=True si dispones de ese campo)
+        # Obtenemos todos los suscriptores (puedes filtrar por active=True si lo deseas)
         subscribers = Subscriber.objects.all()
         recipient_list = [sub.email for sub in subscribers]
         if recipient_list:
             subject = "Nueva Guía Publicada en WebDev Blog"
-            # Construye la URL absoluta a la guía (ajusta la ruta según tu configuración)
+            # Construye la URL absoluta a la guía
             guia_url = request.build_absolute_uri(f"/leer_guias/guia/{guia.pk}/")
             # Renderiza el contenido HTML del email a partir del template
             html_message = render_to_string("emails/new_guide_email.html", {
@@ -167,13 +165,15 @@ def toggle_publish(request, pk):
                 f"Visítala aquí: {guia_url}\n\n"
                 "¡Gracias por suscribirte a WebDev Blog!"
             )
-            send_mail(
+            # Enviamos el email usando EmailMultiAlternatives, pasando la lista en bcc
+            email = EmailMultiAlternatives(
                 subject,
                 plain_message,
                 settings.DEFAULT_FROM_EMAIL,
-                recipient_list,
-                fail_silently=False,
-                html_message=html_message,
+                [settings.DEFAULT_FROM_EMAIL],  # Se utiliza una dirección genérica en "to"
+                bcc=recipient_list  # Los suscriptores en copia oculta
             )
-    return JsonResponse({'published': guia.publicado})
+            email.attach_alternative(html_message, "text/html")
+            email.send()
 
+    return JsonResponse({'published': guia.publicado})
