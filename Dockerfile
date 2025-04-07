@@ -27,5 +27,5 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Exponer el puerto que usará Gunicorn (en este caso el 7090)
 EXPOSE 7090
 
-# Comando para iniciar Supervisor, el cual gestionará Gunicorn, Celery Worker y Celery Beat
+# Comando para iniciar Supervisor en modo no daemon (nodaemon=true)
 CMD ["/usr/bin/supervisord", "-n"]
