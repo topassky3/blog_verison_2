@@ -28,5 +28,4 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 EXPOSE 7090
 
 # Comando para iniciar Supervisor, el cual gestionará Gunicorn, Celery Worker y Celery Beat
-CMD ["/bin/sh", "-c", "exec -a docker-entrypoint /usr/bin/supervisord -n"]
-
+CMD ["/usr/bin/supervisord", "-n"]
