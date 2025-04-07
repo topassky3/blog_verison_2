@@ -74,7 +74,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,
   <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
     <circle cx='50' cy='50' r='50' fill='%232563eb'/>
-    <text x='50' y='65' font-size='30' text-anchor='middle' fill='white' font-family='sans-serif'>TuCC</text>
+    <text x='50' y='65' font-size='30' text-anchor='middle' fill='white' font-family='sans-serif'>TCC</text>
   </svg>">
 
   <!-- Fuentes e Iconos -->
@@ -90,50 +90,52 @@
   <!-- Header / Navbar -->
   <header>
     <nav class="navbar">
-  <div class="nav-container">
-    <a href="/" class="logo">
-      <span class="full-logo">TuCodigoCotidiano</span>
-      <span class="short-logo">TuCC</span>
-    </a>
+      <div class="nav-container">
+        <a href="/" class="logo">
+          <span class="full-logo">TuCodigoCotidiano</span>
+          <span class="short-logo">TCC</span>
+        </a>
 
-    <button class="mobile-menu-btn" aria-label="Abrir menú">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M3 12h18M3 6h18M3 18h18"/>
-      </svg>
-    </button>
+        <button class="mobile-menu-btn" aria-label="Abrir menú">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
+        <ul class="nav-menu">
+          <li><a href="{% url 'inicio_home' %}" class="nav-link active">Inicio</a></li>
+          <li><a href="{% url 'tutoriales_home' %}" class="nav-link">Tutoriales</a></li>
+          <li><a href="{% url 'guias_home' %}" class="nav-link">Guías</a></li>
+          <li><a href="{% url 'podcast_home' %}" class="nav-link">Podcast</a></li>
+          <li><a href="{% url 'suscripcion_home' %}" class="nav-link nav-cta">Suscripción</a></li>
+          <li><a href="{% url 'contacto_home' %}" class="nav-link">Contacto</a></li>
+        </ul>
+        <!-- Bloque de Login -->
+       <div class="login-container">
+  {% if user.is_authenticated %}
+    <div class="user-menu">
+      <button class="icon-btn" id="userMenuToggle" title="Menú de usuario">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5.121 17.804A7.962 7.962 0 0012 20a7.962 7.962 0 006.879-2.196M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </button>
+      <div class="dropdown-menu">
+        <a href="{% url 'profile' %}">Perfil</a>
+        <form method="post" action="{% url 'login:logout' %}">
+          {% csrf_token %}
+          <button type="submit">Cerrar sesión</button>
+        </form>
+      </div>
+    </div>
+  {% else %}
+    <a href="{% url 'login:login' %}" class="login-btn">Iniciar Sesión</a>
+  {% endif %}
+</div>
 
-    <ul class="nav-menu">
-      <li><a href="{% url 'inicio_home' %}" class="nav-link active">Inicio</a></li>
-      <li><a href="{% url 'tutoriales_home' %}" class="nav-link">Tutoriales</a></li>
-      <li><a href="{% url 'guias_home' %}" class="nav-link">Guías</a></li>
-      <li><a href="{% url 'podcast_home' %}" class="nav-link">Podcast</a></li>
-      <li><a href="{% url 'suscripcion_home' %}" class="nav-link nav-cta">Suscripción</a></li>
-      <li><a href="{% url 'contacto_home' %}" class="nav-link">Contacto</a></li>
 
-      {% if user.is_authenticated %}
-        <!-- Si el usuario está autenticado, puedes mostrar su perfil y/o logout -->
-        <li>
-          <a href="{% url 'profile' %}" class="nav-link">Perfil</a>
-        </li>
-        <li>
-          <form method="post" action="{% url 'login:logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="nav-link nav-cta" style="background: none; border: none; cursor: pointer;">
-              Cerrar Sesión
-            </button>
-          </form>
-        </li>
-      {% else %}
-        <!-- Si NO está autenticado, muestra el link de login -->
-        <li>
-          <a href="{% url 'login:login' %}" class="nav-link nav-cta login-btn">Iniciar Sesión</a>
-        </li>
-      {% endif %}
-    </ul>
-
-  </div>
-</nav>
-
+        <!-- Fin bloque de Login -->
+      </div>
+    </nav>
     {% block header %}{% endblock %}
   </header>
 
