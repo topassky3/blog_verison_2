@@ -351,14 +351,19 @@ img {
 /* Responsive Modal */
 @media (max-width: 768px) {
   .login-container {
-    margin-left: 0;
+    display: none;
   }
-  .modal-content {
-    margin: 20% auto;
-    width: 90%;
+  .nav-menu li.mobile-login {
+    display: block;
   }
 }
 
+/* En pantallas de escritorio, se oculta el login duplicado en el menú */
+@media (min-width: 769px) {
+  .nav-menu li.mobile-login {
+    display: none;
+  }
+}
 /* Hero Section */
 .hero {
   padding: 6rem 2rem 4rem;
