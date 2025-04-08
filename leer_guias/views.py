@@ -4,26 +4,34 @@ from django.urls import reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 from django.db.models import Count, ExpressionWrapper, IntegerField
-
-from core.models import Guia, GuiaComment
-from .forms import GuiaCommentForm
+from django.shortcuts import get_object_or_404
 from django.utils.html import escape
 
-class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
+from core.models import Guia, GuiaComment, Lector
+from .forms import GuiaCommentForm
+
+class GuiaDetailView(FormMixin, DetailView):
     model = Guia
     template_name = 'leer_guias/guia_detail.html'
     form_class = GuiaCommentForm
     context_object_name = "guia"
 
+    def get_user(self):
+        """
+        Retorna el usuario autenticado o, si no hay ninguno,
+        devuelve al usuario por defecto "electro".
+        """
+        if self.request.user.is_authenticated:
+            return self.request.user
+        return get_object_or_404(Lector, username="electro")
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['guia'] = self.object
 
-        # Obtenemos todos los bloques y los ordenamos
+        # Obtenemos y procesamos los bloques de la guía
         blocks = self.object.blocks.all().order_by('order')
         processed_blocks = []
-
-        # Iteramos sobre cada bloque y escapamos el contenido si es de tipo 'code'
         for block in blocks:
             content = block.content
             if block.block_type == 'code':
@@ -37,15 +45,19 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
 
         total_blocks = len(processed_blocks)
 
+        # Obtenemos el usuario (real o el predeterminado "electro")
+        user = self.get_user()
+
         # Intentamos obtener la suscripción del usuario
         subscription = None
         try:
-            subscription = self.request.user.subscription
+            subscription = user.subscription
         except Exception:
             pass
 
-        # Si el usuario tiene plan Básico y no es el autor, limitamos a mostrar solo el 60% de los bloques
-        if self.request.user != self.object.author and subscription and subscription.plan == "Básico" and total_blocks > 0:
+        # Si el usuario (real o "electro") tiene plan Básico y no es el autor,
+        # limitamos a mostrar solo el 60% de los bloques.
+        if user != self.object.author and subscription and subscription.plan == "Básico" and total_blocks > 0:
             visible_count = int(total_blocks * 0.6)
             context['visible_blocks'] = processed_blocks[:visible_count]
             context['mostrar_limite'] = True
@@ -53,7 +65,7 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
             context['visible_blocks'] = processed_blocks
             context['mostrar_limite'] = False
 
-        # Procesamiento de comentarios, etc.
+        # Procesamiento de comentarios (comentarios principales y sus datos)
         top_level_comments = self.object.comments.filter(parent__isnull=True).annotate(
             like_count=Count('likes'),
             dislike_count=Count('dislikes'),
@@ -63,15 +75,15 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
 
         if 'form' not in context:
             context['form'] = self.get_form()
-
+        context['effective_user'] = self.get_user()
         return context
 
     def get_success_url(self):
-        # Redirige al mismo detalle, anclando en #comments
+        # Redirige al mismo detalle de la guía, anclando en #comments
         return reverse('guia_detail', kwargs={'pk': self.object.pk}) + "#comments"
 
     def post(self, request, *args, **kwargs):
-        # Se llama al hacer POST (para crear comentario)
+        # Procesa el POST para crear un comentario
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
@@ -80,12 +92,9 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        # Guardamos el comentario
         comment = form.save(commit=False)
         comment.guia = self.object
-        comment.author = self.request.user
-
-        # Si viene un 'parent' en el POST, es una respuesta
+        comment.author = self.request.user  # Se usa el usuario real para el comentario
         parent_id = self.request.POST.get('parent')
         if parent_id:
             try:
@@ -93,7 +102,6 @@ class GuiaDetailView(LoginRequiredMixin, FormMixin, DetailView):
                 comment.parent = parent_comment
             except GuiaComment.DoesNotExist:
                 pass
-
         comment.save()
         return super().form_valid(form)
 
