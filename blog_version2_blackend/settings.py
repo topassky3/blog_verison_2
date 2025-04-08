@@ -185,14 +185,17 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Configuración específica para los proveedores de redes sociales
 SOCIALACCOUNT_PROVIDERS = {
-    'github': {
-        'APP': {
-            'client_id': 'Ov23liwCHvojOnFEoRBj',
-            'secret': '23c08043344212f20afe9154e3b8a71755242586',
-        },
-        # Para GitHub no existe un parámetro equivalente directamente,
-        # por lo que el comportamiento dependerá de la política del proveedor.
-    }
+    'linkedin_oauth2': {
+        'SCOPE': ['openid', 'profile', 'email'],
+        'PROFILE_FIELDS': [
+            'id',
+            'firstName',
+            'lastName',
+            'profilePicture(displayImage~:playableStreams)',
+            'emailAddress',
+        ],
+    },
+    # Aquí puedes agregar o modificar la configuración para otros proveedores si es necesario.
 }
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

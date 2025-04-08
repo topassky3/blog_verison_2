@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 import requests
 from allauth.socialaccount.models import SocialToken
 
-from blog_version2_blackend import settings
 from .forms import CustomAuthenticationForm
 
 class CustomLoginView(LoginView):
@@ -37,43 +36,59 @@ class CustomLoginView(LoginView):
         context['redirect_url'] = self.request.path
         return self.render_to_response(context)
 
-
-from django.contrib.auth import logout
-
+from allauth.socialaccount.models import SocialToken, SocialApp
+import requests
+import json
+from django.contrib.auth.views import LogoutView
 
 class CustomLogoutView(LogoutView):
     http_method_names = ['get', 'post']
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            # Revocamos tokens (Google y GitHub) según tu implementación...
+            # -----------------------------
+            # 1) Revocar token de Google
+            # -----------------------------
             try:
-                token_obj = SocialToken.objects.get(account__user=request.user, account__provider='google')
+                token_obj = SocialToken.objects.get(
+                    account__user=request.user,
+                    account__provider='google'
+                )
                 token = token_obj.token
                 revoke_url = "https://accounts.google.com/o/oauth2/revoke"
                 requests.get(revoke_url, params={'token': token})
             except SocialToken.DoesNotExist:
                 pass
 
+            # -----------------------------
+            # 2) Revocar token de GitHub
+            # -----------------------------
             try:
-                github_token_obj = SocialToken.objects.get(account__user=request.user, account__provider='github')
-                token = github_token_obj.token
-                client_id = settings.SOCIALACCOUNT_PROVIDERS.get('github', {}).get('APP', {}).get('client_id')
-                client_secret = settings.SOCIALACCOUNT_PROVIDERS.get('github', {}).get('APP', {}).get('secret')
-                if client_id and client_secret:
-                    revoke_url = f"https://api.github.com/applications/{client_id}/token"
-                    response = requests.delete(
-                        revoke_url,
-                        auth=(client_id, client_secret),
-                        json={'access_token': token}
-                    )
-                    response.raise_for_status()
-            except SocialToken.DoesNotExist:
-                pass
-            except Exception as e:
-                print("Error al revocar el token de GitHub:", e)
+                # 2.1) Obtener el token del usuario
+                github_token_obj = SocialToken.objects.get(
+                    account__user=request.user,
+                    account__provider='github'
+                )
+                github_token = github_token_obj.token
 
-            # Limpia la sesión de Django para asegurarte
-            request.session.flush()
+                # 2.2) Obtener las credenciales (client_id y secret)
+                github_app = SocialApp.objects.get(provider='github')
+                client_id = github_app.client_id
+                client_secret = github_app.secret
+
+                # 2.3) Construir la URL para revocar
+                url = f"https://api.github.com/applications/{client_id}/token"
+
+                # 2.4) Hacer la petición DELETE para revocar el token
+                response = requests.delete(
+                    url,
+                    auth=(client_id, client_secret),
+                    data=json.dumps({"access_token": github_token}),
+                    headers={'Content-Type': 'application/json'}
+                )
+                # Opcional: Verificar si la revocación se efectuó con éxito
+                # p.ej. if response.status_code == 204: ...
+            except (SocialApp.DoesNotExist, SocialToken.DoesNotExist):
+                pass
 
         return super().dispatch(request, *args, **kwargs)
