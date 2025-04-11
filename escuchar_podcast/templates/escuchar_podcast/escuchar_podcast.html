@@ -398,11 +398,18 @@
   {% endif %}
 </div>
 
-{% if request.user.subscription.plan != "Básico" %}
-  <!-- Botón para descargar el podcast (solo para planes superiores a Básico) -->
+{% if effective_user and effective_user.username != "electro" and effective_user.subscription and effective_user.subscription.plan != "Básico" %}
+  <!-- Botón para descargar el podcast (solo para usuarios con planes superiores a Básico y que no sean "electro") -->
   <div class="download-podcast" style="text-align: center; margin: 2rem 0;">
     <a href="{{ podcast.audio.url }}" class="download-button" download>
       Descargar Podcast
+    </a>
+  </div>
+{% else %}
+  <!-- Mensaje solicitando la suscripción que redirige a la vista de suscripción -->
+  <div class="download-podcast" style="text-align: center; margin: 2rem 0;">
+    <a href="{% url 'suscripcion_home' %}" class="download-message" style="font-weight: 600; font-size: 1.1rem; color: var(--primary); text-decoration: none;">
+      Suscríbete para poder descargar el podcast.
     </a>
   </div>
 {% endif %}
