@@ -1,18 +1,25 @@
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
-from core.models import Podcast
-from core.models import PodcastComment  # Asegúrate de importar el modelo correcto
+from django.shortcuts import get_object_or_404
+from core.models import Podcast, PodcastComment, Lector  # Asegúrate de tener importado Lector
 from .forms import PodcastCommentForm
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
-@method_decorator(login_required(login_url='/login/'), name='dispatch')
+
+# Si deseas permitir acceso a usuarios no autenticados, se remueve el login_required o se implementa en cada acción de comentar/likes.
 class PodcastDetailView(FormMixin, DetailView):
     model = Podcast
     template_name = "escuchar_podcast/escuchar_podcast.html"
     context_object_name = "podcast"
     form_class = PodcastCommentForm
+
+    def get_effective_user(self):
+        """
+        Retorna el usuario autenticado o, en su defecto, al usuario por defecto "electro".
+        """
+        if self.request.user.is_authenticated:
+            return self.request.user
+        return get_object_or_404(Lector, username="electro")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,6 +43,9 @@ class PodcastDetailView(FormMixin, DetailView):
         # Incluye el formulario de comentario
         if 'form' not in context:
             context['form'] = self.get_form()
+
+        # Agregamos el usuario efectivo al contexto (útil para saber quién está navegando o para usar en templates)
+        context['effective_user'] = self.get_effective_user()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -44,12 +54,12 @@ class PodcastDetailView(FormMixin, DetailView):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.podcast = self.object  # Asigna el podcast actual
-            comment.author = request.user
+            # Usamos el usuario efectivo en lugar de request.user
+            comment.author = self.get_effective_user()
             # Verifica si se envió un comentario padre
             parent_id = request.POST.get('parent')
             if parent_id:
                 try:
-                    from core.models import PodcastComment
                     parent_comment = PodcastComment.objects.get(id=parent_id)
                     comment.parent = parent_comment
                 except PodcastComment.DoesNotExist:
@@ -60,6 +70,7 @@ class PodcastDetailView(FormMixin, DetailView):
             return self.form_invalid(form)
 
     def get_success_url(self):
+        # Redirecciona al mismo podcast, anclando en #comments
         return reverse('escuchar_podcast', kwargs={'pk': self.object.pk}) + "#comments"
 
 from django.http import JsonResponse
