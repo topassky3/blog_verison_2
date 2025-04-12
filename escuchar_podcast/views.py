@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from core.models import Podcast, PodcastComment, Lector  # Asegúrate de tener importado Lector
 from .forms import PodcastCommentForm
-
+from django.contrib.auth.views import redirect_to_login
 
 # Si deseas permitir acceso a usuarios no autenticados, se remueve el login_required o se implementa en cada acción de comentar/likes.
 class PodcastDetailView(FormMixin, DetailView):
@@ -49,14 +49,17 @@ class PodcastDetailView(FormMixin, DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
+        # Si el usuario no está autenticado, redirige a la página de login.
+        if not request.user.is_authenticated:
+            return redirect_to_login(request.get_full_path())
+
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
             comment = form.save(commit=False)
             comment.podcast = self.object  # Asigna el podcast actual
-            # Usamos el usuario efectivo en lugar de request.user
-            comment.author = self.get_effective_user()
-            # Verifica si se envió un comentario padre
+            # Ahora se usa directamente request.user porque se confirmó la autenticación.
+            comment.author = request.user
             parent_id = request.POST.get('parent')
             if parent_id:
                 try:

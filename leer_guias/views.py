@@ -6,6 +6,7 @@ from django.views.generic.edit import FormMixin
 from django.db.models import Count, ExpressionWrapper, IntegerField
 from django.shortcuts import get_object_or_404
 from django.utils.html import escape
+from django.contrib.auth.views import redirect_to_login
 
 from core.models import Guia, GuiaComment, Lector
 from .forms import GuiaCommentForm
@@ -83,7 +84,9 @@ class GuiaDetailView(FormMixin, DetailView):
         return reverse('guia_detail', kwargs={'pk': self.object.pk}) + "#comments"
 
     def post(self, request, *args, **kwargs):
-        # Procesa el POST para crear un comentario
+        # Si el usuario no está autenticado, redirige a la página de login.
+        if not request.user.is_authenticated:
+            return redirect_to_login(request.get_full_path())
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
@@ -94,7 +97,8 @@ class GuiaDetailView(FormMixin, DetailView):
     def form_valid(self, form):
         comment = form.save(commit=False)
         comment.guia = self.object
-        comment.author = self.request.user  # Se usa el usuario real para el comentario
+        # Ahora es seguro usar request.user ya que el usuario debe estar autenticado.
+        comment.author = self.request.user
         parent_id = self.request.POST.get('parent')
         if parent_id:
             try:

@@ -19,6 +19,7 @@ from django.db.models import Count, ExpressionWrapper, IntegerField
 from django.shortcuts import get_object_or_404
 from core.models import Tutorial, Lector
 from .forms import CommentForm
+from django.contrib.auth.views import redirect_to_login
 
 class TutorialDetailView(FormMixin, DetailView):
     model = Tutorial
@@ -75,6 +76,10 @@ class TutorialDetailView(FormMixin, DetailView):
         return reverse('tutorial_detail', kwargs={'pk': self.object.pk}) + "#comments"
 
     def post(self, request, *args, **kwargs):
+        # Si el usuario no ha iniciado sesión, se redirige a la página de login.
+        if not request.user.is_authenticated:
+            return redirect_to_login(request.get_full_path())
+
         self.object = self.get_object()  # Obtiene el tutorial actual
         form = self.get_form()
         if form.is_valid():
@@ -83,14 +88,10 @@ class TutorialDetailView(FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        # Si el usuario no está autenticado, se le impide comentar y se agrega un error al formulario
-        if not self.request.user.is_authenticated:
-            form.add_error(None, "Para comentar, por favor inicia sesión.")
-            return self.form_invalid(form)
-
+        # Asumimos que el usuario ya está autenticado
         comment = form.save(commit=False)
         comment.tutorial = self.object
-        comment.author = self.request.user  # El usuario real, ya que está autenticado
+        comment.author = self.request.user  # Usamos el usuario autenticado
         parent_id = self.request.POST.get('parent')
         if parent_id:
             try:
@@ -101,6 +102,7 @@ class TutorialDetailView(FormMixin, DetailView):
                 pass
         comment.save()
         return super().form_valid(form)
+
 
 # core/views.py (o donde centralices las vistas para interacciones AJAX)
 from django.http import JsonResponse
