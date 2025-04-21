@@ -495,7 +495,47 @@
 .modal-content.confirm .cancel-button:hover {
   background-color: #94a3b8;
 }
+@media (max-width: 768px) {
+  /* Hacemos que el contenedor ocupe todo el ancho con un padding simétrico */
+  .container {
+    display: block !important;
+    max-width: 100%;
+    margin: 1rem auto;
+    padding: 0 1rem;       /* <-- aquí igualamos 1rem a ambos lados */
+    gap: 1rem;             /* si usas grid, reducimos el gap */
+  }
 
+  /* Reducimos el padding interior del artículo para que no quede demasiado ancho */
+  article {
+    padding: 1rem;         /* antes era 2rem, ahora 1rem en móvil */
+  }
+
+  /* Ajustes al contenido para que el texto no pegue a los bordes */
+  .tutorial-content {
+    font-size: 1rem;       /* opcional, ajusta tamaño si lo deseas */
+    line-height: 1.5;
+    padding: 0;            /* quitamos cualquier padding extra interno */
+  }
+  .tutorial-content p {
+    padding: 0 0.5rem;     /* le damos 0.5rem a cada lado al <p> */
+    margin-bottom: 1rem;   /* espacio vertical entre párrafos */
+  }
+
+  /* Si tienes un bloque de cabecera muy largo, igual puedes ajustarlo */
+  .tutorial-header {
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  /* Y el botón de volver, descarga, etc. */
+  .back-button,
+  .download-button {
+    display: block;
+    width: auto;
+    padding: 0.5rem 1rem;
+    margin: 1rem auto;
+  }
+}
   </style>
 {% endblock %}
 
