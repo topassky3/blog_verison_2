@@ -812,8 +812,10 @@ background-color: var(--primary);
   <header class="tutorial-header">
   <h1 class="tutorial-title">{{ tutorial.title }}</h1>
       <div class="tutorial-info">
+          <!--
         <span class="tutorial-duration">Duración: {{ tutorial.duration|default:"Desconocida" }}</span>
         <span class="tutorial-level">Nivel: {{ tutorial.level|default:"General" }}</span>
+        -->
         <span class="tutorial-date">Publicado: {{ tutorial.created_at|date:"d/m/Y" }}</span>
         <span class="tutorial-author">Por: {{ tutorial.author.get_full_name|default:tutorial.author.username }}</span>
       </div>
