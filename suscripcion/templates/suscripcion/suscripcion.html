@@ -1,6 +1,6 @@
 {% extends "core/core.html" %}
 
-{% block title %}Suscripción | TuCodigoCotidiano Blog{% endblock %}
+{% block title %}Membresía | TuCodigoCotidiano Blog{% endblock %}
 
 {% block extra_head %}
   <style>
@@ -112,7 +112,7 @@
     </div>
   {% endif %}
 
-  <!-- Sección para Suscribirse al Newsletter -->
+  <!-- Sección para Suscribirse al Newsletter
     <section class="subscription-section">
       <h2>Forma Parte de Nuestra Comunidad</h2>
       <p>Suscríbete para recibir contenido exclusivo, actualizaciones y ofertas especiales.</p>
@@ -122,10 +122,11 @@
         <button type="submit">Suscribirse</button>
       </form>
     </section>
+    -->
 
   <!-- Sección de Planes de Suscripción -->
   <section class="subscriptions">
-    <h2>Planes de Suscripción</h2>
+    <h2>Planes de Membresia</h2>
     <div class="plan-grid">
 
       <!-- Plan Básico -->
@@ -145,7 +146,9 @@
               <span class="plan-disabled">No disponible</span>
             {% else %}
               <!-- Caso extremo: si no existe plan, aunque tu lógica ya crea uno por defecto -->
-              <a class="cta" href="{% url 'payment:paypal_payment' 'basico' %}">Suscribirse</a>
+              <a class="cta" href="{% url 'payment:paypal_payment' 'basico' %}">
+                  Únete a la Membresía Básica
+                </a>
             {% endif %}
           {% endif %}
         {% else %}
@@ -161,7 +164,9 @@
         {% if user.is_authenticated %}
           {% if subscription.is_expired %}
             <!-- Si está vencida, asumimos plan Básico, por lo que puede subir a Premium -->
-            <a class="cta" href="{% url 'payment:paypal_payment' 'premium' %}">Suscribirse</a>
+            <a class="cta" href="{% url 'payment:paypal_payment' 'premium' %}">
+              Únete a la Membresía Premium
+            </a>
           {% else %}
             {% if subscription.plan == "Premium" %}
               <span class="plan-current">Plan Actual</span>
@@ -170,11 +175,15 @@
               <span class="plan-disabled">No disponible</span>
             {% else %}
               <!-- Si está en Básico, permitimos upgrade a Premium -->
-              <a class="cta" href="{% url 'payment:paypal_payment' 'premium' %}">Suscribirse</a>
+              <a class="cta" href="{% url 'payment:paypal_payment' 'premium' %}">
+                  Únete a la Membresía Premium
+                </a>
             {% endif %}
           {% endif %}
         {% else %}
-          <a class="cta" href="{% url 'payment:paypal_payment' 'premium' %}">Suscribirse</a>
+          <a class="cta" href="{% url 'payment:paypal_payment' 'premium' %}">
+              Únete a la Membresía Premium
+            </a>
         {% endif %}
       </div>
 
@@ -186,17 +195,19 @@
         {% if user.is_authenticated %}
           {% if subscription.is_expired %}
             <!-- Si está vencida, asumimos plan Básico, por lo que puede subir a Anual -->
-            <a class="cta" href="{% url 'payment:paypal_payment' 'anual' %}">Suscribirse</a>
+            <a class="cta" href="{% url 'payment:paypal_payment' 'anual' %}">
+              Únete a la Membresía Anual
+            </a>
           {% else %}
             {% if subscription.plan == "Anual" %}
               <span class="plan-current">Plan Actual</span>
             {% else %}
               <!-- Permitimos upgrade a Anual desde cualquier otro plan (Básico o Premium) -->
-              <a class="cta" href="{% url 'payment:paypal_payment' 'anual' %}">Suscribirse</a>
+              <a class="cta" href="{% url 'payment:paypal_payment' 'anual' %}">Únete a la Membresía Anual</a>
             {% endif %}
           {% endif %}
         {% else %}
-          <a class="cta" href="{% url 'payment:paypal_payment' 'anual' %}">Suscribirse</a>
+          <a class="cta" href="{% url 'payment:paypal_payment' 'anual' %}">Únete a la Membresía Anual</a>
         {% endif %}
       </div>
 

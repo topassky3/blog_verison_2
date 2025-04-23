@@ -193,13 +193,13 @@
 
 
   <!-- Newsletter Section -->
-<section class="newsletter" id="suscripcion">
-  <h2>Suscríbete a nuestro Newsletter</h2>
+<section class="newsletter" id="newsletter">
+  <h2>Suscríbete al Boletín</h2>
   <p>Suscríbete para recibir contenido exclusivo, novedades y las últimas tendencias en desarrollo web.</p>
   <form action="{% url 'newsletter:subscribe' %}" method="post" class="newsletter-form">
     {% csrf_token %}
     <input type="email" name="email" placeholder="Tu correo electrónico" required>
-    <button type="submit">Suscribirse</button>
+    <button type="submit">Suscribirse al Boletín</button>
   </form>
 </section>
 
