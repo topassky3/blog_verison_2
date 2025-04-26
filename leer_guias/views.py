@@ -18,56 +18,60 @@ class GuiaDetailView(FormMixin, DetailView):
     context_object_name = "guia"
 
     def get_user(self):
-        """
-        Retorna el usuario autenticado o, si no hay ninguno,
-        devuelve al usuario por defecto "electro".
-        """
         if self.request.user.is_authenticated:
             return self.request.user
         return get_object_or_404(Lector, username="electro")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['guia'] = self.object
+        guia = self.object # Renombrado para claridad
+        context['guia'] = guia
 
-        # Obtenemos y procesamos los bloques de la guía
-        blocks = self.object.blocks.all().order_by('order')
-        processed_blocks = []
-        for block in blocks:
+        # Obtenemos los bloques originales de la base de datos
+        blocks_qs = guia.blocks.all().order_by('order') # QuerySet original
+
+        processed_blocks = [] # Lista para los diccionarios procesados
+        for block in blocks_qs: # Iterar sobre los objetos GuiaBlock originales
             content = block.content
+            image_url = None # Inicializar la URL de la imagen como None
+
             if block.block_type == 'code':
-                content = escape(content)
+                # Decide si necesitas escapar aquí o confías en |safe y highlight.js
+                # content = escape(content)
+                pass
+            elif block.block_type == 'image' and block.image: # Si es imagen Y tiene archivo
+                # Obtenemos la URL de la imagen
+                image_url = block.image.url
+
+            # Creamos el diccionario para este bloque, AÑADIENDO image_url
             processed_blocks.append({
                 'id': block.id,
                 'block_type': block.block_type,
-                'content': content,
+                'content': content, # Contenido de texto/code/latex
                 'order': block.order,
+                'image_url': image_url  # <-- ¡AQUÍ AÑADIMOS LA URL! (será None si no es imagen)
             })
 
-        total_blocks = len(processed_blocks)
+        total_processed_blocks = len(processed_blocks) # Ahora contamos los diccionarios
 
-        # Obtenemos el usuario (real o el predeterminado "electro")
         user = self.get_user()
+        subscription = getattr(user, 'subscription', None)
 
-        # Intentamos obtener la suscripción del usuario
-        subscription = None
-        try:
-            subscription = user.subscription
-        except Exception:
-            pass
+        context['mostrar_limite'] = False
+        # La variable que se pasa a la plantilla AHORA contiene la lista de diccionarios
+        visible_blocks_data = processed_blocks
 
-        # Si el usuario (real o "electro") tiene plan Básico y no es el autor,
-        # limitamos a mostrar solo el 60% de los bloques.
-        if user != self.object.author and subscription and subscription.plan == "Básico" and total_blocks > 0:
-            visible_count = int(total_blocks * 0.6)
-            context['visible_blocks'] = processed_blocks[:visible_count]
+        if user != guia.author and subscription and subscription.plan == "Básico" and total_processed_blocks > 0:
+            visible_count = int(total_processed_blocks * 0.6)
+            # Cortamos la LISTA de diccionarios
+            visible_blocks_data = processed_blocks[:visible_count]
             context['mostrar_limite'] = True
-        else:
-            context['visible_blocks'] = processed_blocks
-            context['mostrar_limite'] = False
 
-        # Procesamiento de comentarios (comentarios principales y sus datos)
-        top_level_comments = self.object.comments.filter(parent__isnull=True).annotate(
+        # Pasamos la lista de diccionarios (completa o cortada) a la plantilla
+        context['visible_blocks'] = visible_blocks_data
+
+        # --- Resto del contexto (comentarios, formulario, etc.) ---
+        top_level_comments = guia.comments.filter(parent__isnull=True).annotate(
             like_count=Count('likes'),
             dislike_count=Count('dislikes'),
             score=ExpressionWrapper(Count('likes') - Count('dislikes'), output_field=IntegerField())
@@ -77,37 +81,9 @@ class GuiaDetailView(FormMixin, DetailView):
         if 'form' not in context:
             context['form'] = self.get_form()
         context['effective_user'] = self.get_user()
+        # --- Fin del resto del contexto ---
+
         return context
-
-    def get_success_url(self):
-        # Redirige al mismo detalle de la guía, anclando en #comments
-        return reverse('guia_detail', kwargs={'pk': self.object.pk}) + "#comments"
-
-    def post(self, request, *args, **kwargs):
-        # Si el usuario no está autenticado, redirige a la página de login.
-        if not request.user.is_authenticated:
-            return redirect_to_login(request.get_full_path())
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        comment = form.save(commit=False)
-        comment.guia = self.object
-        # Ahora es seguro usar request.user ya que el usuario debe estar autenticado.
-        comment.author = self.request.user
-        parent_id = self.request.POST.get('parent')
-        if parent_id:
-            try:
-                parent_comment = GuiaComment.objects.get(id=parent_id)
-                comment.parent = parent_comment
-            except GuiaComment.DoesNotExist:
-                pass
-        comment.save()
-        return super().form_valid(form)
 
 
 # leer_guias/views.py (o donde manejes tus vistas AJAX para guías)

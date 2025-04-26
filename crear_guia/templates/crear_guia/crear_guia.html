@@ -41,6 +41,7 @@
       <button type="button" data-type="text">Agregar Texto</button>
       <button type="button" data-type="latex">Agregar LaTeX</button>
       <button type="button" data-type="code">Agregar Código</button>
+        <button type="button" data-type="image">Agregar Imagen</button>
     </div>
 
     <!-- Área de edición -->
@@ -59,7 +60,15 @@
             <div class="editor-block block-code" draggable="true">
               <textarea rows="5">{{ block.content|safe }}</textarea>
             </div>
-          {% endif %}
+          {% elif block.block_type == 'image' %}
+              <div class="editor-block block-image" draggable="true">
+                  {% if block.image %}
+                      <img src="{{ block.image.url }}" style="max-width:100%;">
+                  {% else %}
+                      <em>Imagen no encontrada</em>
+                  {% endif %}
+              </div>
+            {% endif %}
         {% endfor %}
       {% else %}
         <!-- Bloque inicial vacío -->
@@ -183,7 +192,26 @@
       } else if (type === 'latex') {
         newBlock.classList.add('block-latex');
         textArea.placeholder = 'Aquí tu LaTeX (usa $$...$$ o \\(...\\))';
-      } else if (type === 'code') {
+      }else if (type === 'image') {                // ← NUEVO
+          newBlock.classList.add('block-image');
+          // file input
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = 'image/*';
+          input.name = 'block_image_' + Date.now(); // nombre único
+
+          // preview
+          const preview = document.createElement('img');
+          preview.style.maxWidth = '100%';
+          preview.style.display = 'none';
+
+          input.onchange = e=>{
+             const f=e.target.files[0];
+             if(f){ preview.src = URL.createObjectURL(f); preview.style.display='block'; }
+          };
+
+          newBlock.append(input, preview);
+        } else if (type === 'code') {
         newBlock.classList.add('block-code');
         textArea.placeholder = '<pre><code class="language-xxx">\n // tu código \n</code></pre>';
       }
@@ -255,9 +283,17 @@
       let blockType = 'text';
       if (block.classList.contains('block-latex')) blockType = 'latex';
       if (block.classList.contains('block-code')) blockType = 'code';
-      const textArea = block.querySelector('textarea');
-      const content = textArea ? textArea.value.trim() : '';
-      blocks.push({ type: blockType, content: content });
+      let content = '';
+
+        if (block.classList.contains('block-image')) {
+          blockType = 'image';
+          const inp = block.querySelector('input[type=file]');
+          content   = inp.name;            // guardamos el nombre del input
+        } else {
+          const ta  = block.querySelector('textarea');
+          content   = ta ? ta.value.trim() : '';
+        }
+        blocks.push({type: blockType, content});
     });
     document.getElementById('blocks-input').value = JSON.stringify(blocks);
     const formData = new FormData(this);

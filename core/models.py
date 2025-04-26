@@ -343,10 +343,14 @@ class GuiaBlock(models.Model):
         ('text', 'Texto'),
         ('latex', 'LaTeX'),
         ('code', 'Código'),
+        ('image', 'Imagen'),
     )
     guia = models.ForeignKey(Guia, on_delete=models.CASCADE, related_name='blocks')
     block_type = models.CharField("Tipo de Bloque", max_length=10, choices=BLOCK_TYPES)
     content = models.TextField("Contenido")
+    image = models.ImageField(upload_to='guia_block_images/',
+                              storage=GridFSStorage(),
+                              blank=True, null=True)
     order = models.PositiveIntegerField("Orden", default=0)
 
     class Meta:

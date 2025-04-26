@@ -560,16 +560,40 @@
     <!-- Bloques de contenido de la Guía -->
 <section class="tutorial-content">
   {% for block in visible_blocks %}
-  {% if block.block_type == 'code' %}
-    <div class="tutorial-block block-code">{{ block.content|safe }}</div>
-  {% elif block.block_type == 'text' %}
-    <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-  {% elif block.block_type == 'latex' %}
-    <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
-  {% else %}
-    <div class="tutorial-block block-text">{{ block.content|safe }}</div>
-  {% endif %}
-{% endfor %}
+
+    {% comment %} Instrucción para bloques de CÓDIGO {% endcomment %}
+    {% if block.block_type == 'code' %}
+      <div class="tutorial-block block-code">{{ block.content|safe }}</div>
+
+    {% comment %} Instrucción para bloques de TEXTO {% endcomment %}
+    {% elif block.block_type == 'text' %}
+      <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+
+    {% comment %} Instrucción para bloques de LATEX {% endcomment %}
+    {% elif block.block_type == 'latex' %}
+      <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
+
+    {% comment %} ¡NUEVA INSTRUCCIÓN PARA BLOQUES DE IMAGEN! {% endcomment %}
+    {% elif block.block_type == 'image' %}
+      <div class="tutorial-block block-image" style="margin: 1.5rem auto; text-align: center; max-width: 80%;">
+        {% if block.image_url %} {# <--- CAMBIO: Verifica si existe la clave 'image_url' en el diccionario #}
+          <img src="{{ block.image_url }}" {# <--- CAMBIO: Usa la clave 'image_url' del diccionario #}
+               alt="Imagen de la guía {{ guia.title }}"
+               style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        {% else %}
+          <p><em>[Imagen no disponible o no encontrada]</em></p> {# Mensaje si no hay URL #}
+        {% endif %}
+      </div>
+    {% comment %} Instrucción por si aparece un tipo de bloque desconocido {% endcomment %}
+    {% else %}
+      <div class="tutorial-block block-unknown">
+         <p><em>(Bloque de tipo desconocido: {{ block.block_type }})</em></p>
+         {{ block.content|safe }}
+      </div>
+    {% endif %}
+
+  {% endfor %}
+</section>
 
 
   {% if mostrar_limite %}
