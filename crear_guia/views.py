@@ -119,6 +119,7 @@ class GuiaUpdateView(UpdateView):
 
             # Update → limpiar bloques anteriores ANTES de crear los nuevos
             if hasattr(self.object, "blocks"):
+                old_images = {b.id: b.image for b in self.object.blocks.filter(block_type='image')}
                 self.object.blocks.all().delete()
 
             # --- BUCLE ÚNICO PARA CREAR BLOQUES ---
@@ -126,23 +127,15 @@ class GuiaUpdateView(UpdateView):
                 if blk['type'] == 'image':
                     # 'blk['content']' debe contener el *nombre* del input file del frontend
                     image_file = self.request.FILES.get(blk['content'])
-                    if image_file:
-                        GuiaBlock.objects.create(
-                            guia=self.object,
-                            block_type='image',
-                            image=image_file,
-                            content='',  # El contenido no aplica directamente a la imagen
-                            order=idx
-                        )
+                    if blk['content'].startswith('keep-'):
+                        img = old_images.get(int(blk['content'][5:]))
+                        GuiaBlock.objects.create(guia=self.object, block_type='image',
+                                                 image=img, order=idx)
                     else:
-                        # Si la imagen no se subió de nuevo (porque ya existía y no se cambió),
-                        # podrías necesitar una lógica para buscarla en los bloques eliminados
-                        # o requerir que siempre se envíe la imagen si el bloque es de tipo imagen.
-                        # Por simplicidad, asumimos que si es un bloque de imagen nuevo o modificado,
-                        # el archivo estará en request.FILES.
-                        print(
-                            f"Advertencia: No se encontró el archivo de imagen '{blk['content']}' para el bloque {idx} de la Guia {self.object.pk}")
-
+                        image_file = self.request.FILES.get(blk['content'])
+                        if image_file:
+                            GuiaBlock.objects.create(guia=self.object, block_type='image',
+                                                     image=image_file, order=idx)
                 else:
                     GuiaBlock.objects.create(
                         guia=self.object,

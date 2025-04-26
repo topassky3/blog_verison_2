@@ -62,12 +62,9 @@
             </div>
           {% elif block.block_type == 'image' %}
               <div class="editor-block block-image" draggable="true">
-                  {% if block.image %}
-                      <img src="{{ block.image.url }}" style="max-width:100%;">
-                  {% else %}
-                      <em>Imagen no encontrada</em>
-                  {% endif %}
-              </div>
+                <input type="hidden" class="keep-image" value="{{ block.id }}">
+                <img src="{{ block.image.url }}" style="max-width:100%;">
+            </div>
             {% endif %}
         {% endfor %}
       {% else %}
@@ -281,19 +278,21 @@
     const blocks = [];
     document.querySelectorAll('.editor-block').forEach(block => {
       let blockType = 'text';
-      if (block.classList.contains('block-latex')) blockType = 'latex';
-      if (block.classList.contains('block-code')) blockType = 'code';
-      let content = '';
+        if (block.classList.contains('block-latex')) blockType='latex';
+        if (block.classList.contains('block-code'))  blockType='code';
+
+        let content='';
 
         if (block.classList.contains('block-image')) {
-          blockType = 'image';
-          const inp = block.querySelector('input[type=file]');
-          content   = inp.name;            // guardamos el nombre del input
-        } else {
-          const ta  = block.querySelector('textarea');
-          content   = ta ? ta.value.trim() : '';
+            const inp = block.querySelector('input[type=file]');
+            content = inp ? inp.name : 'keep-'+block.querySelector('.keep-image').value;
+            blockType = 'image';
+        } else {                       // 👈 aquí
+            const ta = block.querySelector('textarea');
+            content = ta ? ta.value.trim() : '';
         }
-        blocks.push({type: blockType, content});
+
+        blocks.push({type:blockType, content});
     });
     document.getElementById('blocks-input').value = JSON.stringify(blocks);
     const formData = new FormData(this);
