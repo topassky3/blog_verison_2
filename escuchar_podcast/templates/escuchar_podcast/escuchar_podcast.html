@@ -418,8 +418,9 @@
 
   <!-- Episodios Anteriores -->
   <section class="episodes-section">
-    <h2 class="section-title">Episodios Anteriores</h2>
-    {% for episode in previous_episodes %}
+  <h2 class="section-title">Episodios Anteriores</h2>
+  {% for episode in previous_episodes %}
+    <a href="{% url 'escuchar_podcast' episode.pk %}" class="episode-card-link">
       <div class="episode-card">
         <div class="episode-number">#{{ forloop.counter }}</div>
         <div class="episode-content">
@@ -429,10 +430,12 @@
           <span class="episode-duration">{{ episode.duration }}</span>
         </div>
       </div>
-    {% empty %}
-      <p>No hay episodios anteriores.</p>
-    {% endfor %}
-  </section>
+    </a>
+  {% empty %}
+    <p>No hay episodios anteriores.</p>
+  {% endfor %}
+</section>
+
 
   <!-- Comentarios y Valoraciones -->
   <section id="comments" class="comments-section">

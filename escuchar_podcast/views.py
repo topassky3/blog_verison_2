@@ -23,29 +23,26 @@ class PodcastDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Comentarios principales para este podcast
+
+        # Top-level comments…
         context['top_level_comments'] = PodcastComment.objects.filter(
             podcast=self.object, parent__isnull=True
         ).order_by('-created_at')
 
-        # Episodios anteriores: filtra por fecha y, si es posible, por la misma categoría
-        if self.object.category:
-            previous_episodes = Podcast.objects.filter(
-                created_at__lt=self.object.created_at,
-                category=self.object.category
-            ).order_by('-created_at')
-        else:
-            previous_episodes = Podcast.objects.filter(
-                created_at__lt=self.object.created_at
-            ).order_by('-created_at')
-        context['previous_episodes'] = previous_episodes
+        # 1) Solo los episodios con created_at **anterior** al actual
+        # 2) Ordenados de más recientes a más antiguos
+        # 3) Limitados a 5
+        previous_qs = Podcast.objects.filter(
+            created_at__lt=self.object.created_at
+        ).order_by('-created_at')[:5]
 
-        # Incluye el formulario de comentario
+        context['previous_episodes'] = previous_qs
+
+        # Formulario y usuario efectivo…
         if 'form' not in context:
             context['form'] = self.get_form()
-
-        # Agregamos el usuario efectivo al contexto (útil para saber quién está navegando o para usar en templates)
         context['effective_user'] = self.get_effective_user()
+
         return context
 
     def post(self, request, *args, **kwargs):
