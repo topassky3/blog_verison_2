@@ -540,6 +540,31 @@
   .toc {
     display: none!important;
   }
+
+        .tutorial-block.block-text table {
+    display: block;  /* Permite que overflow-x funcione correctamente en la tabla */
+    width: 100%;     /* La tabla intentará ocupar el ancho disponible */
+    overflow-x: auto;/* Habilita el scroll horizontal si el contenido es más ancho */
+    -webkit-overflow-scrolling: touch; /* Scroll más suave en iOS */
+
+    /* Opcional: un borde para indicar visualmente que el área es desplazable */
+    border: 1px solid var(--gray-200);
+    margin-bottom: 1rem; /* Espacio después de la tabla */
+  }
+
+  .tutorial-block.block-text table th,
+  .tutorial-block.block-text table td {
+    white-space: nowrap; /* Evita que el texto dentro de las celdas se divida en múltiples líneas,
+                             forzando a la tabla a mantener el ancho de sus columnas. */
+    /* Puedes ajustar el padding para móviles si es necesario */
+    padding: 0.6em 0.8em;
+  }
+
+  /* Opcional: Si la tabla tiene un caption, asegúrate de que se vea bien */
+  .tutorial-block.block-text table caption {
+    text-align: left; /* O como prefieras */
+    padding: 0.5em 0;
+  }
 }
 
   </style>
