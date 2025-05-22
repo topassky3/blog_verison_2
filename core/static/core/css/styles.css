@@ -8,6 +8,8 @@
   --gray-200: #e2e8f0;
   --radius: 8px;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  /* Agregado de una interacción previa para el footer, mantener si es útil */
+  --text-subtle: #475569;
 }
 
 /* Dark Mode */
@@ -18,24 +20,56 @@
   --background: #0f172a;
   --gray-100: #1e293b;
   --gray-200: #334155;
+  /* Agregado de una interacción previa para el footer, mantener si es útil */
+  --text-subtle: #94a3b8;
 }
 
+/* --- INICIO DE CAMBIOS PARA CONSISTENCIA DE FUENTE --- */
 /* Base Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+html {
+  font-family: 'Inter', sans-serif; /* Fuente base para todo el documento */
+  line-height: 1.6; /* Altura de línea base */
+  -webkit-font-smoothing: antialiased; /* Mejor renderizado en WebKit/Blink */
+  -moz-osx-font-smoothing: grayscale; /* Mejor renderizado en Firefox */
+}
+
 body {
-  font-family: 'Inter', sans-serif;
+  /* font-family se hereda de html */
+  font-size: 1rem; /* Tamaño de fuente base para el contenido del cuerpo */
   color: var(--text);
   background-color: var(--background);
-  line-height: 1.6;
+  /* line-height se hereda de html, a menos que necesites uno específico para body */
   transition: background-color 0.3s, color 0.3s;
 }
+
+/* Asegurar que elementos comunes y de formulario hereden la fuente */
+h1, h2, h3, h4, h5, h6,
+p, li, dt, dd,
+a, label, span, strong, em {
+  /* Estos elementos generalmente heredan bien, pero es para ser extra seguro.
+     Si tienes estilos específicos para ellos después, esos prevalecerán. */
+  font-family: inherit; /* Asegura que hereden 'Inter' */
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit; /* MUY IMPORTANTE para la consistencia en formularios */
+  font-size: inherit;   /* Heredar tamaño de fuente (puedes ajustarlo por elemento si es necesario) */
+  /* color: inherit; - Muchos de tus inputs/botones ya especifican color o usan var(--text) explícitamente */
+}
+/* --- FIN DE CAMBIOS PARA CONSISTENCIA DE FUENTE --- */
+
 p {
   margin-bottom: 1rem;
-  font-size: 1rem;
+  /* font-size: 1rem; /* Ya establecido por body o puede heredar */
 }
 a {
   text-decoration: none;
@@ -51,30 +85,29 @@ img {
   position: sticky;
   top: 0;
   backdrop-filter: blur(10px);
-  background-color: rgba(241,245,249, 0.8); /* Considerar variable para tema oscuro */
+  background-color: rgba(241,245,249, 0.8);
   z-index: 1000;
   border-bottom: 1px solid var(--gray-200);
 }
 [data-theme="dark"] .navbar {
-    background-color: rgba(15, 23, 42, 0.8); /* Fondo oscuro para navbar en tema oscuro */
+    background-color: rgba(15, 23, 42, 0.8);
 }
 
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 2rem; /* Este padding se ajustará en móviles */
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .logo {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 700; /* 'Inter' soporta este peso */
   color: var(--primary);
   transition: color 0.3s;
-  flex-shrink: 0; /* Evita que el logo se encoja */
+  flex-shrink: 0;
 }
-/* Por defecto, mostrar el logo completo y ocultar el abreviado */
 .logo .full-logo {
   display: inline;
 }
@@ -83,29 +116,29 @@ img {
 }
 
 .nav-menu {
-  display: flex; /* Por defecto para escritorio */
-  gap: 1.5rem; /* Reducido ligeramente de 2rem para ganar espacio */
+  display: flex;
+  gap: 1.5rem;
   align-items: center;
   list-style: none;
-  margin: 0; /* Asegurar que no haya márgenes por defecto */
-  padding: 0; /* Asegurar que no haya paddings por defecto */
+  margin: 0;
+  padding: 0;
 }
 .nav-link {
-  padding: 0.5rem 0.8rem; /* Reducido ligeramente para ganar espacio */
+  padding: 0.5rem 0.8rem;
   border-radius: var(--radius);
   transition: all 0.3s ease;
   color: var(--text);
-  font-weight: 500;
-  white-space: nowrap; /* Evita que el texto de los enlaces se parta */
+  font-weight: 500; /* 'Inter' soporta este peso */
+  white-space: nowrap;
 }
 .nav-link:hover,
-.nav-link.active { /* .active aquí se refiere a la página actual */
+.nav-link.active {
   background-color: var(--gray-100);
 }
-.nav-cta { /* Este es un <a> con clase .nav-link y .nav-cta */
+.nav-cta {
   background-color: var(--primary);
   color: #fff !important;
-  padding: 0.75rem 1.2rem; /* Ajustado ligeramente */
+  padding: 0.75rem 1.2rem;
   border-radius: var(--radius);
   transition: background-color 0.3s ease;
 }
@@ -115,58 +148,37 @@ img {
 }
 
 .mobile-menu-btn {
-  display: none; /* Oculto por defecto, se muestra en móvil */
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0.5rem;
-  color: var(--text); /* Para el color del SVG */
+  color: var(--text);
 }
 .mobile-menu-btn svg {
-    stroke: currentColor; /* Hereda el color del botón */
+    stroke: currentColor;
 }
 
-
-/* Contenedor para agrupar nav-menu y login-container (OPCIONAL, pero recomendado para mejor control) */
-/* Si decides usar esto, debes modificar tu HTML:
-   <div class="nav-container">
-     <a href="/" class="logo">...</a>
-     <button class="mobile-menu-btn">...</button>
-     <div class="nav-right-group"> <--- ESTE NUEVO DIV
-       <ul class="nav-menu">...</ul>
-       <div class="login-container">...</div>
-     </div>
-   </div>
-*/
 .nav-right-group {
     display: flex;
     align-items: center;
-    gap: 1.5rem; /* Espacio entre el nav-menu y el login-container */
+    gap: 1.5rem;
 }
 
-
-/* Login Styles para Escritorio */
 .login-container {
-  display: flex; /* Visible por defecto en escritorio */
+  display: flex;
   align-items: center;
-  /* gap: 1rem; */ /* El gap ahora lo maneja nav-right-group si se usa */
-  /* margin-left: 1rem; */ /* Ya no es necesario si se usa nav-right-group */
-  flex-shrink: 0; /* Evita que el contenedor de login se encoja */
+  flex-shrink: 0;
 }
 
-
-/* --- INICIO DE CAMBIOS IMPORTANTES PARA RESPONSIVE NAVIGATION --- */
-/* Breakpoint ajustado a 1024px para tablets (landscape) y móviles */
-@media (max-width: 1024px) { /* <<< CAMBIADO DE 768px a 1024px */
+@media (max-width: 1024px) {
   .nav-container {
-    padding: 0.75rem 1rem; /* Menos padding en pantallas más pequeñas */
+    padding: 0.75rem 1rem;
   }
-
-  /* Ocultar el nav-menu de escritorio y el contenedor de login */
   .nav-menu {
     display: none;
     position: absolute;
-    top: 100%; /* Justo debajo del navbar */
+    top: 100%;
     left: 0;
     right: 0;
     background-color: var(--background);
@@ -174,47 +186,35 @@ img {
     flex-direction: column;
     box-shadow: var(--shadow);
     border-top: 1px solid var(--gray-200);
-    z-index: 999; /* Asegurar que esté sobre otros elementos */
+    z-index: 999;
   }
-  .login-container { /* Ocultar el login de escritorio */
+  .login-container {
     display: none;
   }
-  .nav-right-group { /* Si estás usando el agrupador, también se debe ocultar como bloque principal */
+  .nav-right-group {
       display: none;
   }
-
-
-  /* Mostrar el menú móvil cuando tiene la clase .active (añadida por JS) */
   .nav-menu.active {
     display: flex;
   }
-  /* Si usas .nav-right-group y quieres que el menú móvil sea independiente de él: */
-  /* .nav-menu.mobile-active { display:flex; } */
-
-
   .nav-menu li {
     width: 100%;
   }
-  .nav-menu li .nav-link { /* Estilo para todos los links dentro del menú móvil */
+  .nav-menu li .nav-link {
     display: block;
     padding: 0.75rem 1rem;
     text-align: left;
     width: 100%;
   }
-  .nav-menu li .nav-link.nav-cta { /* Estilo específico para el CTA dentro del menú móvil */
+  .nav-menu li .nav-link.nav-cta {
     margin-top: 0.5rem;
-    text-align: center; /* El CTA puede estar centrado en el móvil */
+    text-align: center;
   }
-
-
   .mobile-menu-btn {
-    display: block; /* Muestra el botón de hamburguesa */
+    display: block;
   }
-
-  /* Mostrar los items de login/perfil en el menú móvil */
-  /* (Asegúrate que estos <li> estén DENTRO del <ul class="nav-menu"> en tu HTML) */
   .nav-menu li.mobile-login {
-    display: list-item; /* o block */
+    display: list-item;
     width: 100%;
   }
   .nav-menu li.mobile-login .nav-link,
@@ -224,39 +224,33 @@ img {
     text-align: left;
     padding: 0.75rem 1rem;
   }
-  .nav-menu li.mobile-login button.nav-link { /* Estilo para el botón de cerrar sesión */
+  .nav-menu li.mobile-login button.nav-link {
     background: none;
     border: none;
-    color: var(--text);
+    /* color: var(--text); /* Ya hereda */
     font-weight: 500;
     cursor: pointer;
   }
   .nav-menu li.mobile-login button.nav-link:hover {
     background-color: var(--gray-100);
   }
-
-
-  /* Ajuste del logo para que cambie junto con el menú */
   .logo .full-logo {
     display: none;
   }
   .logo .short-logo {
     display: inline;
   }
-
-  /* Otros ajustes responsivos que tenías */
-  .hero h1 {
+  .hero h1 { /* Los h1 heredarán 'Inter' */
     font-size: 2rem;
   }
 }
 
-/* Estilos para pantallas mayores al breakpoint móvil (escritorio) */
-@media (min-width: 1025px) { /* <<< CAMBIADO DE 769px a 1025px */
+@media (min-width: 1025px) {
   .mobile-menu-btn {
-    display: none; /* Ocultar botón hamburguesa */
+    display: none;
   }
   .nav-menu {
-    display: flex; /* Mostrar menú de escritorio */
+    display: flex;
     position: static;
     flex-direction: row;
     background-color: transparent;
@@ -264,19 +258,15 @@ img {
     box-shadow: none;
     border-top: none;
   }
-  .login-container { /* Mostrar contenedor de login de escritorio */
+  .login-container {
     display: flex;
   }
-  .nav-right-group { /* Si usas el agrupador */
+  .nav-right-group {
       display: flex;
   }
-
-  /* Ocultar items de login/perfil del menú de escritorio si están duplicados y pensados solo para móvil */
   .nav-menu li.mobile-login {
     display: none;
   }
-
-  /* Asegurar que el logo completo se muestre en escritorio */
   .logo .full-logo {
     display: inline;
   }
@@ -284,38 +274,53 @@ img {
     display: none;
   }
 }
-/* --- FIN DE CAMBIOS IMPORTANTES PARA RESPONSIVE NAVIGATION --- */
 
-
-/* Footer (sin cambios) */
+/* Footer */
 .footer {
   background-color: var(--gray-100);
-  padding: 4rem 2rem 2rem;
+  padding: 3rem 1rem 0;
   margin-top: 4rem;
   border-top: 1px solid var(--gray-200);
+}
+@media (min-width: 768px) {
+    .footer {
+        padding: 4rem 2rem 0;
+    }
 }
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+    .footer-container {
+        gap: 2rem;
+    }
+}
+.footer-section {
+    margin-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+    .footer-section {
+        margin-bottom: 0;
+    }
 }
 .footer-section h3,
 .footer-section h4 {
   color: var(--primary);
   margin-bottom: 1rem;
+  font-size: 1.125rem; /* Heredarán 'Inter' */
 }
-.footer-section ul {
-  list-style: none;
-  padding: 0;
-}
-.footer-section ul li {
-  margin-bottom: 0.75rem;
+.footer-section p {
+    font-size: 0.95rem;
+    color: var(--text-subtle); /* Heredarán 'Inter' */
 }
 .footer-section ul li a {
-  color: var(--text);
+  color: var(--text-subtle);
   transition: color 0.3s ease;
+  font-size: 0.95rem; /* Heredarán 'Inter' */
 }
 .footer-section ul li a:hover {
   color: var(--primary);
@@ -323,10 +328,11 @@ img {
 .social-links {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 .social-links a {
-  color: var(--text);
-  font-size: 1.25rem;
+  color: var(--text-subtle);
+  font-size: 1.25rem; /* Para iconos, la fuente es menos relevante aquí */
   transition: color 0.3s ease;
 }
 .social-links a:hover {
@@ -334,63 +340,88 @@ img {
 }
 .footer-newsletter {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.75rem;
 }
-.footer-newsletter input {
+@media (min-width: 400px) {
+    .footer-newsletter {
+        flex-direction: row;
+    }
+}
+.footer-newsletter input { /* input heredará 'Inter' */
   flex: 1;
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   background-color: var(--background);
-  color: var(--text);
+  font-size: 0.95rem;
+  /* color: var(--text); */ /* Heredará */
 }
-.footer-newsletter button {
+.footer-newsletter button { /* button heredará 'Inter' */
   background-color: var(--primary);
   color: #fff;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   border-radius: var(--radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 0.95rem;
+  white-space: nowrap;
 }
 .footer-newsletter button:hover {
   background-color: var(--secondary);
 }
+
 .footer-bottom {
   margin-top: 2rem;
-  padding-top: 2rem;
+  padding: 1.5rem 1rem;
   border-top: 1px solid var(--gray-200);
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
+  color: var(--text-subtle);
+  font-size: 0.875rem; /* Heredarán 'Inter' */
+}
+.footer-bottom p {
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+.legal-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+.legal-links a {
+  color: var(--text-subtle);
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+.legal-links a:hover {
+  color: var(--primary);
+  text-decoration: underline;
 }
 @media (min-width: 768px) {
     .footer-bottom {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        text-align: left;
+        padding: 1.5rem 2rem;
+        gap: 1.5rem;
     }
-}
-.legal-links {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-.legal-links a {
-  color: var(--text);
-  transition: color 0.3s ease;
-  font-size: 0.9rem;
-}
-.legal-links a:hover {
-  color: var(--primary);
+    .legal-links {
+        justify-content: flex-end;
+        gap: 1.25rem;
+    }
 }
 
 /* Theme Toggle Button */
-.theme-toggle {
+.theme-toggle { /* button heredará 'Inter', aunque es un icono */
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -404,33 +435,33 @@ img {
   z-index: 1001;
 }
 [data-theme="dark"] .theme-toggle {
-    background-color: var(--gray-200); /* Ajustar para tema oscuro */
+    background-color: var(--gray-200);
 }
 
 
 /* Login Styles (Generales) */
-.login-form { /* Usado en el modal y potencialmente en un login inline si lo tuvieras */
+.login-form {
   display: flex;
-  flex-direction: column; /* Cambiado para modal, si es inline, ajustar */
-  gap: 1rem; /* Espacio entre campos y botón */
+  flex-direction: column;
+  gap: 1rem;
 }
 .login-form input[type="text"],
-.login-form input[type="password"] {
-  padding: 0.75rem 1rem; /* Más padding para mejor usabilidad */
+.login-form input[type="password"] { /* input heredará 'Inter' */
+  padding: 0.75rem 1rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-  font-size: 1rem;
+  /* font-size: 1rem;  /* Heredará o puedes ser específico */
   outline: none;
   transition: border-color 0.3s ease;
   background-color: var(--background);
-  color: var(--text);
+  /* color: var(--text); /* Heredará */
 }
 .login-form input[type="text"]:focus,
 .login-form input[type="password"]:focus {
   border-color: var(--primary);
 }
-.login-form button {
-  padding: 0.75rem 1.5rem; /* Botón más grande */
+.login-form button { /* button heredará 'Inter' */
+  padding: 0.75rem 1.5rem;
   background-color: var(--primary);
   color: #fff;
   border: none;
@@ -438,31 +469,30 @@ img {
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.3s ease;
-  font-size: 1rem;
+  /* font-size: 1rem; */
 }
 .login-form button:hover {
   background-color: var(--secondary);
 }
-.login-btn { /* Botón "Iniciar Sesión" del .login-container */
+.login-btn { /* a, heredará 'Inter' */
   padding: 0.5rem 1rem;
   background-color: var(--primary);
   color: #fff;
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  font-weight: 500; /* Ligeramente menos pesado que el del form */
+  font-weight: 500;
   transition: background-color 0.3s ease;
   white-space: nowrap;
 }
 .login-btn:hover {
   background-color: var(--secondary);
 }
-
 .user-info {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.9rem; /* Heredará 'Inter' */
 }
 .user-info a {
   color: var(--primary);
@@ -485,23 +515,26 @@ img {
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.5);
-  align-items: center; /* Para centrar verticalmente el contenido */
-  justify-content: center; /* Para centrar horizontalmente */
+  align-items: center;
+  justify-content: center;
 }
-.modal.active { /* Añade esta clase con JS para mostrar el modal */
+.modal.active {
     display: flex;
 }
 .modal-content {
   background-color: var(--background);
-  /* margin: 10% auto; Ya no es necesario con flex en .modal */
   padding: 2rem;
   border-radius: var(--radius);
   max-width: 400px;
-  width: 90%; /* Para que no ocupe todo en móviles muy pequeños */
+  width: 90%;
   position: relative;
   box-shadow: var(--shadow);
 }
-.close-btn {
+.modal-content h2 { /* h2 heredará 'Inter' */
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+.close-btn { /* span, heredará 'Inter' */
   color: var(--text);
   position: absolute;
   top: 10px;
@@ -509,22 +542,21 @@ img {
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
-  line-height: 1; /* Para mejor alineación */
+  line-height: 1;
 }
-/* .modal .login-form ya está estilizado arriba */
-
 
 /* Hero Section */
 .hero {
-  padding: 4rem 1rem 3rem; /* Ajustado padding para responsive */
+  padding: 4rem 1rem 3rem;
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
 }
-.hero h1 {
-  font-size: 2.5rem; /* Ajustado, el media query lo baja a 2rem */
+.hero h1 { /* h1 heredará 'Inter' */
+  font-size: 2.5rem;
   margin-bottom: 1.5rem;
   line-height: 1.2;
+  font-weight: 700;
 }
 @media (min-width: 768px) {
     .hero {
@@ -534,17 +566,14 @@ img {
         font-size: 3rem;
     }
 }
-.hero p {
+.hero p { /* p heredará 'Inter' */
   font-size: 1.125rem;
   margin-bottom: 2rem;
 }
 
-/* El resto de tu CSS (Featured Posts, Newsletter, Filters, Grids, etc.) se mantiene igual que lo tenías */
-/* ... (pega aquí el resto de tu CSS sin modificar si no afecta al navbar) ... */
-
 /* Featured Posts Section */
 .featured-posts {
-  padding: 4rem 1rem; /* Padding responsive */
+  padding: 4rem 1rem;
   background-color: var(--gray-100);
 }
 @media (min-width: 768px) {
@@ -552,22 +581,23 @@ img {
         padding: 4rem 2rem;
     }
 }
-.section-title {
+.section-title { /* Heredará 'Inter' */
   font-size: 2rem;
   text-align: center;
   margin-bottom: 2rem;
+  font-weight: 600;
 }
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado minmax */
-  gap: 1.5rem; /* Ajustado gap */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem; /* Padding para que las cards no peguen al borde en móvil */
+  padding: 0 1rem;
 }
 @media (min-width: 768px) {
     .posts-grid {
-        padding: 0; /* Sin padding extra en desktop */
+        padding: 0;
         gap: 2rem;
     }
 }
@@ -583,19 +613,20 @@ img {
   transform: translateY(-5px);
 }
 .post-content {
-  padding: 1.25rem; /* Ajustado padding */
+  padding: 1.25rem;
 }
-.post-content h3 {
-  font-size: 1.25rem; /* Ajustado tamaño */
+.post-content h3 { /* Heredará 'Inter' */
+  font-size: 1.25rem;
   margin-bottom: 0.75rem;
   line-height: 1.3;
+  font-weight: 600;
 }
-.post-content p {
+.post-content p { /* Heredará 'Inter' */
   margin-bottom: 1rem;
-  font-size: 0.95rem; /* Ligeramente más pequeño */
+  font-size: 0.95rem;
   line-height: 1.5;
 }
-.read-more {
+.read-more { /* a, heredará 'Inter' */
   color: var(--primary);
   font-weight: 500;
   transition: color 0.3s ease;
@@ -607,7 +638,7 @@ img {
 
 /* Newsletter Section */
 .newsletter {
-  padding: 3rem 1rem; /* Padding responsive */
+  padding: 3rem 1rem;
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
@@ -617,41 +648,41 @@ img {
         padding: 4rem 2rem;
     }
 }
-.newsletter h2 {
-  font-size: 1.8rem; /* Ajustado */
+.newsletter h2 { /* Heredará 'Inter' */
+  font-size: 1.8rem;
   margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 @media (min-width: 768px) {
     .newsletter h2 {
         font-size: 2rem;
     }
 }
-.newsletter p {
+.newsletter p { /* Heredará 'Inter' */
   font-size: 1rem;
   margin-bottom: 2rem;
 }
 .newsletter-form {
   display: flex;
-  flex-direction: column; /* Apilado en móvil */
+  flex-direction: column;
   align-items: center;
   gap: 0.75rem;
 }
-@media (min-width: 500px) { /* Lado a lado en pantallas más grandes */
+@media (min-width: 500px) {
     .newsletter-form {
         flex-direction: row;
         justify-content: center;
     }
 }
-.newsletter-form input[type="email"] {
+.newsletter-form input[type="email"] { /* input, heredará 'Inter' */
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-  width: 100%; /* Ancho completo en móvil */
-  max-width: 300px; /* Máximo ancho */
+  width: 100%;
+  max-width: 300px;
   background-color: var(--background);
-  color: var(--text);
 }
-.newsletter-form button {
+.newsletter-form button { /* button, heredará 'Inter' */
   background-color: var(--primary);
   color: #fff;
   border: none;
@@ -659,12 +690,13 @@ img {
   border-radius: var(--radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 100%; /* Ancho completo en móvil */
-  max-width: 300px; /* Máximo ancho */
+  width: 100%;
+  max-width: 300px;
+  font-weight: 500;
 }
 @media (min-width: 500px) {
     .newsletter-form button {
-        width: auto; /* Ancho automático si está al lado */
+        width: auto;
     }
 }
 .newsletter-form button:hover {
@@ -678,10 +710,10 @@ img {
   margin: 2rem auto;
   padding: 1rem;
   display: flex;
-  flex-direction: column; /* Apilado en móvil */
+  flex-direction: column;
   gap: 1rem;
 }
-@media (min-width: 768px) { /* Lado a lado en desktop */
+@media (min-width: 768px) {
     .tutorials-filter, .guias-filter, .podcast-filter {
         flex-direction: row;
         justify-content: space-between;
@@ -691,22 +723,21 @@ img {
 .filter-options {
   display: flex;
   gap: 0.5rem;
-  flex-wrap: wrap; /* Permitir que los botones se envuelvan si son muchos */
-  justify-content: center; /* Centrar botones en móvil */
+  flex-wrap: wrap;
+  justify-content: center;
 }
 @media (min-width: 768px) {
     .filter-options {
-        justify-content: flex-start; /* Alineados a la izquierda en desktop */
+        justify-content: flex-start;
     }
 }
-.filter-btn {
+.filter-btn { /* button, heredará 'Inter' */
   padding: 0.5rem 1rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   background-color: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
   color: var(--text);
 }
 .filter-btn.active {
@@ -717,30 +748,28 @@ img {
 .filter-btn:hover:not(.active) {
   background-color: var(--gray-100);
 }
-.search-box { /* Para los filtros */
+.search-box {
   position: relative;
-  width: 100%; /* Ancho completo en móvil */
-  max-width: 300px; /* Máximo ancho */
-  margin: 0 auto; /* Centrado en móvil */
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
 }
 @media (min-width: 768px) {
     .search-box {
-        width: auto; /* Ancho automático en desktop */
-        flex-basis: 300px; /* Ancho base en desktop */
-        margin: 0; /* Sin margen extra */
+        width: auto;
+        flex-basis: 300px;
+        margin: 0;
     }
 }
-.search-box input {
+.search-box input { /* input, heredará 'Inter' */
   width: 100%;
-  padding: 0.75rem 1rem; /* Más padding */
-  padding-right: 3rem; /* Espacio para el botón icono */
+  padding: 0.75rem 1rem;
+  padding-right: 3rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-  color: var(--text);
   background-color: var(--background);
-  font-size: 0.9rem;
 }
-.search-box button {
+.search-box button { /* button, heredará 'Inter' */
   position: absolute;
   right: 0;
   top: 0;
@@ -752,7 +781,7 @@ img {
   color: var(--text);
 }
 .search-box button i {
-    color: var(--primary); /* Color del icono */
+    color: var(--primary);
 }
 
 
@@ -761,9 +790,9 @@ img {
   max-width: 1200px;
   margin: 2rem auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado minmax */
-  gap: 1.5rem; /* Ajustado gap */
-  padding: 0 1rem; /* Padding para que las cards no peguen al borde */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
 }
 @media (min-width: 768px) {
     .tutorials-grid, .guias-grid, .podcast-grid {
@@ -779,7 +808,7 @@ img {
   border-radius: var(--radius);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex; /* Para control interno */
+  display: flex;
   flex-direction: column;
 }
 .tutorial-card:hover, .guia-card:hover, .podcast-card:hover {
@@ -789,7 +818,7 @@ img {
 .tutorial-header, .guia-header, .podcast-header {
   position: relative;
 }
-.category-badge {
+.category-badge { /* span, heredará 'Inter' */
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -797,51 +826,52 @@ img {
   color: #ffffff;
   padding: 0.25rem 0.75rem;
   border-radius: var(--radius);
-  font-size: 0.8rem; /* Ligeramente más pequeño */
+  font-size: 0.8rem;
   font-weight: 500;
 }
 .tutorial-image, .guia-image, .podcast-image {
   width: 100%;
-  height: 180px; /* Altura ligeramente reducida */
+  height: 180px;
   object-fit: cover;
 }
 .tutorial-content, .guia-content, .podcast-content {
-  padding: 1.25rem; /* Ajustado padding */
-  flex-grow: 1; /* Para que el contenido crezca y empuje el footer hacia abajo */
+  padding: 1.25rem;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
-.tutorial-content h3, .guia-content h3, .podcast-content h3 {
-  margin-bottom: 0.5rem; /* Menos espacio */
-  font-size: 1.2rem; /* Ajustado tamaño */
+.tutorial-content h3, .guia-content h3, .podcast-content h3 { /* h3, heredará 'Inter' */
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
   color: var(--text);
   line-height: 1.3;
+  font-weight: 600;
 }
-.tutorial-meta, .guia-meta, .podcast-meta {
+.tutorial-meta, .guia-meta, .podcast-meta { /* span/div, heredará 'Inter' */
   color: var(--text);
   opacity: 0.7;
   font-size: 0.8rem;
-  margin-bottom: 0.75rem; /* Más espacio antes de la descripción */
+  margin-bottom: 0.75rem;
 }
-.tutorial-content p, .guia-content p, .podcast-content p {
+.tutorial-content p, .guia-content p, .podcast-content p { /* p, heredará 'Inter' */
   margin-bottom: 1rem;
-  font-size: 0.9rem; /* Ligeramente más pequeño */
+  font-size: 0.9rem;
   line-height: 1.5;
-  flex-grow: 1; /* Para que la descripción ocupe espacio */
+  flex-grow: 1;
 }
 .tutorial-footer, .guia-footer, .podcast-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto; /* Empuja el footer de la card hacia abajo */
-  padding-top: 1rem; /* Espacio antes del footer de la card */
-  border-top: 1px solid var(--gray-100); /* Separador sutil */
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-100);
 }
-.rating {
+.rating { /* span/div, heredará 'Inter' */
   color: #f59e0b;
   font-size: 0.85rem;
 }
-.rating i { /* Si usas FontAwesome para estrellas */
+.rating i {
     margin-right: 0.1em;
 }
 
@@ -850,21 +880,20 @@ img {
 .pagination {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; /* Para que los botones se envuelvan en móvil */
+  flex-wrap: wrap;
   gap: 0.5rem;
-  margin: 3rem auto 2rem auto; /* Más margen superior */
+  margin: 3rem auto 2rem auto;
   padding: 0 1rem;
 }
-.page-btn {
-  padding: 0.6rem 1rem; /* Ligeramente más grandes */
+.page-btn { /* button, heredará 'Inter' */
+  padding: 0.6rem 1rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-  background-color: var(--background); /* Fondo explícito */
+  background-color: var(--background);
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
   color: var(--text);
-  line-height: 1; /* Para consistencia */
+  line-height: 1;
 }
 .page-btn.active {
   background-color: var(--primary);
@@ -873,7 +902,7 @@ img {
 }
 .page-btn:hover:not(:disabled):not(.active) {
   background-color: var(--gray-100);
-  border-color: var(--gray-200); /* Mantener borde o aclararlo */
+  border-color: var(--gray-200);
 }
 .page-btn:disabled {
   opacity: 0.5;
@@ -881,19 +910,17 @@ img {
   background-color: var(--gray-100);
 }
 
-/* Subscription (Membresía) & Contact Section - Revisa y ajusta según tu diseño final */
-/* ... (Asegúrate de que estas secciones también sean responsivas) ... */
-
-/* Sección de Planes de Suscripción (ejemplo, adaptar) */
+/* Subscription (Membresía) & Contact Section */
 .subscriptions {
   max-width: 1200px;
   margin: 3rem auto;
   padding: 2rem 1rem;
   text-align: center;
 }
-.subscriptions h2 {
+.subscriptions h2 { /* h2, heredará 'Inter' */
   font-size: 2rem;
   margin-bottom: 2rem;
+  font-weight: 600;
 }
 .plan-grid {
   display: grid;
@@ -914,12 +941,13 @@ img {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
-.plan h3 {
+.plan h3 { /* h3, heredará 'Inter' */
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: var(--primary);
+  font-weight: 600;
 }
-.plan .price {
+.plan .price { /* div/span, heredará 'Inter' */
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
@@ -930,14 +958,14 @@ img {
     font-weight: normal;
     opacity: 0.7;
 }
-.plan ul.features { /* Si tienes una lista de características */
+.plan ul.features {
     list-style: none;
     padding: 0;
     margin: 1rem 0 1.5rem 0;
     text-align: left;
     flex-grow: 1;
 }
-.plan ul.features li {
+.plan ul.features li { /* li, heredará 'Inter' */
     margin-bottom: 0.5rem;
     padding-left: 1.5em;
     position: relative;
@@ -950,12 +978,12 @@ img {
     left: 0;
     font-weight: bold;
 }
-.plan p.description { /* Si hay una descripción general */
+.plan p.description { /* p, heredará 'Inter' */
   font-size: 0.95rem;
   margin-bottom: 1.5rem;
   flex-grow: 1;
 }
-.plan .cta-button { /* Cambiado de .plan .cta para evitar conflicto con .nav-cta */
+.plan .cta-button { /* a, heredará 'Inter' */
   display: inline-block;
   background-color: var(--primary);
   color: #fff !important;
@@ -963,7 +991,7 @@ img {
   border-radius: var(--radius);
   transition: background-color 0.3s ease;
   text-decoration: none;
-  margin-top: auto; /* Para empujar al final si es el último elemento */
+  margin-top: auto;
   font-weight: 500;
 }
 .plan .cta-button:hover {
@@ -979,9 +1007,9 @@ img {
   grid-template-columns: 1fr;
   gap: 2rem;
 }
-@media (min-width: 992px) { /* Cambiar a dos columnas en pantallas más grandes */
+@media (min-width: 992px) {
     .contact-section {
-        grid-template-columns: 1fr 1fr; /* O minmax(300px, 1fr) si prefieres */
+        grid-template-columns: 1fr 1fr;
     }
 }
 .contact-info,
@@ -991,13 +1019,14 @@ img {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
-.contact-info h2,
+.contact-info h2, /* h2, heredará 'Inter' */
 .contact-form-container h2 {
-  font-size: 1.8rem; /* Ajustado */
+  font-size: 1.8rem;
   margin-bottom: 1rem;
   color: var(--primary);
+  font-weight: 600;
 }
-.contact-info p, .contact-info ul li {
+.contact-info p, .contact-info ul li { /* p, li heredarán 'Inter' */
   margin-bottom: 0.75rem;
   font-size: 0.95rem;
   line-height: 1.6;
@@ -1008,15 +1037,15 @@ img {
 }
 .contact-info ul li {
     display: flex;
-    align-items: flex-start; /* Para que el icono y texto largo se alineen bien */
+    align-items: flex-start;
 }
-.contact-info ul li i.fas, /* Si usas FontAwesome */
+.contact-info ul li i.fas,
 .contact-info ul li i.fab {
     margin-right: 0.75rem;
     color: var(--primary);
     width: 20px;
     text-align: center;
-    margin-top: 0.2em; /* Ajuste vertical del icono */
+    margin-top: 0.2em;
 }
 
 .contact-form-container form {
@@ -1024,42 +1053,38 @@ img {
   flex-direction: column;
   gap: 1rem;
 }
-.contact-form-container label { /* Añadir labels para accesibilidad */
+.contact-form-container label { /* label, heredará 'Inter' */
     display: block;
     margin-bottom: 0.25rem;
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text);
 }
-.contact-form-container input,
+.contact-form-container input, /* input, textarea heredarán 'Inter' */
 .contact-form-container textarea {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   background-color: var(--background);
-  color: var(--text);
-  font-size: 0.95rem;
 }
 .contact-form-container input:focus,
 .contact-form-container textarea:focus {
     outline: none;
     border-color: var(--primary);
-    /* box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); /* Reemplaza con los RGB de tu --primary */
 }
 .contact-form-container textarea {
     min-height: 120px;
     resize: vertical;
 }
-.contact-form-container button[type="submit"] {
+.contact-form-container button[type="submit"] { /* button, heredará 'Inter' */
   background-color: var(--primary);
   color: #fff;
   border: none;
-  padding: 0.85rem 1.5rem; /* Botón un poco más grande */
+  padding: 0.85rem 1.5rem;
   border-radius: var(--radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: 1rem;
   font-weight: 500;
 }
 .contact-form-container button[type="submit"]:hover {
@@ -1067,7 +1092,7 @@ img {
 }
 
 
-/* Captcha y reCAPTCHA (manteniendo tus estilos, asegúrate de su responsividad) */
+/* Captcha y reCAPTCHA */
 .captcha-container {
   display: flex;
   flex-direction: column;
@@ -1083,17 +1108,15 @@ img {
   border-radius: var(--radius);
   margin-bottom: 0.5rem;
 }
-.captcha-container input {
+.captcha-container input { /* input, heredará 'Inter' */
   padding: 0.85rem 1rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   width: 100%;
   max-width: 200px;
   text-align: center;
-  font-size: 1rem;
   transition: border-color 0.3s;
   background-color: var(--background);
-  color: var(--text);
 }
 .captcha-container input:focus {
   outline: none;
@@ -1104,10 +1127,10 @@ img {
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   padding: 0.75rem;
-  display: block; /* Para que el margin auto funcione bien */
+  display: block;
   width: 100%;
-  max-width: 304px;  /* Ancho estándar de reCAPTCHA */
-  background-color: #f9f9f9; /* Color típico de fondo de reCAPTCHA */
+  max-width: 304px;
+  background-color: #f9f9f9;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   text-align: left;
   margin: 1.5rem auto;
@@ -1119,42 +1142,40 @@ img {
 .recaptcha-checkbox-container {
   display: flex;
   align-items: center;
-  gap: 0.75rem; /* Más espacio */
+  gap: 0.75rem;
 }
-.recaptcha-checkbox-container input[type="checkbox"] {
-  width: 28px; /* Tamaño típico */
+.recaptcha-checkbox-container input[type="checkbox"] { /* input, heredará 'Inter' (no visible) */
+  width: 28px;
   height: 28px;
   cursor: pointer;
   accent-color: var(--primary);
 }
-.fake-recaptcha-label {
+.fake-recaptcha-label { /* label, heredará 'Inter' */
   font-size: 0.9rem;
   color: var(--text);
   cursor: pointer;
 }
-.recaptcha-footer {
+.recaptcha-footer { /* texto, heredará 'Inter' */
   margin-top: 0.75rem;
   border-top: 1px solid var(--gray-200);
   padding-top: 0.75rem;
   display: flex;
-  align-items: center; /* Alinear verticalmente */
-  justify-content: center; /* Centrar si es una sola línea */
-  font-size: 0.7rem; /* Texto pequeño */
-  color: #555; /* Color de texto típico */
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #555;
 }
 [data-theme="dark"] .recaptcha-footer {
     color: var(--gray-200);
     border-top-color: var(--gray-200);
 }
-/* (Fin estilos reCAPTCHA) */
-
 
 /* User Menu (Dropdown en el navbar) */
 .user-menu {
   position: relative;
   display: inline-block;
 }
-.icon-btn {
+.icon-btn { /* button, heredará 'Inter' (icono) */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1163,34 +1184,34 @@ img {
   border: none;
   cursor: pointer;
   transition: color 0.3s ease;
-  color: var(--text); /* Color por defecto del icono */
+  color: var(--text);
 }
 .icon-btn:hover {
-    color: var(--primary); /* Color al hacer hover */
+    color: var(--primary);
 }
 .icon-btn svg {
   width: 24px;
   height: 24px;
-  stroke: currentColor; /* El SVG hereda el color del botón */
+  stroke: currentColor;
 }
 .dropdown-menu {
   display: none;
   position: absolute;
   right: 0;
-  top: calc(100% + 0.5rem); /* Pequeño espacio */
+  top: calc(100% + 0.5rem);
   background-color: var(--background);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 0.5rem 0;
-  z-index: 1001; /* Encima de otros elementos del navbar */
-  width: 180px; /* Ancho del dropdown */
+  z-index: 1001;
+  width: 180px;
   min-width: max-content;
 }
 .dropdown-menu.show {
   display: block;
 }
-.dropdown-menu a,
+.dropdown-menu a, /* a, button heredarán 'Inter' */
 .dropdown-menu button {
   display: block;
   width: 100%;
@@ -1210,13 +1231,11 @@ img {
   background-color: var(--gray-100);
   color: var(--primary);
 }
-.dropdown-menu form { /* Para el botón de logout si es un form */
+.dropdown-menu form {
     margin: 0;
 }
 
-
 /* Modal de Confirmación */
-/* (Tus estilos para .modal-content.confirm y .confirm-buttons se ven bien) */
 .modal-content.confirm {
   margin: 15% auto;
   padding: 2rem;
@@ -1226,12 +1245,13 @@ img {
   text-align: center;
   background: var(--background);
 }
-.modal-content.confirm h2 {
+.modal-content.confirm h2 { /* h2, heredará 'Inter' */
     font-size: 1.5rem;
     margin-bottom: 1rem;
     color: var(--text);
+    font-weight: 600;
 }
-.modal-content.confirm p {
+.modal-content.confirm p { /* p, heredará 'Inter' */
     margin-bottom: 1.5rem;
     font-size: 1rem;
     color: var(--text);
@@ -1243,14 +1263,13 @@ img {
   gap: 1rem;
   margin-top: 1.5rem;
 }
-.modal-content.confirm button {
+.modal-content.confirm button { /* button, heredará 'Inter' */
   background-color: var(--primary);
   color: #fff;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   cursor: pointer;
-  font-size: 0.9rem;
   font-weight: 500;
   transition: background-color 0.3s, box-shadow 0.3s;
   flex-grow: 1;
@@ -1265,10 +1284,9 @@ img {
   color: var(--text);
 }
 .modal-content.confirm .cancel-button:hover {
-  background-color: #b0bac9; /* Un poco más oscuro que el gris claro */
+  background-color: #b0bac9;
   color: var(--text);
 }
-
 
 /* Loading Overlay */
 #loadingOverlay {
@@ -1279,14 +1297,14 @@ img {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.6); /* Un poco más oscuro */
+  background-color: rgba(0,0,0,0.6);
   justify-content: center;
   align-items: center;
 }
 #loadingOverlay.active {
     display: flex;
 }
-#loadingOverlay .modal-content { /* Contenedor del spinner en el overlay */
+#loadingOverlay .modal-content {
   background-color: transparent;
   box-shadow: none;
   border: none;
@@ -1295,20 +1313,19 @@ img {
   max-width: 200px;
 }
 .spinner {
-  border: 4px solid rgba(255,255,255,0.3); /* Borde claro para overlay oscuro */
-  border-top: 4px solid #fff; /* Parte que gira, blanca */
+  border: 4px solid rgba(255,255,255,0.3);
+  border-top: 4px solid #fff;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem auto;
 }
-/* Si usas tema oscuro y quieres que el spinner se adapte a --primary del tema oscuro */
 [data-theme="dark"] .spinner {
-    border-top-color: var(--primary); /* Usar el primario del tema oscuro */
+    border-top-color: var(--primary);
 }
-#loadingOverlay p {
-    color: #fff; /* Texto blanco */
+#loadingOverlay p { /* p, heredará 'Inter' */
+    color: #fff;
     font-size: 0.9rem;
     text-align: center;
     margin-bottom: 0;
@@ -1320,16 +1337,16 @@ img {
 }
 
 /* Sección de Buscador (general, no el de filtros) */
-.search { /* Contenedor de la sección de búsqueda */
+.search {
   margin: 2rem auto;
   padding: 0 1rem;
   text-align: center;
 }
-.search-container { /* El div que envuelve el form */
+.search-container {
   max-width: 600px;
   margin: 0 auto;
   background-color: var(--gray-100);
-  padding: 1.5rem; /* Más padding */
+  padding: 1.5rem;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
@@ -1337,18 +1354,16 @@ img {
   display: flex;
   border-radius: var(--radius);
   border: 1px solid var(--gray-200);
-  overflow: hidden; /* Para que el borde y radius funcionen bien */
+  overflow: hidden;
 }
-.search-form input[type="text"] {
+.search-form input[type="text"] { /* input, heredará 'Inter' */
   flex: 1;
-  padding: 0.85rem 1rem; /* Más padding */
-  border: none; /* Borde ya está en .search-form */
-  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  border: none;
   outline: none;
   background-color: var(--background);
-  color: var(--text);
 }
-.search-form button {
+.search-form button { /* button, heredará 'Inter' */
   padding: 0.85rem 1.5rem;
   border: none;
   background-color: var(--primary);
@@ -1356,7 +1371,7 @@ img {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-.search-form button i { /* Si usas un icono */
+.search-form button i {
     color: #fff;
 }
 .search-form button:hover {
