@@ -36,19 +36,23 @@ from .models import Category
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
-
-    # El campo 'slug' será de solo lectura si se muestra y está en readonly_fields
-    readonly_fields = ('slug',)
-
-    # Define qué campos se muestran en el formulario
+    # En el formulario de edición se mostrarán "name" y "slug",
+    # mientras que en el de creación solo se mostrará "name"
     def get_fields(self, request, obj=None):
-        if obj:  # Modo edición: mostrar 'name' (editable) y 'slug' (readonly)
+        if obj:
             return ('name', 'slug')
-        # Modo creación: mostrar solo 'name'. El 'slug' se generará automáticamente
-        # al guardar desde el modelo.
         return ('name',)
 
+    # Prepopula "slug" solo en el formulario de edición
+    def get_prepopulated_fields(self, request, obj=None):
+        if obj:
+            return {"slug": ("name",)}
+        return {}
+
+    # Como en el formulario de edición queremos que "slug" no se edite, lo marcamos como readonly
+    readonly_fields = ('slug',)
+
+    list_display = ('name', 'slug')
 
 
 from django.contrib import admin
