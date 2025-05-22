@@ -12,9 +12,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script>hljs.highlightAll();</script>
+
 
 <style>
 :root {
@@ -89,7 +89,7 @@ img { max-width: 100%; display: block; }
   cursor: pointer;
   padding: 0.5rem;
 }
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .nav-menu {
     display: none;
     position: absolute;
@@ -595,6 +595,46 @@ background-color: var(--primary);
   line-height: 1.2;
 }
 
+.title-download-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.8rem; /* Más pequeño que el botón principal */
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.85rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 0.25rem; /* Ajuste para alinear con la primera línea del título */
+  flex-shrink: 0; /* Evita que el botón se encoja */
+}
+
+.title-download-link.type-download {
+  background-color: var(--primary);
+  color: #fff !important;
+}
+.title-download-link.type-download:hover {
+  background-color: var(--secondary);
+  transform: translateY(-1px);
+}
+
+.title-download-link.type-login,
+.title-download-link.type-subscribe {
+  background-color: var(--secondary); /* Color diferente para CTA indirecto */
+  color: #fff !important;
+}
+.title-download-link.type-login:hover,
+.title-download-link.type-subscribe:hover {
+  background-color: var(--primary); /* O un color más oscuro de var(--secondary) */
+  transform: translateY(-1px);
+}
+
+.title-download-link i {
+  margin-right: 0.5em;
+}
+
 .tutorial-info {
   display: flex;
   flex-wrap: wrap;
@@ -632,7 +672,7 @@ background-color: var(--primary);
   transform: translateY(-2px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   /* Layout principal: 1 columna en móvil */
   .container {
     grid-template-columns: 1fr !important;
@@ -811,6 +851,13 @@ background-color: var(--primary);
 <article>
   <header class="tutorial-header">
   <h1 class="tutorial-title">{{ tutorial.title }}</h1>
+      {% if code_file_exists %}
+        <a href="{{ title_download_url }}"
+           class="title-download-link type-{{ title_download_cta_type }}"
+           title="{{ title_download_link_title_attr }}">
+          <i class="fas fa-download"></i>&nbsp;{{ title_download_button_text }}
+        </a>
+      {% endif %}
       <div class="tutorial-info">
           <!--
         <span class="tutorial-duration">Duración: {{ tutorial.duration|default:"Desconocida" }}</span>

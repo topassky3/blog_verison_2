@@ -89,7 +89,7 @@
       cursor: pointer;
       padding: 0.5rem;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       .nav-menu {
         display: none;
         position: absolute;
@@ -495,7 +495,7 @@
 .modal-content.confirm .cancel-button:hover {
   background-color: #94a3b8;
 }
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   /* Hacemos que el contenedor ocupe todo el ancho con un padding simétrico */
   .container {
     display: block !important;
@@ -536,7 +536,7 @@
     margin: 1rem auto;
   }
 }
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
   .toc {
     display: none!important;
   }
@@ -566,6 +566,16 @@
     padding: 0.5em 0;
   }
 }
+
+    .block-code {
+      background-color: var(--gray-100);
+      border-left: 4px solid var(--secondary);
+      padding: 0.25rem 0.5rem;
+      font-family: "Courier New", monospace;
+      white-space: pre-wrap;
+      overflow-wrap: break-word; /* Permite quiebres en palabras largas si es necesario */
+      word-break: normal; /* Evita romper arbitrariamente las palabras */
+    }
 
   </style>
 {% endblock %}
