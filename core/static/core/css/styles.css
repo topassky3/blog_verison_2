@@ -1378,7 +1378,7 @@ img {
 }
 
 /* En pantallas móviles (por ejemplo, menos de 600px) se oculta el logo completo y se muestra el abreviado */
-@media (max-width: 1024px) {
+@media (max-width: 600px) {
   .logo .full-logo {
     display: none;
   }
