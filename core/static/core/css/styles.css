@@ -8,8 +8,6 @@
   --gray-200: #e2e8f0;
   --radius: 8px;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  /* Agregado de una interacción previa para el footer, mantener si es útil */
-  --text-subtle: #475569;
 }
 
 /* Dark Mode */
@@ -20,56 +18,24 @@
   --background: #0f172a;
   --gray-100: #1e293b;
   --gray-200: #334155;
-  /* Agregado de una interacción previa para el footer, mantener si es útil */
-  --text-subtle: #94a3b8;
 }
 
-/* --- INICIO DE CAMBIOS PARA CONSISTENCIA DE FUENTE --- */
 /* Base Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-html {
-  font-family: 'Inter', sans-serif; /* Fuente base para todo el documento */
-  line-height: 1.6; /* Altura de línea base */
-  -webkit-font-smoothing: antialiased; /* Mejor renderizado en WebKit/Blink */
-  -moz-osx-font-smoothing: grayscale; /* Mejor renderizado en Firefox */
-}
-
 body {
-  /* font-family se hereda de html */
-  font-size: 1rem; /* Tamaño de fuente base para el contenido del cuerpo */
+  font-family: 'Inter', sans-serif;
   color: var(--text);
   background-color: var(--background);
-  /* line-height se hereda de html, a menos que necesites uno específico para body */
+  line-height: 1.6;
   transition: background-color 0.3s, color 0.3s;
 }
-
-/* Asegurar que elementos comunes y de formulario hereden la fuente */
-h1, h2, h3, h4, h5, h6,
-p, li, dt, dd,
-a, label, span, strong, em {
-  /* Estos elementos generalmente heredan bien, pero es para ser extra seguro.
-     Si tienes estilos específicos para ellos después, esos prevalecerán. */
-  font-family: inherit; /* Asegura que hereden 'Inter' */
-}
-
-button,
-input,
-textarea,
-select {
-  font-family: inherit; /* MUY IMPORTANTE para la consistencia en formularios */
-  font-size: inherit;   /* Heredar tamaño de fuente (puedes ajustarlo por elemento si es necesario) */
-  /* color: inherit; - Muchos de tus inputs/botones ya especifican color o usan var(--text) explícitamente */
-}
-/* --- FIN DE CAMBIOS PARA CONSISTENCIA DE FUENTE --- */
-
 p {
   margin-bottom: 1rem;
-  /* font-size: 1rem; /* Ya establecido por body o puede heredar */
+  font-size: 1rem;
 }
 a {
   text-decoration: none;
@@ -89,13 +55,6 @@ img {
   z-index: 1000;
   border-bottom: 1px solid var(--gray-200);
 }
-<<<<<<< HEAD
-[data-theme="dark"] .navbar {
-    background-color: rgba(15, 23, 42, 0.8);
-}
-
-=======
->>>>>>> temp-feature
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -106,35 +65,9 @@ img {
 }
 .logo {
   font-size: 1.5rem;
-  font-weight: 700; /* 'Inter' soporta este peso */
+  font-weight: 700;
   color: var(--primary);
   transition: color 0.3s;
-<<<<<<< HEAD
-  flex-shrink: 0;
-}
-.logo .full-logo {
-  display: inline;
-}
-.logo .short-logo {
-  display: none;
-}
-
-.nav-menu {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.nav-link {
-  padding: 0.5rem 0.8rem;
-  border-radius: var(--radius);
-  transition: all 0.3s ease;
-  color: var(--text);
-  font-weight: 500; /* 'Inter' soporta este peso */
-  white-space: nowrap;
-=======
 }
 .nav-menu {
   display: flex;
@@ -148,7 +81,6 @@ img {
   transition: all 0.3s ease;
   color: var(--text);
   font-weight: 500;
->>>>>>> temp-feature
 }
 .nav-link:hover,
 .nav-link.active {
@@ -156,13 +88,8 @@ img {
 }
 .nav-cta {
   background-color: var(--primary);
-<<<<<<< HEAD
-  color: #fff !important;
-  padding: 0.75rem 1.2rem;
-=======
   color: #fff;
   padding: 0.75rem 1.5rem;
->>>>>>> temp-feature
   border-radius: var(--radius);
   transition: background-color 0.3s ease;
 }
@@ -175,179 +102,37 @@ img {
   border: none;
   cursor: pointer;
   padding: 0.5rem;
-<<<<<<< HEAD
-  color: var(--text);
-}
-.mobile-menu-btn svg {
-    stroke: currentColor;
 }
 
-.nav-right-group {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.login-container {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-@media (max-width: 1024px) {
-  .nav-container {
-    padding: 0.75rem 1rem;
-  }
-  .nav-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: var(--background);
-    padding: 1rem;
-    flex-direction: column;
-    box-shadow: var(--shadow);
-    border-top: 1px solid var(--gray-200);
-    z-index: 999;
-  }
-  .login-container {
-    display: none;
-  }
-  .nav-right-group {
-      display: none;
-  }
-  .nav-menu.active {
-    display: flex;
-  }
-  .nav-menu li {
-    width: 100%;
-  }
-  .nav-menu li .nav-link {
-    display: block;
-    padding: 0.75rem 1rem;
-    text-align: left;
-    width: 100%;
-  }
-  .nav-menu li .nav-link.nav-cta {
-    margin-top: 0.5rem;
-    text-align: center;
-  }
-  .mobile-menu-btn {
-    display: block;
-  }
-  .nav-menu li.mobile-login {
-    display: list-item;
-    width: 100%;
-  }
-  .nav-menu li.mobile-login .nav-link,
-  .nav-menu li.mobile-login button.nav-link {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 0.75rem 1rem;
-  }
-  .nav-menu li.mobile-login button.nav-link {
-    background: none;
-    border: none;
-    /* color: var(--text); /* Ya hereda */
-    font-weight: 500;
-    cursor: pointer;
-  }
-  .nav-menu li.mobile-login button.nav-link:hover {
-    background-color: var(--gray-100);
-  }
-  .logo .full-logo {
-    display: none;
-  }
-  .logo .short-logo {
-    display: inline;
-  }
-  .hero h1 { /* Los h1 heredarán 'Inter' */
-    font-size: 2rem;
-  }
-}
-
-@media (min-width: 1025px) {
-  .mobile-menu-btn {
-    display: none;
-  }
-  .nav-menu {
-    display: flex;
-    position: static;
-    flex-direction: row;
-    background-color: transparent;
-    padding: 0;
-    box-shadow: none;
-    border-top: none;
-  }
-  .login-container {
-    display: flex;
-  }
-  .nav-right-group {
-      display: flex;
-  }
-  .nav-menu li.mobile-login {
-    display: none;
-  }
-  .logo .full-logo {
-    display: inline;
-  }
-  .logo .short-logo {
-    display: none;
-  }
-}
-
-=======
-}
-
->>>>>>> temp-feature
 /* Footer */
 .footer {
   background-color: var(--gray-100);
-  padding: 3rem 1rem 0;
+  padding: 4rem 2rem 2rem;
   margin-top: 4rem;
   border-top: 1px solid var(--gray-200);
-}
-@media (min-width: 768px) {
-    .footer {
-        padding: 4rem 2rem 0;
-    }
 }
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-}
-@media (min-width: 768px) {
-    .footer-container {
-        gap: 2rem;
-    }
-}
-.footer-section {
-    margin-bottom: 1.5rem;
-}
-@media (min-width: 768px) {
-    .footer-section {
-        margin-bottom: 0;
-    }
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
 .footer-section h3,
 .footer-section h4 {
   color: var(--primary);
   margin-bottom: 1rem;
-  font-size: 1.125rem; /* Heredarán 'Inter' */
 }
-.footer-section p {
-    font-size: 0.95rem;
-    color: var(--text-subtle); /* Heredarán 'Inter' */
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+.footer-section ul li {
+  margin-bottom: 0.75rem;
 }
 .footer-section ul li a {
-  color: var(--text-subtle);
+  color: var(--text);
   transition: color 0.3s ease;
-  font-size: 0.95rem; /* Heredarán 'Inter' */
 }
 .footer-section ul li a:hover {
   color: var(--primary);
@@ -355,11 +140,10 @@ img {
 .social-links {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
 }
 .social-links a {
-  color: var(--text-subtle);
-  font-size: 1.25rem; /* Para iconos, la fuente es menos relevante aquí */
+  color: var(--text);
+  font-size: 1.25rem;
   transition: color 0.3s ease;
 }
 .social-links a:hover {
@@ -367,89 +151,36 @@ img {
 }
 .footer-newsletter {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
-@media (min-width: 400px) {
-    .footer-newsletter {
-        flex-direction: row;
-    }
-}
-.footer-newsletter input { /* input heredará 'Inter' */
+.footer-newsletter input {
   flex: 1;
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-<<<<<<< HEAD
-  background-color: var(--background);
-  font-size: 0.95rem;
-  /* color: var(--text); */ /* Heredará */
-=======
->>>>>>> temp-feature
 }
-.footer-newsletter button { /* button heredará 'Inter' */
+.footer-newsletter button {
   background-color: var(--primary);
   color: #fff;
   border: none;
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: 0.95rem;
-  white-space: nowrap;
 }
 .footer-newsletter button:hover {
   background-color: var(--secondary);
 }
-
 .footer-bottom {
   margin-top: 2rem;
-  padding: 1.5rem 1rem;
+  padding-top: 2rem;
   border-top: 1px solid var(--gray-200);
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  color: var(--text-subtle);
-  font-size: 0.875rem; /* Heredarán 'Inter' */
+  gap: 1rem;
 }
-.footer-bottom p {
-    margin-bottom: 0;
-    line-height: 1.4;
-}
-.legal-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-}
-.legal-links a {
-  color: var(--text-subtle);
-  transition: color 0.3s ease;
-  text-decoration: none;
-}
-.legal-links a:hover {
-  color: var(--primary);
-  text-decoration: underline;
-}
-<<<<<<< HEAD
-@media (min-width: 768px) {
-    .footer-bottom {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        text-align: left;
-        padding: 1.5rem 2rem;
-        gap: 1.5rem;
-    }
-    .legal-links {
-        justify-content: flex-end;
-        gap: 1.25rem;
-    }
-=======
 .legal-links {
   list-style: none;
   padding: 0;
@@ -463,7 +194,6 @@ img {
 }
 .legal-links a:hover {
   color: var(--primary);
->>>>>>> temp-feature
 }
 
 /* Responsive Navigation */
@@ -491,7 +221,7 @@ img {
 }
 
 /* Theme Toggle Button */
-.theme-toggle { /* button heredará 'Inter', aunque es un icono */
+.theme-toggle {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -502,27 +232,6 @@ img {
   cursor: pointer;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
-<<<<<<< HEAD
-  z-index: 1001;
-}
-[data-theme="dark"] .theme-toggle {
-    background-color: var(--gray-200);
-}
-
-
-/* Login Styles (Generales) */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.login-form input[type="text"],
-.login-form input[type="password"] { /* input heredará 'Inter' */
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  /* font-size: 1rem;  /* Heredará o puedes ser específico */
-=======
 }
 
 /* Login Styles */
@@ -542,24 +251,18 @@ img {
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   font-size: 0.9rem;
->>>>>>> temp-feature
   outline: none;
   transition: border-color 0.3s ease;
   background-color: var(--background);
-  /* color: var(--text); /* Heredará */
+  color: var(--text);
 }
 .login-form input[type="text"]:focus,
 .login-form input[type="password"]:focus {
   border-color: var(--primary);
 }
-<<<<<<< HEAD
-.login-form button { /* button heredará 'Inter' */
-  padding: 0.75rem 1.5rem;
-=======
 .login-form button,
 .login-btn {
   padding: 0.5rem 1rem;
->>>>>>> temp-feature
   background-color: var(--primary);
   color: #fff;
   border: none;
@@ -567,24 +270,6 @@ img {
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.3s ease;
-<<<<<<< HEAD
-  /* font-size: 1rem; */
-}
-.login-form button:hover {
-  background-color: var(--secondary);
-}
-.login-btn { /* a, heredará 'Inter' */
-  padding: 0.5rem 1rem;
-  background-color: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
-  white-space: nowrap;
-=======
->>>>>>> temp-feature
 }
 .login-form button:hover,
 .login-btn:hover {
@@ -594,7 +279,7 @@ img {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem; /* Heredará 'Inter' */
+  font-size: 0.9rem;
 }
 .user-info a {
   color: var(--primary);
@@ -617,20 +302,6 @@ img {
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.5);
-<<<<<<< HEAD
-  align-items: center;
-  justify-content: center;
-}
-.modal.active {
-    display: flex;
-}
-.modal-content {
-  background-color: var(--background);
-  padding: 2rem;
-  border-radius: var(--radius);
-  max-width: 400px;
-  width: 90%;
-=======
 }
 .modal-content {
   background-color: var(--background);
@@ -638,14 +309,9 @@ img {
   padding: 2rem;
   border-radius: var(--radius);
   max-width: 400px;
->>>>>>> temp-feature
   position: relative;
 }
-.modal-content h2 { /* h2 heredará 'Inter' */
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-}
-.close-btn { /* span, heredará 'Inter' */
+.close-btn {
   color: var(--text);
   position: absolute;
   top: 10px;
@@ -653,10 +319,6 @@ img {
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
-<<<<<<< HEAD
-  line-height: 1;
-}
-=======
 }
 .modal .login-form {
   flex-direction: column;
@@ -695,7 +357,6 @@ img {
     display: block;
   }
 }
->>>>>>> temp-feature
 
 /* En pantallas de escritorio, se oculta el login duplicado en el menú */
 @media (min-width: 769px) {
@@ -705,86 +366,37 @@ img {
 }
 /* Hero Section */
 .hero {
-<<<<<<< HEAD
-  padding: 4rem 1rem 3rem;
-=======
   padding: 6rem 2rem 4rem;
->>>>>>> temp-feature
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
 }
-<<<<<<< HEAD
-.hero h1 { /* h1 heredará 'Inter' */
-  font-size: 2.5rem;
-=======
 .hero h1 {
   font-size: 3rem;
->>>>>>> temp-feature
   margin-bottom: 1.5rem;
   line-height: 1.2;
-  font-weight: 700;
 }
-<<<<<<< HEAD
-@media (min-width: 768px) {
-    .hero {
-        padding: 6rem 2rem 4rem;
-    }
-    .hero h1 {
-        font-size: 3rem;
-    }
-}
-.hero p { /* p heredará 'Inter' */
-=======
 .hero p {
->>>>>>> temp-feature
   font-size: 1.125rem;
   margin-bottom: 2rem;
 }
 
 /* Featured Posts Section */
 .featured-posts {
-<<<<<<< HEAD
-  padding: 4rem 1rem;
-  background-color: var(--gray-100);
-}
-@media (min-width: 768px) {
-    .featured-posts {
-        padding: 4rem 2rem;
-    }
-}
-.section-title { /* Heredará 'Inter' */
-=======
   padding: 4rem 2rem;
   background-color: var(--gray-100);
 }
 .section-title {
->>>>>>> temp-feature
   font-size: 2rem;
   text-align: center;
   margin-bottom: 2rem;
-  font-weight: 600;
 }
 .posts-grid {
   display: grid;
-<<<<<<< HEAD
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-@media (min-width: 768px) {
-    .posts-grid {
-        padding: 0;
-        gap: 2rem;
-    }
-=======
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
->>>>>>> temp-feature
 }
 .post-card {
   background-color: var(--background);
@@ -798,31 +410,16 @@ img {
   transform: translateY(-5px);
 }
 .post-content {
-<<<<<<< HEAD
-  padding: 1.25rem;
-}
-.post-content h3 { /* Heredará 'Inter' */
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
-  line-height: 1.3;
-  font-weight: 600;
-=======
   padding: 1rem;
 }
 .post-content h3 {
   font-size: 1.5rem;
   margin-bottom: 0.75rem;
->>>>>>> temp-feature
 }
-.post-content p { /* Heredará 'Inter' */
+.post-content p {
   margin-bottom: 1rem;
-<<<<<<< HEAD
-  font-size: 0.95rem;
-  line-height: 1.5;
-=======
->>>>>>> temp-feature
 }
-.read-more { /* a, heredará 'Inter' */
+.read-more {
   color: var(--primary);
   font-weight: 500;
   transition: color 0.3s ease;
@@ -832,75 +429,33 @@ img {
 }
 /* Newsletter Section */
 .newsletter {
-<<<<<<< HEAD
-  padding: 3rem 1rem;
-=======
   padding: 4rem 2rem;
->>>>>>> temp-feature
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
 }
-<<<<<<< HEAD
-@media (min-width: 768px) {
-    .newsletter {
-        padding: 4rem 2rem;
-    }
-}
-.newsletter h2 { /* Heredará 'Inter' */
-  font-size: 1.8rem;
-=======
 .newsletter h2 {
   font-size: 2rem;
->>>>>>> temp-feature
   margin-bottom: 1.5rem;
-  font-weight: 600;
 }
-<<<<<<< HEAD
-@media (min-width: 768px) {
-    .newsletter h2 {
-        font-size: 2rem;
-    }
-}
-.newsletter p { /* Heredará 'Inter' */
-=======
 .newsletter p {
->>>>>>> temp-feature
   font-size: 1rem;
   margin-bottom: 2rem;
 }
 .newsletter-form {
   display: flex;
-<<<<<<< HEAD
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-@media (min-width: 500px) {
-    .newsletter-form {
-        flex-direction: row;
-        justify-content: center;
-    }
-=======
   justify-content: center;
   gap: 0.75rem;
   flex-wrap: wrap;
->>>>>>> temp-feature
 }
-.newsletter-form input[type="email"] { /* input, heredará 'Inter' */
+.newsletter-form input[type="email"] {
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-<<<<<<< HEAD
-  width: 100%;
-  max-width: 300px;
-  background-color: var(--background);
-=======
   width: 300px;
   max-width: 100%;
->>>>>>> temp-feature
 }
-.newsletter-form button { /* button, heredará 'Inter' */
+.newsletter-form button {
   background-color: var(--primary);
   color: #fff;
   border: none;
@@ -908,17 +463,6 @@ img {
   border-radius: var(--radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
-<<<<<<< HEAD
-  width: 100%;
-  max-width: 300px;
-  font-weight: 500;
-}
-@media (min-width: 500px) {
-    .newsletter-form button {
-        width: auto;
-    }
-=======
->>>>>>> temp-feature
 }
 .newsletter-form button:hover {
   background-color: var(--secondary);
@@ -930,44 +474,24 @@ img {
   margin: 2rem auto;
   padding: 1rem;
   display: flex;
-<<<<<<< HEAD
-  flex-direction: column;
-  gap: 1rem;
-}
-@media (min-width: 768px) {
-    .tutorials-filter, .guias-filter, .podcast-filter {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-=======
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
->>>>>>> temp-feature
 }
 .filter-options {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-<<<<<<< HEAD
-  justify-content: center;
 }
-@media (min-width: 768px) {
-    .filter-options {
-        justify-content: flex-start;
-    }
-=======
->>>>>>> temp-feature
-}
-.filter-btn { /* button, heredará 'Inter' */
+.filter-btn {
   padding: 0.5rem 1rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   background-color: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 0.9rem;
   color: var(--text);
 }
 .filter-btn.active {
@@ -980,39 +504,18 @@ img {
 }
 .search-box {
   position: relative;
-<<<<<<< HEAD
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
-}
-@media (min-width: 768px) {
-    .search-box {
-        width: auto;
-        flex-basis: 300px;
-        margin: 0;
-    }
-=======
   flex: 1;
   max-width: 300px;
->>>>>>> temp-feature
 }
-.search-box input { /* input, heredará 'Inter' */
+.search-box input {
   width: 100%;
-<<<<<<< HEAD
-  padding: 0.75rem 1rem;
-  padding-right: 3rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background-color: var(--background);
-=======
   padding: 0.5rem 1rem;
   padding-right: 2.5rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   color: var(--text);
->>>>>>> temp-feature
 }
-.search-box button { /* button, heredará 'Inter' */
+.search-box button {
   position: absolute;
   right: 0;
   top: 0;
@@ -1021,13 +524,6 @@ img {
   border: none;
   padding: 0 1rem;
   cursor: pointer;
-<<<<<<< HEAD
-  color: var(--text);
-}
-.search-box button i {
-    color: var(--primary);
-=======
->>>>>>> temp-feature
 }
 
 /* Tutorials Grid */
@@ -1035,15 +531,9 @@ img {
   max-width: 1200px;
   margin: 2rem auto;
   display: grid;
-<<<<<<< HEAD
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  padding: 0 1rem;
-=======
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   padding: 1rem;
->>>>>>> temp-feature
 }
 .tutorial-card {
   background-color: var(--background);
@@ -1051,11 +541,6 @@ img {
   border-radius: var(--radius);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-<<<<<<< HEAD
-  display: flex;
-  flex-direction: column;
-=======
->>>>>>> temp-feature
 }
 .tutorial-card:hover {
   transform: translateY(-5px);
@@ -1064,7 +549,7 @@ img {
 .tutorial-header {
   position: relative;
 }
-.category-badge { /* span, heredará 'Inter' */
+.category-badge {
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -1072,44 +557,10 @@ img {
   color: #ffffff;
   padding: 0.25rem 0.75rem;
   border-radius: var(--radius);
-<<<<<<< HEAD
-  font-size: 0.8rem;
-  font-weight: 500;
-=======
   font-size: 0.875rem;
->>>>>>> temp-feature
 }
 .tutorial-image {
   width: 100%;
-<<<<<<< HEAD
-  height: 180px;
-  object-fit: cover;
-}
-.tutorial-content, .guia-content, .podcast-content {
-  padding: 1.25rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-.tutorial-content h3, .guia-content h3, .podcast-content h3 { /* h3, heredará 'Inter' */
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-  color: var(--text);
-  line-height: 1.3;
-  font-weight: 600;
-}
-.tutorial-meta, .guia-meta, .podcast-meta { /* span/div, heredará 'Inter' */
-  color: var(--text);
-  opacity: 0.7;
-  font-size: 0.8rem;
-  margin-bottom: 0.75rem;
-}
-.tutorial-content p, .guia-content p, .podcast-content p { /* p, heredará 'Inter' */
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  flex-grow: 1;
-=======
   height: 200px;
   object-fit: cover;
 }
@@ -1129,17 +580,11 @@ img {
 .tutorial-content p {
   margin-bottom: 1rem;
   color: var(--text);
->>>>>>> temp-feature
 }
 .tutorial-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-<<<<<<< HEAD
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid var(--gray-100);
-=======
   margin-top: 1rem;
 }
 .read-more {
@@ -1149,36 +594,16 @@ img {
 }
 .read-more:hover {
   color: var(--secondary);
->>>>>>> temp-feature
 }
-.rating { /* span/div, heredará 'Inter' */
+.rating {
   color: #f59e0b;
   font-size: 0.9rem;
 }
-<<<<<<< HEAD
-.rating i {
-    margin-right: 0.1em;
-}
-
-=======
->>>>>>> temp-feature
 
 /* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
-<<<<<<< HEAD
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 3rem auto 2rem auto;
-  padding: 0 1rem;
-}
-.page-btn { /* button, heredará 'Inter' */
-  padding: 0.6rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background-color: var(--background);
-=======
   gap: 0.5rem;
   margin: 2rem 0;
   padding: 1rem;
@@ -1188,14 +613,10 @@ img {
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   background-color: transparent;
->>>>>>> temp-feature
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 0.9rem;
   color: var(--text);
-<<<<<<< HEAD
-  line-height: 1;
-=======
->>>>>>> temp-feature
 }
 .page-btn.active {
   background-color: var(--primary);
@@ -1204,19 +625,12 @@ img {
 }
 .page-btn:hover:not(:disabled) {
   background-color: var(--gray-100);
-<<<<<<< HEAD
-  border-color: var(--gray-200);
-=======
->>>>>>> temp-feature
 }
 .page-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-<<<<<<< HEAD
-/* Subscription (Membresía) & Contact Section */
-=======
 /* Guías Filter */
 .guias-filter {
   max-width: 1200px;
@@ -1576,17 +990,15 @@ img {
   background-color: var(--secondary);
 }
 /* Sección de Planes de Suscripción */
->>>>>>> temp-feature
 .subscriptions {
   max-width: 1200px;
   margin: 3rem auto;
   padding: 2rem;
   text-align: center;
 }
-.subscriptions h2 { /* h2, heredará 'Inter' */
+.subscriptions h2 {
   font-size: 2rem;
   margin-bottom: 2rem;
-  font-weight: 600;
 }
 .plan-grid {
   display: grid;
@@ -1605,70 +1017,25 @@ img {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
-.plan h3 { /* h3, heredará 'Inter' */
+.plan h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-<<<<<<< HEAD
-  color: var(--primary);
-  font-weight: 600;
-=======
->>>>>>> temp-feature
 }
-.plan .price { /* div/span, heredará 'Inter' */
+.plan .price {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
-<<<<<<< HEAD
-.plan .price span {
-    font-size: 0.9rem;
-    font-weight: normal;
-    opacity: 0.7;
-}
-.plan ul.features {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0 1.5rem 0;
-    text-align: left;
-    flex-grow: 1;
-}
-.plan ul.features li { /* li, heredará 'Inter' */
-    margin-bottom: 0.5rem;
-    padding-left: 1.5em;
-    position: relative;
-    font-size: 0.95rem;
-}
-.plan ul.features li::before {
-    content: '✓';
-    color: var(--primary);
-    position: absolute;
-    left: 0;
-    font-weight: bold;
-}
-.plan p.description { /* p, heredará 'Inter' */
-  font-size: 0.95rem;
-=======
 .plan p {
   font-size: 1rem;
->>>>>>> temp-feature
   margin-bottom: 1.5rem;
 }
-<<<<<<< HEAD
-.plan .cta-button { /* a, heredará 'Inter' */
-=======
 .plan .cta {
->>>>>>> temp-feature
   display: inline-block;
   background-color: var(--primary);
   color: #fff;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   transition: background-color 0.3s ease;
-<<<<<<< HEAD
-  text-decoration: none;
-  margin-top: auto;
-  font-weight: 500;
-=======
->>>>>>> temp-feature
 }
 .plan .cta:hover {
   background-color: var(--secondary);
@@ -1682,14 +1049,6 @@ img {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
-<<<<<<< HEAD
-@media (min-width: 992px) {
-    .contact-section {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-=======
->>>>>>> temp-feature
 .contact-info,
 .contact-form {
   background-color: var(--gray-100);
@@ -1697,92 +1056,26 @@ img {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
-<<<<<<< HEAD
-.contact-info h2, /* h2, heredará 'Inter' */
-.contact-form-container h2 {
-  font-size: 1.8rem;
-=======
 .contact-info h2,
 .contact-form h2 {
   font-size: 2rem;
->>>>>>> temp-feature
   margin-bottom: 1rem;
   color: var(--primary);
-  font-weight: 600;
 }
-<<<<<<< HEAD
-.contact-info p, .contact-info ul li { /* p, li heredarán 'Inter' */
-=======
 .contact-info p {
->>>>>>> temp-feature
   margin-bottom: 0.75rem;
 }
-<<<<<<< HEAD
-.contact-info ul {
-    list-style: none;
-    padding: 0;
-}
-.contact-info ul li {
-    display: flex;
-    align-items: flex-start;
-}
-.contact-info ul li i.fas,
-.contact-info ul li i.fab {
-    margin-right: 0.75rem;
-    color: var(--primary);
-    width: 20px;
-    text-align: center;
-    margin-top: 0.2em;
-}
-
-.contact-form-container form {
-=======
 .contact-form form {
->>>>>>> temp-feature
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-<<<<<<< HEAD
-.contact-form-container label { /* label, heredará 'Inter' */
-    display: block;
-    margin-bottom: 0.25rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text);
-}
-.contact-form-container input, /* input, textarea heredarán 'Inter' */
-.contact-form-container textarea {
-=======
 .contact-form input,
 .contact-form textarea {
->>>>>>> temp-feature
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-<<<<<<< HEAD
-  background-color: var(--background);
-}
-.contact-form-container input:focus,
-.contact-form-container textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-}
-.contact-form-container textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-.contact-form-container button[type="submit"] { /* button, heredará 'Inter' */
-  background-color: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.85rem 1.5rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-weight: 500;
-=======
 }
 .contact-form button {
   background-color: var(--primary);
@@ -1792,18 +1085,11 @@ img {
   border-radius: var(--radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
->>>>>>> temp-feature
 }
 .contact-form button:hover {
   background-color: var(--secondary);
 }
-<<<<<<< HEAD
-
-
-/* Captcha y reCAPTCHA */
-=======
 /* Contenedor principal del captcha */
->>>>>>> temp-feature
 .captcha-container {
   display: flex;
   flex-direction: column;
@@ -1821,23 +1107,16 @@ img {
   border-radius: var(--radius);
   margin-bottom: 0.5rem;
 }
-<<<<<<< HEAD
-.captcha-container input { /* input, heredará 'Inter' */
-=======
 
 /* Campo de texto para ingresar el código */
 .captcha-container input {
->>>>>>> temp-feature
   padding: 0.85rem 1rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   width: 100%;
   text-align: center;
+  font-size: 1rem;
   transition: border-color 0.3s;
-<<<<<<< HEAD
-  background-color: var(--background);
-=======
->>>>>>> temp-feature
 }
 .captcha-container input:focus {
   outline: none;
@@ -1847,19 +1126,11 @@ img {
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   padding: 0.75rem;
-<<<<<<< HEAD
-  display: block;
-  width: 100%;
-  max-width: 304px;
-  background-color: #f9f9f9;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-=======
   display: inline-block;
   width: 100%;
   max-width: 300px;  /* Ajusta si quieres otro ancho */
   background-color: #fff;
   box-shadow: var(--shadow);
->>>>>>> temp-feature
   text-align: left;
   margin: 1.5rem auto; /* Centra el widget horizontalmente */
 }
@@ -1867,31 +1138,14 @@ img {
 .recaptcha-checkbox-container {
   display: flex;
   align-items: center;
-<<<<<<< HEAD
-  gap: 0.75rem;
-}
-.recaptcha-checkbox-container input[type="checkbox"] { /* input, heredará 'Inter' (no visible) */
-  width: 28px;
-  height: 28px;
-=======
   gap: 0.5rem;
 }
 
 .recaptcha-checkbox-container input[type="checkbox"] {
   width: 20px;
   height: 20px;
->>>>>>> temp-feature
   cursor: pointer;
 }
-<<<<<<< HEAD
-.fake-recaptcha-label { /* label, heredará 'Inter' */
-  font-size: 0.9rem;
-  color: var(--text);
-  cursor: pointer;
-}
-.recaptcha-footer { /* texto, heredará 'Inter' */
-  margin-top: 0.75rem;
-=======
 
 .fake-recaptcha-label {
   font-size: 0.95rem;
@@ -1901,29 +1155,19 @@ img {
 
 .recaptcha-footer {
   margin-top: 0.5rem;
->>>>>>> temp-feature
   border-top: 1px solid var(--gray-200);
   padding-top: 0.5rem;
   display: flex;
-<<<<<<< HEAD
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  color: #555;
-=======
   align-items: baseline;
   justify-content: space-between;
   font-size: 0.75rem;
   color: #666;
->>>>>>> temp-feature
 }
 
 .recaptcha-footer strong {
   font-weight: 600;
   color: #333;
 }
-<<<<<<< HEAD
-=======
 
 .recaptcha-footer small {
   color: #999;
@@ -1938,7 +1182,6 @@ img {
   font-weight: 600;
   transition: background-color 0.3s ease;
 }
->>>>>>> temp-feature
 
 .logout-btn:hover {
   background-color: var(--secondary);
@@ -1993,13 +1236,9 @@ img {
   position: relative;
   display: inline-block;
 }
-<<<<<<< HEAD
-.icon-btn { /* button, heredará 'Inter' (icono) */
-=======
 
 /* Botón que muestra el ícono de usuario */
 .icon-btn {
->>>>>>> temp-feature
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2008,23 +1247,12 @@ img {
   border: none;
   cursor: pointer;
   transition: color 0.3s ease;
-<<<<<<< HEAD
-  color: var(--text);
-}
-.icon-btn:hover {
-    color: var(--primary);
-=======
   color: var(--primary);
->>>>>>> temp-feature
 }
 
 .icon-btn svg {
   width: 24px;
   height: 24px;
-<<<<<<< HEAD
-  stroke: currentColor;
-=======
->>>>>>> temp-feature
 }
 
 /* Menú desplegable oculto por defecto */
@@ -2032,37 +1260,23 @@ img {
   display: none;
   position: absolute;
   right: 0;
-<<<<<<< HEAD
-  top: calc(100% + 0.5rem);
-=======
   top: 110%;
->>>>>>> temp-feature
   background-color: var(--background);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 0.5rem 0;
-<<<<<<< HEAD
-  z-index: 1001;
-  width: 180px;
-  min-width: max-content;
-=======
   z-index: 1000;
   width: 150px;
->>>>>>> temp-feature
 }
 
 /* Mostrar el menú cuando se active */
 .dropdown-menu.show {
   display: block;
 }
-<<<<<<< HEAD
-.dropdown-menu a, /* a, button heredarán 'Inter' */
-=======
 
 /* Estilos para los elementos del menú */
 .dropdown-menu a,
->>>>>>> temp-feature
 .dropdown-menu button {
   display: block;
   width: 100%;
@@ -2079,19 +1293,9 @@ img {
 .dropdown-menu a:hover,
 .dropdown-menu button:hover {
   background-color: var(--gray-100);
-<<<<<<< HEAD
-  color: var(--primary);
-}
-.dropdown-menu form {
-    margin: 0;
-}
-
-/* Modal de Confirmación */
-=======
 }
 
 /* Modal para confirmación */
->>>>>>> temp-feature
 .modal-content.confirm {
   margin: 10% auto;
   padding: 2rem;
@@ -2101,51 +1305,25 @@ img {
   text-align: center;
   background: var(--background);
 }
-<<<<<<< HEAD
-.modal-content.confirm h2 { /* h2, heredará 'Inter' */
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--text);
-    font-weight: 600;
-}
-.modal-content.confirm p { /* p, heredará 'Inter' */
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-    color: var(--text);
-    opacity: 0.9;
-}
-=======
 
 /* Contenedor para ambos botones (Aceptar / Cancelar) */
->>>>>>> temp-feature
 .confirm-buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
 }
-<<<<<<< HEAD
-.modal-content.confirm button { /* button, heredará 'Inter' */
-=======
 
 /* Botones de confirmación */
 .modal-content.confirm button {
->>>>>>> temp-feature
   background-color: var(--primary);
   color: #fff;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   cursor: pointer;
-<<<<<<< HEAD
-  font-weight: 500;
-  transition: background-color 0.3s, box-shadow 0.3s;
-  flex-grow: 1;
-  max-width: 150px;
-=======
   font-size: 1rem;
   transition: background-color 0.3s;
->>>>>>> temp-feature
 }
 .modal-content.confirm button:hover {
   background-color: var(--secondary);
@@ -2157,17 +1335,9 @@ img {
   color: var(--text);
 }
 .modal-content.confirm .cancel-button:hover {
-<<<<<<< HEAD
-  background-color: #b0bac9;
-  color: var(--text);
-}
-
-/* Loading Overlay */
-=======
   background-color: #94a3b8; /* Gris un poco más oscuro */
 }
 
->>>>>>> temp-feature
 #loadingOverlay {
   display: none;
   position: fixed;
@@ -2176,18 +1346,8 @@ img {
   top: 0;
   width: 100%;
   height: 100%;
-<<<<<<< HEAD
-  background-color: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-}
-#loadingOverlay.active {
-    display: flex;
-}
-=======
   background-color: rgba(0,0,0,0.5);
 }
->>>>>>> temp-feature
 #loadingOverlay .modal-content {
   background-color: transparent;
   box-shadow: none;
@@ -2196,80 +1356,19 @@ img {
   margin: 40% auto;
 }
 .spinner {
-<<<<<<< HEAD
-  border: 4px solid rgba(255,255,255,0.3);
-  border-top: 4px solid #fff;
-=======
   border: 4px solid var(--gray-200);
   border-top: 4px solid var(--primary);
->>>>>>> temp-feature
   border-radius: 50%;
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
   margin: 0 auto;
 }
-<<<<<<< HEAD
-[data-theme="dark"] .spinner {
-    border-top-color: var(--primary);
-}
-#loadingOverlay p { /* p, heredará 'Inter' */
-    color: #fff;
-    font-size: 0.9rem;
-    text-align: center;
-    margin-bottom: 0;
-}
-
-=======
->>>>>>> temp-feature
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-<<<<<<< HEAD
-/* Sección de Buscador (general, no el de filtros) */
-.search {
-  margin: 2rem auto;
-  padding: 0 1rem;
-  text-align: center;
-}
-.search-container {
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: var(--gray-100);
-  padding: 1.5rem;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-.search-form {
-  display: flex;
-  border-radius: var(--radius);
-  border: 1px solid var(--gray-200);
-  overflow: hidden;
-}
-.search-form input[type="text"] { /* input, heredará 'Inter' */
-  flex: 1;
-  padding: 0.85rem 1rem;
-  border: none;
-  outline: none;
-  background-color: var(--background);
-}
-.search-form button { /* button, heredará 'Inter' */
-  padding: 0.85rem 1.5rem;
-  border: none;
-  background-color: var(--primary);
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.search-form button i {
-    color: #fff;
-}
-.search-form button:hover {
-  background-color: var(--secondary);
-}
-=======
 /* Por defecto, mostrar el logo completo y ocultar el abreviado */
 .logo .full-logo {
   display: inline;
@@ -2287,5 +1386,3 @@ img {
     display: inline;
   }
 }
-
->>>>>>> temp-feature
