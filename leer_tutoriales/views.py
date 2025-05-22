@@ -12,7 +12,7 @@ from django.db.models import Count, ExpressionWrapper, IntegerField
 from core.models import Tutorial
 from .forms import CommentForm
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 from django.db.models import Count, ExpressionWrapper, IntegerField
@@ -21,44 +21,73 @@ from core.models import Tutorial, Lector
 from .forms import CommentForm
 from django.contrib.auth.views import redirect_to_login
 
+
 class TutorialDetailView(FormMixin, DetailView):
     model = Tutorial
-    template_name = 'leer_tutoriales/mis_tutoriales.html'
+    template_name = 'leer_tutoriales/mis_tutoriales.html'  # ESTE ES EL NOMBRE DE TU PLANTILLA
     form_class = CommentForm
-
-    def get_user(self):
-        # Si el usuario está autenticado se usa el real,
-        # en caso contrario se asigna el usuario por defecto "electro"
-        if self.request.user.is_authenticated:
-            return self.request.user
-        return get_object_or_404(Lector, username="electro")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         tutorial = self.object
-        all_blocks = tutorial.blocks.all()
-        total_blocks = all_blocks.count()
+        current_user = self.request.user
 
-        user = self.get_user()
+        # --- Lógica para limitación de contenido (60%) ---
+        # Esta lógica asume que los bloques se cargan vía AJAX y la plantilla decide si mostrar el mensaje.
+        # Si la carga de bloques es puramente vía AJAX, la limitación real de bloques se hace en la vista AJAX.
+        user_for_content_check = current_user if current_user.is_authenticated else get_object_or_404(Lector,
+                                                                                                      username="electro")
 
-        # Se aplica la restricción (mostrar solo el 60%) si el usuario (real o por defecto)
-        # no es el autor y tiene plan "Básico"
-        if user != tutorial.author and hasattr(user, 'subscription') and user.subscription.plan == "Básico" and total_blocks > 0:
-            visible_count = int(total_blocks * 0.6)
-            context['visible_blocks'] = all_blocks[:visible_count]
-            context['mostrar_limite'] = True
+        context['mostrar_limite'] = False
+        if hasattr(tutorial, 'blocks') and tutorial.blocks.exists():  # Solo si hay bloques
+            total_blocks = tutorial.blocks.count()
+            if user_for_content_check != tutorial.author and \
+                    hasattr(user_for_content_check, 'subscription') and \
+                    user_for_content_check.subscription.plan == "Básico" and \
+                    total_blocks > 0:
+                context['mostrar_limite'] = True
+
+        # --- Lógica para Permisos de Descarga ---
+        user_is_author = current_user.is_authenticated and current_user == tutorial.author
+        user_has_premium_or_higher = current_user.is_authenticated and \
+                                     hasattr(current_user, 'subscription') and \
+                                     current_user.subscription.plan != "Básico"
+
+        user_can_download_directly = user_is_author or user_has_premium_or_higher
+
+        # Para el botón de descarga principal (al final del artículo)
+        context['mostrar_descarga'] = bool(tutorial.code_file) and user_can_download_directly
+
+        # Para el nuevo botón de descarga junto al título
+        context['code_file_exists'] = bool(tutorial.code_file)
+
+        if context['code_file_exists']:
+            if user_can_download_directly:
+                context['title_download_url'] = reverse('download_code_file', kwargs={'pk': tutorial.pk})
+                context['title_download_cta_type'] = 'download'
+                context['title_download_button_text'] = 'Descargar Código'
+                context['title_download_link_title_attr'] = 'Descargar código fuente del tutorial'
+            elif not current_user.is_authenticated:
+                # Asegúrate de que 'login:login' es el nombre correcto de tu URL de login
+                # y que tu app de login tiene app_name='login'
+                login_url = reverse_lazy('login:login')
+                context['title_download_url'] = f"{login_url}?next={self.request.path}"
+                context['title_download_cta_type'] = 'login'
+                context['title_download_button_text'] = 'Descargar'  # O 'Descargar (Login)'
+                context['title_download_link_title_attr'] = 'Iniciar sesión para descargar'
+            else:  # Autenticado, pero no tiene permisos (ej. plan Básico y no es autor)
+                # Asegúrate de que 'suscripcion_home' es el nombre correcto de tu URL de suscripciones
+                context['title_download_url'] = reverse_lazy('suscripcion_home')
+                context['title_download_cta_type'] = 'subscribe'
+                context['title_download_button_text'] = 'Descargar'  # O 'Descargar (Premium)'
+                context['title_download_link_title_attr'] = 'Obtener membresía para descargar'
         else:
-            context['visible_blocks'] = all_blocks
-            context['mostrar_limite'] = False
+            context['title_download_url'] = '#'
+            context['title_download_cta_type'] = 'none'  # No se mostrará el botón
+            context['title_download_button_text'] = ''
+            context['title_download_link_title_attr'] = ''
 
-        # Lógica para mostrar el botón de descarga:
-        # Permitimos la descarga si el usuario es el autor o si tiene una suscripción distinta a "Básico"
-        if user == tutorial.author or (hasattr(user, 'subscription') and user.subscription.plan != "Básico"):
-            context['mostrar_descarga'] = True
-        else:
-            context['mostrar_descarga'] = False
-
-        # Comentarios y demás datos de contexto
+        # Comentarios
         top_level_comments = tutorial.comments.filter(parent__isnull=True).annotate(
             like_count=Count('likes'),
             dislike_count=Count('dislikes'),
@@ -68,19 +97,20 @@ class TutorialDetailView(FormMixin, DetailView):
 
         if 'form' not in context:
             context['form'] = self.get_form()
-        context['tutorial'] = tutorial
+        # context['tutorial'] ya está disponible como self.object
         return context
 
     def get_success_url(self):
-        # Redirige a la misma URL del detalle del tutorial
         return reverse('tutorial_detail', kwargs={'pk': self.object.pk}) + "#comments"
 
     def post(self, request, *args, **kwargs):
-        # Si el usuario no ha iniciado sesión, se redirige a la página de login.
         if not request.user.is_authenticated:
-            return redirect_to_login(request.get_full_path())
+            # Asumiendo que 'login:login' es el nombre de tu URL de login
+            # y que tu app de login se llama 'login'
+            login_url = reverse_lazy('login:login')
+            return redirect_to_login(request.get_full_path(), login_url=login_url)
 
-        self.object = self.get_object()  # Obtiene el tutorial actual
+        self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
@@ -88,14 +118,12 @@ class TutorialDetailView(FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        # Asumimos que el usuario ya está autenticado
         comment = form.save(commit=False)
         comment.tutorial = self.object
-        comment.author = self.request.user  # Usamos el usuario autenticado
+        comment.author = self.request.user
         parent_id = self.request.POST.get('parent')
         if parent_id:
             try:
-                from core.models import Comment
                 parent_comment = Comment.objects.get(id=parent_id)
                 comment.parent = parent_comment
             except Comment.DoesNotExist:

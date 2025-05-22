@@ -51,14 +51,18 @@ img {
   position: sticky;
   top: 0;
   backdrop-filter: blur(10px);
-  background-color: rgba(241,245,249, 0.8);
+  background-color: rgba(241,245,249, 0.8); /* Considerar variable para tema oscuro */
   z-index: 1000;
   border-bottom: 1px solid var(--gray-200);
 }
+[data-theme="dark"] .navbar {
+    background-color: rgba(15, 23, 42, 0.8); /* Fondo oscuro para navbar en tema oscuro */
+}
+
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 1rem 2rem; /* Este padding se ajustará en móviles */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -68,43 +72,222 @@ img {
   font-weight: 700;
   color: var(--primary);
   transition: color 0.3s;
+  flex-shrink: 0; /* Evita que el logo se encoja */
 }
+/* Por defecto, mostrar el logo completo y ocultar el abreviado */
+.logo .full-logo {
+  display: inline;
+}
+.logo .short-logo {
+  display: none;
+}
+
 .nav-menu {
-  display: flex;
-  gap: 2rem;
+  display: flex; /* Por defecto para escritorio */
+  gap: 1.5rem; /* Reducido ligeramente de 2rem para ganar espacio */
   align-items: center;
   list-style: none;
+  margin: 0; /* Asegurar que no haya márgenes por defecto */
+  padding: 0; /* Asegurar que no haya paddings por defecto */
 }
 .nav-link {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.8rem; /* Reducido ligeramente para ganar espacio */
   border-radius: var(--radius);
   transition: all 0.3s ease;
   color: var(--text);
   font-weight: 500;
+  white-space: nowrap; /* Evita que el texto de los enlaces se parta */
 }
 .nav-link:hover,
-.nav-link.active {
+.nav-link.active { /* .active aquí se refiere a la página actual */
   background-color: var(--gray-100);
 }
-.nav-cta {
+.nav-cta { /* Este es un <a> con clase .nav-link y .nav-cta */
   background-color: var(--primary);
-  color: #fff;
-  padding: 0.75rem 1.5rem;
+  color: #fff !important;
+  padding: 0.75rem 1.2rem; /* Ajustado ligeramente */
   border-radius: var(--radius);
   transition: background-color 0.3s ease;
 }
 .nav-cta:hover {
   background-color: var(--secondary);
+  color: #fff !important;
 }
+
 .mobile-menu-btn {
-  display: none;
+  display: none; /* Oculto por defecto, se muestra en móvil */
   background: none;
   border: none;
   cursor: pointer;
   padding: 0.5rem;
+  color: var(--text); /* Para el color del SVG */
+}
+.mobile-menu-btn svg {
+    stroke: currentColor; /* Hereda el color del botón */
 }
 
-/* Footer */
+
+/* Contenedor para agrupar nav-menu y login-container (OPCIONAL, pero recomendado para mejor control) */
+/* Si decides usar esto, debes modificar tu HTML:
+   <div class="nav-container">
+     <a href="/" class="logo">...</a>
+     <button class="mobile-menu-btn">...</button>
+     <div class="nav-right-group"> <--- ESTE NUEVO DIV
+       <ul class="nav-menu">...</ul>
+       <div class="login-container">...</div>
+     </div>
+   </div>
+*/
+.nav-right-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* Espacio entre el nav-menu y el login-container */
+}
+
+
+/* Login Styles para Escritorio */
+.login-container {
+  display: flex; /* Visible por defecto en escritorio */
+  align-items: center;
+  /* gap: 1rem; */ /* El gap ahora lo maneja nav-right-group si se usa */
+  /* margin-left: 1rem; */ /* Ya no es necesario si se usa nav-right-group */
+  flex-shrink: 0; /* Evita que el contenedor de login se encoja */
+}
+
+
+/* --- INICIO DE CAMBIOS IMPORTANTES PARA RESPONSIVE NAVIGATION --- */
+/* Breakpoint ajustado a 1024px para tablets (landscape) y móviles */
+@media (max-width: 1024px) { /* <<< CAMBIADO DE 768px a 1024px */
+  .nav-container {
+    padding: 0.75rem 1rem; /* Menos padding en pantallas más pequeñas */
+  }
+
+  /* Ocultar el nav-menu de escritorio y el contenedor de login */
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* Justo debajo del navbar */
+    left: 0;
+    right: 0;
+    background-color: var(--background);
+    padding: 1rem;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+    border-top: 1px solid var(--gray-200);
+    z-index: 999; /* Asegurar que esté sobre otros elementos */
+  }
+  .login-container { /* Ocultar el login de escritorio */
+    display: none;
+  }
+  .nav-right-group { /* Si estás usando el agrupador, también se debe ocultar como bloque principal */
+      display: none;
+  }
+
+
+  /* Mostrar el menú móvil cuando tiene la clase .active (añadida por JS) */
+  .nav-menu.active {
+    display: flex;
+  }
+  /* Si usas .nav-right-group y quieres que el menú móvil sea independiente de él: */
+  /* .nav-menu.mobile-active { display:flex; } */
+
+
+  .nav-menu li {
+    width: 100%;
+  }
+  .nav-menu li .nav-link { /* Estilo para todos los links dentro del menú móvil */
+    display: block;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    width: 100%;
+  }
+  .nav-menu li .nav-link.nav-cta { /* Estilo específico para el CTA dentro del menú móvil */
+    margin-top: 0.5rem;
+    text-align: center; /* El CTA puede estar centrado en el móvil */
+  }
+
+
+  .mobile-menu-btn {
+    display: block; /* Muestra el botón de hamburguesa */
+  }
+
+  /* Mostrar los items de login/perfil en el menú móvil */
+  /* (Asegúrate que estos <li> estén DENTRO del <ul class="nav-menu"> en tu HTML) */
+  .nav-menu li.mobile-login {
+    display: list-item; /* o block */
+    width: 100%;
+  }
+  .nav-menu li.mobile-login .nav-link,
+  .nav-menu li.mobile-login button.nav-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+  }
+  .nav-menu li.mobile-login button.nav-link { /* Estilo para el botón de cerrar sesión */
+    background: none;
+    border: none;
+    color: var(--text);
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .nav-menu li.mobile-login button.nav-link:hover {
+    background-color: var(--gray-100);
+  }
+
+
+  /* Ajuste del logo para que cambie junto con el menú */
+  .logo .full-logo {
+    display: none;
+  }
+  .logo .short-logo {
+    display: inline;
+  }
+
+  /* Otros ajustes responsivos que tenías */
+  .hero h1 {
+    font-size: 2rem;
+  }
+}
+
+/* Estilos para pantallas mayores al breakpoint móvil (escritorio) */
+@media (min-width: 1025px) { /* <<< CAMBIADO DE 769px a 1025px */
+  .mobile-menu-btn {
+    display: none; /* Ocultar botón hamburguesa */
+  }
+  .nav-menu {
+    display: flex; /* Mostrar menú de escritorio */
+    position: static;
+    flex-direction: row;
+    background-color: transparent;
+    padding: 0;
+    box-shadow: none;
+    border-top: none;
+  }
+  .login-container { /* Mostrar contenedor de login de escritorio */
+    display: flex;
+  }
+  .nav-right-group { /* Si usas el agrupador */
+      display: flex;
+  }
+
+  /* Ocultar items de login/perfil del menú de escritorio si están duplicados y pensados solo para móvil */
+  .nav-menu li.mobile-login {
+    display: none;
+  }
+
+  /* Asegurar que el logo completo se muestre en escritorio */
+  .logo .full-logo {
+    display: inline;
+  }
+  .logo .short-logo {
+    display: none;
+  }
+}
+/* --- FIN DE CAMBIOS IMPORTANTES PARA RESPONSIVE NAVIGATION --- */
+
+
+/* Footer (sin cambios) */
 .footer {
   background-color: var(--gray-100);
   padding: 4rem 2rem 2rem;
@@ -159,6 +342,8 @@ img {
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
+  background-color: var(--background);
+  color: var(--text);
 }
 .footer-newsletter button {
   background-color: var(--primary);
@@ -181,6 +366,13 @@ img {
   flex-direction: column;
   gap: 1rem;
 }
+@media (min-width: 768px) {
+    .footer-bottom {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
 .legal-links {
   list-style: none;
   padding: 0;
@@ -191,33 +383,10 @@ img {
 .legal-links a {
   color: var(--text);
   transition: color 0.3s ease;
+  font-size: 0.9rem;
 }
 .legal-links a:hover {
   color: var(--primary);
-}
-
-/* Responsive Navigation */
-@media (max-width: 768px) {
-  .nav-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: var(--background);
-    padding: 1rem;
-    flex-direction: column;
-    box-shadow: var(--shadow);
-  }
-  .nav-menu.active {
-    display: flex;
-  }
-  .mobile-menu-btn {
-    display: block;
-  }
-  .hero h1 {
-    font-size: 2rem;
-  }
 }
 
 /* Theme Toggle Button */
@@ -232,25 +401,25 @@ img {
   cursor: pointer;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
+  z-index: 1001;
+}
+[data-theme="dark"] .theme-toggle {
+    background-color: var(--gray-200); /* Ajustar para tema oscuro */
 }
 
-/* Login Styles */
-.login-container {
+
+/* Login Styles (Generales) */
+.login-form { /* Usado en el modal y potencialmente en un login inline si lo tuvieras */
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-left: 1rem;
-}
-.login-form {
-  display: flex;
-  gap: 0.5rem;
+  flex-direction: column; /* Cambiado para modal, si es inline, ajustar */
+  gap: 1rem; /* Espacio entre campos y botón */
 }
 .login-form input[type="text"],
 .login-form input[type="password"] {
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem; /* Más padding para mejor usabilidad */
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-  font-size: 0.9rem;
+  font-size: 1rem;
   outline: none;
   transition: border-color 0.3s ease;
   background-color: var(--background);
@@ -260,9 +429,8 @@ img {
 .login-form input[type="password"]:focus {
   border-color: var(--primary);
 }
-.login-form button,
-.login-btn {
-  padding: 0.5rem 1rem;
+.login-form button {
+  padding: 0.75rem 1.5rem; /* Botón más grande */
   background-color: var(--primary);
   color: #fff;
   border: none;
@@ -270,11 +438,26 @@ img {
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.3s ease;
+  font-size: 1rem;
 }
-.login-form button:hover,
+.login-form button:hover {
+  background-color: var(--secondary);
+}
+.login-btn { /* Botón "Iniciar Sesión" del .login-container */
+  padding: 0.5rem 1rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500; /* Ligeramente menos pesado que el del form */
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
 .login-btn:hover {
   background-color: var(--secondary);
 }
+
 .user-info {
   display: flex;
   align-items: center;
@@ -302,14 +485,21 @@ img {
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.5);
+  align-items: center; /* Para centrar verticalmente el contenido */
+  justify-content: center; /* Para centrar horizontalmente */
+}
+.modal.active { /* Añade esta clase con JS para mostrar el modal */
+    display: flex;
 }
 .modal-content {
   background-color: var(--background);
-  margin: 10% auto;
+  /* margin: 10% auto; Ya no es necesario con flex en .modal */
   padding: 2rem;
   border-radius: var(--radius);
   max-width: 400px;
+  width: 90%; /* Para que no ocupe todo en móviles muy pequeños */
   position: relative;
+  box-shadow: var(--shadow);
 }
 .close-btn {
   color: var(--text);
@@ -319,72 +509,48 @@ img {
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
+  line-height: 1; /* Para mejor alineación */
 }
-.modal .login-form {
-  flex-direction: column;
-  gap: 1rem;
-}
-.modal .login-form input[type="text"],
-.modal .login-form input[type="password"] {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  font-size: 1rem;
-  outline: none;
-  background-color: var(--background);
-  color: var(--text);
-}
-.modal .login-form button {
-  padding: 0.5rem 1rem;
-  background-color: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-.modal .login-form button:hover {
-  background-color: var(--secondary);
-}
+/* .modal .login-form ya está estilizado arriba */
 
-/* Responsive Modal */
-@media (max-width: 768px) {
-  .login-container {
-    display: none;
-  }
-  .nav-menu li.mobile-login {
-    display: block;
-  }
-}
 
-/* En pantallas de escritorio, se oculta el login duplicado en el menú */
-@media (min-width: 769px) {
-  .nav-menu li.mobile-login {
-    display: none;
-  }
-}
 /* Hero Section */
 .hero {
-  padding: 6rem 2rem 4rem;
+  padding: 4rem 1rem 3rem; /* Ajustado padding para responsive */
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
 }
 .hero h1 {
-  font-size: 3rem;
+  font-size: 2.5rem; /* Ajustado, el media query lo baja a 2rem */
   margin-bottom: 1.5rem;
   line-height: 1.2;
+}
+@media (min-width: 768px) {
+    .hero {
+        padding: 6rem 2rem 4rem;
+    }
+    .hero h1 {
+        font-size: 3rem;
+    }
 }
 .hero p {
   font-size: 1.125rem;
   margin-bottom: 2rem;
 }
 
+/* El resto de tu CSS (Featured Posts, Newsletter, Filters, Grids, etc.) se mantiene igual que lo tenías */
+/* ... (pega aquí el resto de tu CSS sin modificar si no afecta al navbar) ... */
+
 /* Featured Posts Section */
 .featured-posts {
-  padding: 4rem 2rem;
+  padding: 4rem 1rem; /* Padding responsive */
   background-color: var(--gray-100);
+}
+@media (min-width: 768px) {
+    .featured-posts {
+        padding: 4rem 2rem;
+    }
 }
 .section-title {
   font-size: 2rem;
@@ -393,10 +559,17 @@ img {
 }
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado minmax */
+  gap: 1.5rem; /* Ajustado gap */
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1rem; /* Padding para que las cards no peguen al borde en móvil */
+}
+@media (min-width: 768px) {
+    .posts-grid {
+        padding: 0; /* Sin padding extra en desktop */
+        gap: 2rem;
+    }
 }
 .post-card {
   background-color: var(--background);
@@ -410,33 +583,48 @@ img {
   transform: translateY(-5px);
 }
 .post-content {
-  padding: 1rem;
+  padding: 1.25rem; /* Ajustado padding */
 }
 .post-content h3 {
-  font-size: 1.5rem;
+  font-size: 1.25rem; /* Ajustado tamaño */
   margin-bottom: 0.75rem;
+  line-height: 1.3;
 }
 .post-content p {
   margin-bottom: 1rem;
+  font-size: 0.95rem; /* Ligeramente más pequeño */
+  line-height: 1.5;
 }
 .read-more {
   color: var(--primary);
   font-weight: 500;
   transition: color 0.3s ease;
+  font-size: 0.9rem;
 }
 .read-more:hover {
   color: var(--secondary);
 }
+
 /* Newsletter Section */
 .newsletter {
-  padding: 4rem 2rem;
+  padding: 3rem 1rem; /* Padding responsive */
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
 }
+@media (min-width: 768px) {
+    .newsletter {
+        padding: 4rem 2rem;
+    }
+}
 .newsletter h2 {
-  font-size: 2rem;
+  font-size: 1.8rem; /* Ajustado */
   margin-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+    .newsletter h2 {
+        font-size: 2rem;
+    }
 }
 .newsletter p {
   font-size: 1rem;
@@ -444,16 +632,24 @@ img {
 }
 .newsletter-form {
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* Apilado en móvil */
+  align-items: center;
   gap: 0.75rem;
-  flex-wrap: wrap;
+}
+@media (min-width: 500px) { /* Lado a lado en pantallas más grandes */
+    .newsletter-form {
+        flex-direction: row;
+        justify-content: center;
+    }
 }
 .newsletter-form input[type="email"] {
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-  width: 300px;
-  max-width: 100%;
+  width: 100%; /* Ancho completo en móvil */
+  max-width: 300px; /* Máximo ancho */
+  background-color: var(--background);
+  color: var(--text);
 }
 .newsletter-form button {
   background-color: var(--primary);
@@ -463,26 +659,45 @@ img {
   border-radius: var(--radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
+  width: 100%; /* Ancho completo en móvil */
+  max-width: 300px; /* Máximo ancho */
+}
+@media (min-width: 500px) {
+    .newsletter-form button {
+        width: auto; /* Ancho automático si está al lado */
+    }
 }
 .newsletter-form button:hover {
   background-color: var(--secondary);
 }
 
-/* Tutorials Filter */
-.tutorials-filter {
+
+/* Filters (Tutorials, Guias, Podcast) */
+.tutorials-filter, .guias-filter, .podcast-filter {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 1rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column; /* Apilado en móvil */
   gap: 1rem;
-  flex-wrap: wrap;
+}
+@media (min-width: 768px) { /* Lado a lado en desktop */
+    .tutorials-filter, .guias-filter, .podcast-filter {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
 .filter-options {
   display: flex;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Permitir que los botones se envuelvan si son muchos */
+  justify-content: center; /* Centrar botones en móvil */
+}
+@media (min-width: 768px) {
+    .filter-options {
+        justify-content: flex-start; /* Alineados a la izquierda en desktop */
+    }
 }
 .filter-btn {
   padding: 0.5rem 1rem;
@@ -499,21 +714,31 @@ img {
   color: #ffffff;
   border-color: var(--primary);
 }
-.filter-btn:hover {
+.filter-btn:hover:not(.active) {
   background-color: var(--gray-100);
 }
-.search-box {
+.search-box { /* Para los filtros */
   position: relative;
-  flex: 1;
-  max-width: 300px;
+  width: 100%; /* Ancho completo en móvil */
+  max-width: 300px; /* Máximo ancho */
+  margin: 0 auto; /* Centrado en móvil */
+}
+@media (min-width: 768px) {
+    .search-box {
+        width: auto; /* Ancho automático en desktop */
+        flex-basis: 300px; /* Ancho base en desktop */
+        margin: 0; /* Sin margen extra */
+    }
 }
 .search-box input {
   width: 100%;
-  padding: 0.5rem 1rem;
-  padding-right: 2.5rem;
+  padding: 0.75rem 1rem; /* Más padding */
+  padding-right: 3rem; /* Espacio para el botón icono */
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   color: var(--text);
+  background-color: var(--background);
+  font-size: 0.9rem;
 }
 .search-box button {
   position: absolute;
@@ -524,29 +749,44 @@ img {
   border: none;
   padding: 0 1rem;
   cursor: pointer;
+  color: var(--text);
+}
+.search-box button i {
+    color: var(--primary); /* Color del icono */
 }
 
-/* Tutorials Grid */
-.tutorials-grid {
+
+/* Grids (Tutorials, Guias, Podcast) */
+.tutorials-grid, .guias-grid, .podcast-grid {
   max-width: 1200px;
   margin: 2rem auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado minmax */
+  gap: 1.5rem; /* Ajustado gap */
+  padding: 0 1rem; /* Padding para que las cards no peguen al borde */
 }
-.tutorial-card {
+@media (min-width: 768px) {
+    .tutorials-grid, .guias-grid, .podcast-grid {
+        padding: 0;
+        gap: 2rem;
+    }
+}
+
+/* Cards (Tutorial, Guia, Podcast) */
+.tutorial-card, .guia-card, .podcast-card {
   background-color: var(--background);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex; /* Para control interno */
+  flex-direction: column;
 }
-.tutorial-card:hover {
+.tutorial-card:hover, .guia-card:hover, .podcast-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow);
 }
-.tutorial-header {
+.tutorial-header, .guia-header, .podcast-header {
   position: relative;
 }
 .category-badge {
@@ -557,443 +797,98 @@ img {
   color: #ffffff;
   padding: 0.25rem 0.75rem;
   border-radius: var(--radius);
-  font-size: 0.875rem;
+  font-size: 0.8rem; /* Ligeramente más pequeño */
+  font-weight: 500;
 }
-.tutorial-image {
+.tutorial-image, .guia-image, .podcast-image {
   width: 100%;
-  height: 200px;
+  height: 180px; /* Altura ligeramente reducida */
   object-fit: cover;
 }
-.tutorial-content {
-  padding: 1.5rem;
-}
-.tutorial-content h3 {
-  margin-bottom: 0.75rem;
-  font-size: 1.5rem;
-  color: var(--text);
-}
-.tutorial-meta {
-  color: var(--gray-200);
-  font-size: 0.875rem;
-  margin: 0.5rem 0;
-}
-.tutorial-content p {
-  margin-bottom: 1rem;
-  color: var(--text);
-}
-.tutorial-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-.read-more {
-  color: var(--primary);
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-.read-more:hover {
-  color: var(--secondary);
-}
-.rating {
-  color: #f59e0b;
-  font-size: 0.9rem;
-}
-
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 2rem 0;
-  padding: 1rem;
-}
-.page-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  color: var(--text);
-}
-.page-btn.active {
-  background-color: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
-}
-.page-btn:hover:not(:disabled) {
-  background-color: var(--gray-100);
-}
-.page-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Guías Filter */
-.guias-filter {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.filter-options {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-.filter-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-.filter-btn.active {
-  background-color: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
-}
-.filter-btn:hover {
-  background-color: var(--gray-100);
-}
-.search-box {
-  position: relative;
-  flex: 1;
-  max-width: 300px;
-}
-.search-box input {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  padding-right: 2.5rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  color: var(--text);
-}
-.search-box button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  background: none;
-  border: none;
-  padding: 0 1rem;
-  cursor: pointer;
-}
-
-/* Guías Grid */
-.guias-grid {
-  max-width: 1200px;
-  margin: 2rem auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 1rem;
-}
-.guia-card {
-  background-color: var(--background);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.guia-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-}
-.guia-header {
-  position: relative;
-}
-.category-badge {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  background-color: var(--primary);
-  color: #ffffff;
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius);
-  font-size: 0.875rem;
-}
-.guia-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-.guia-content {
-  padding: 1.5rem;
-}
-.guia-content h3 {
-  margin-bottom: 0.75rem;
-  font-size: 1.5rem;
-}
-.guia-meta {
-  color: var(--text);
-  font-size: 0.875rem;
-  margin: 0.5rem 0;
-}
-.guia-content p {
-  margin-bottom: 1rem;
-}
-.guia-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-.read-more {
-  color: var(--primary);
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-.read-more:hover {
-  color: var(--secondary);
-}
-.rating {
-  color: #f59e0b;
-  font-size: 0.9rem;
-}
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 2rem 0;
-  padding: 1rem;
-}
-.page-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  color: var(--text);
-}
-.page-btn.active {
-  background-color: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
-}
-.page-btn:hover:not(:disabled) {
-  background-color: var(--gray-100);
-}
-.page-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-/* Podcast Filter */
-.podcast-filter {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.filter-options {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-.filter-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-.filter-btn.active {
-  background-color: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
-}
-.filter-btn:hover {
-  background-color: var(--gray-100);
-}
-.search-box {
-  position: relative;
-  flex: 1;
-  max-width: 300px;
-}
-.search-box input {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  padding-right: 2.5rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  color: var(--text);
-}
-.search-box button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  background: none;
-  border: none;
-  padding: 0 1rem;
-  cursor: pointer;
-}
-/* Podcast Grid */
-.podcast-grid {
-  max-width: 1200px;
-  margin: 2rem auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 1rem;
-}
-.podcast-card {
-  background-color: var(--background);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.podcast-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-}
-.podcast-header {
-  position: relative;
-}
-.category-badge {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  background-color: var(--primary);
-  color: #ffffff;
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius);
-  font-size: 0.875rem;
-}
-.podcast-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-.podcast-content {
-  padding: 1.5rem;
-}
-.podcast-content h3 {
-  margin-bottom: 0.75rem;
-  font-size: 1.5rem;
-}
-.podcast-meta {
-  color: var(--text);
-  font-size: 0.875rem;
-  margin: 0.5rem 0;
-}
-.podcast-content p {
-  margin-bottom: 1rem;
-}
-.podcast-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-.read-more {
-  color: var(--primary);
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-.read-more:hover {
-  color: var(--secondary);
-}
-.rating {
-  color: #f59e0b;
-  font-size: 0.9rem;
-}
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 2rem 0;
-  padding: 1rem;
-}
-.page-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  color: var(--text);
-}
-.page-btn.active {
-  background-color: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
-}
-.page-btn:hover:not(:disabled) {
-  background-color: var(--gray-100);
-}
-.page-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-/* Subscription Form Section */
-.subscription-section {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: var(--gray-100);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  text-align: center;
-}
-.subscription-section h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-.subscription-section p {
-  font-size: 1rem;
-  margin-bottom: 2rem;
-}
-.subscription-form {
+.tutorial-content, .guia-content, .podcast-content {
+  padding: 1.25rem; /* Ajustado padding */
+  flex-grow: 1; /* Para que el contenido crezca y empuje el footer hacia abajo */
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  align-items: center;
 }
-.subscription-form input[type="email"] {
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
+.tutorial-content h3, .guia-content h3, .podcast-content h3 {
+  margin-bottom: 0.5rem; /* Menos espacio */
+  font-size: 1.2rem; /* Ajustado tamaño */
+  color: var(--text);
+  line-height: 1.3;
+}
+.tutorial-meta, .guia-meta, .podcast-meta {
+  color: var(--text);
+  opacity: 0.7;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem; /* Más espacio antes de la descripción */
+}
+.tutorial-content p, .guia-content p, .podcast-content p {
+  margin-bottom: 1rem;
+  font-size: 0.9rem; /* Ligeramente más pequeño */
+  line-height: 1.5;
+  flex-grow: 1; /* Para que la descripción ocupe espacio */
+}
+.tutorial-footer, .guia-footer, .podcast-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Empuja el footer de la card hacia abajo */
+  padding-top: 1rem; /* Espacio antes del footer de la card */
+  border-top: 1px solid var(--gray-100); /* Separador sutil */
+}
+.rating {
+  color: #f59e0b;
+  font-size: 0.85rem;
+}
+.rating i { /* Si usas FontAwesome para estrellas */
+    margin-right: 0.1em;
+}
+
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Para que los botones se envuelvan en móvil */
+  gap: 0.5rem;
+  margin: 3rem auto 2rem auto; /* Más margen superior */
+  padding: 0 1rem;
+}
+.page-btn {
+  padding: 0.6rem 1rem; /* Ligeramente más grandes */
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
-}
-.subscription-form button {
-  background-color: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius);
+  background-color: var(--background); /* Fondo explícito */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1; /* Para consistencia */
 }
-.subscription-form button:hover {
-  background-color: var(--secondary);
+.page-btn.active {
+  background-color: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
 }
-/* Sección de Planes de Suscripción */
+.page-btn:hover:not(:disabled):not(.active) {
+  background-color: var(--gray-100);
+  border-color: var(--gray-200); /* Mantener borde o aclararlo */
+}
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--gray-100);
+}
+
+/* Subscription (Membresía) & Contact Section - Revisa y ajusta según tu diseño final */
+/* ... (Asegúrate de que estas secciones también sean responsivas) ... */
+
+/* Sección de Planes de Suscripción (ejemplo, adaptar) */
 .subscriptions {
   max-width: 1200px;
   margin: 3rem auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
   text-align: center;
 }
 .subscriptions h2 {
@@ -1002,8 +897,8 @@ img {
 }
 .plan-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 .plan {
   background-color: var(--background);
@@ -1012,6 +907,8 @@ img {
   padding: 1.5rem;
   box-shadow: var(--shadow);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 .plan:hover {
   transform: translateY(-5px);
@@ -1020,76 +917,157 @@ img {
 .plan h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  color: var(--primary);
 }
 .plan .price {
   font-size: 2rem;
-  margin-bottom: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--text);
 }
-.plan p {
-  font-size: 1rem;
+.plan .price span {
+    font-size: 0.9rem;
+    font-weight: normal;
+    opacity: 0.7;
+}
+.plan ul.features { /* Si tienes una lista de características */
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 1.5rem 0;
+    text-align: left;
+    flex-grow: 1;
+}
+.plan ul.features li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5em;
+    position: relative;
+    font-size: 0.95rem;
+}
+.plan ul.features li::before {
+    content: '✓';
+    color: var(--primary);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+.plan p.description { /* Si hay una descripción general */
+  font-size: 0.95rem;
   margin-bottom: 1.5rem;
+  flex-grow: 1;
 }
-.plan .cta {
+.plan .cta-button { /* Cambiado de .plan .cta para evitar conflicto con .nav-cta */
   display: inline-block;
   background-color: var(--primary);
-  color: #fff;
+  color: #fff !important;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   transition: background-color 0.3s ease;
+  text-decoration: none;
+  margin-top: auto; /* Para empujar al final si es el último elemento */
+  font-weight: 500;
 }
-.plan .cta:hover {
+.plan .cta-button:hover {
   background-color: var(--secondary);
 }
+
 /* Contact Section */
 .contact-section {
   max-width: 1200px;
   margin: 2rem auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   gap: 2rem;
 }
+@media (min-width: 992px) { /* Cambiar a dos columnas en pantallas más grandes */
+    .contact-section {
+        grid-template-columns: 1fr 1fr; /* O minmax(300px, 1fr) si prefieres */
+    }
+}
 .contact-info,
-.contact-form {
+.contact-form-container {
   background-color: var(--gray-100);
   padding: 2rem;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
 .contact-info h2,
-.contact-form h2 {
-  font-size: 2rem;
+.contact-form-container h2 {
+  font-size: 1.8rem; /* Ajustado */
   margin-bottom: 1rem;
   color: var(--primary);
 }
-.contact-info p {
+.contact-info p, .contact-info ul li {
   margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
-.contact-form form {
+.contact-info ul {
+    list-style: none;
+    padding: 0;
+}
+.contact-info ul li {
+    display: flex;
+    align-items: flex-start; /* Para que el icono y texto largo se alineen bien */
+}
+.contact-info ul li i.fas, /* Si usas FontAwesome */
+.contact-info ul li i.fab {
+    margin-right: 0.75rem;
+    color: var(--primary);
+    width: 20px;
+    text-align: center;
+    margin-top: 0.2em; /* Ajuste vertical del icono */
+}
+
+.contact-form-container form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.contact-form input,
-.contact-form textarea {
+.contact-form-container label { /* Añadir labels para accesibilidad */
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+}
+.contact-form-container input,
+.contact-form-container textarea {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
+  background-color: var(--background);
+  color: var(--text);
+  font-size: 0.95rem;
 }
-.contact-form button {
+.contact-form-container input:focus,
+.contact-form-container textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    /* box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); /* Reemplaza con los RGB de tu --primary */
+}
+.contact-form-container textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+.contact-form-container button[type="submit"] {
   background-color: var(--primary);
   color: #fff;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.5rem; /* Botón un poco más grande */
   border-radius: var(--radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
 }
-.contact-form button:hover {
+.contact-form-container button[type="submit"]:hover {
   background-color: var(--secondary);
 }
-/* Contenedor principal del captcha */
+
+
+/* Captcha y reCAPTCHA (manteniendo tus estilos, asegúrate de su responsividad) */
 .captcha-container {
   display: flex;
   flex-direction: column;
@@ -1097,8 +1075,6 @@ img {
   gap: 0.5rem;
   margin: 1.5rem 0;
 }
-
-/* Imagen de placeholder para el captcha */
 .captcha-container img {
   width: 200px;
   height: auto;
@@ -1107,137 +1083,77 @@ img {
   border-radius: var(--radius);
   margin-bottom: 0.5rem;
 }
-
-/* Campo de texto para ingresar el código */
 .captcha-container input {
   padding: 0.85rem 1rem;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   width: 100%;
+  max-width: 200px;
   text-align: center;
   font-size: 1rem;
   transition: border-color 0.3s;
+  background-color: var(--background);
+  color: var(--text);
 }
 .captcha-container input:focus {
   outline: none;
   border-color: var(--primary);
 }
+
 .recaptcha-fake-container {
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   padding: 0.75rem;
-  display: inline-block;
+  display: block; /* Para que el margin auto funcione bien */
   width: 100%;
-  max-width: 300px;  /* Ajusta si quieres otro ancho */
-  background-color: #fff;
-  box-shadow: var(--shadow);
+  max-width: 304px;  /* Ancho estándar de reCAPTCHA */
+  background-color: #f9f9f9; /* Color típico de fondo de reCAPTCHA */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   text-align: left;
-  margin: 1.5rem auto; /* Centra el widget horizontalmente */
+  margin: 1.5rem auto;
 }
-
+[data-theme="dark"] .recaptcha-fake-container {
+    background-color: var(--gray-100);
+    border-color: var(--gray-200);
+}
 .recaptcha-checkbox-container {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem; /* Más espacio */
 }
-
 .recaptcha-checkbox-container input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
+  width: 28px; /* Tamaño típico */
+  height: 28px;
   cursor: pointer;
+  accent-color: var(--primary);
 }
-
 .fake-recaptcha-label {
-  font-size: 0.95rem;
-  color: #444;
+  font-size: 0.9rem;
+  color: var(--text);
   cursor: pointer;
 }
-
 .recaptcha-footer {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   border-top: 1px solid var(--gray-200);
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: #666;
+  align-items: center; /* Alinear verticalmente */
+  justify-content: center; /* Centrar si es una sola línea */
+  font-size: 0.7rem; /* Texto pequeño */
+  color: #555; /* Color de texto típico */
 }
+[data-theme="dark"] .recaptcha-footer {
+    color: var(--gray-200);
+    border-top-color: var(--gray-200);
+}
+/* (Fin estilos reCAPTCHA) */
 
-.recaptcha-footer strong {
-  font-weight: 600;
-  color: #333;
-}
 
-.recaptcha-footer small {
-  color: #999;
-}
-.logout-btn {
-  padding: 0.5rem 1rem;
-  background-color: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.logout-btn:hover {
-  background-color: var(--secondary);
-}
-
-/* Sección de Buscador Mejorado */
-.search {
-  margin: 2rem 0;
-  text-align: center;
-}
-
-.search-container {
-  max-width: 500px;
-  margin: 0 auto;
-  background-color: var(--gray-100);
-  padding: 1rem 1.5rem;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-.search-form {
-  display: flex;
-  overflow: hidden;
-  border-radius: var(--radius);
-}
-
-.search-form input[type="text"] {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--gray-200);
-  border-right: none;
-  font-size: 1rem;
-  border-radius: var(--radius) 0 0 var(--radius);
-  outline: none;
-}
-
-.search-form button {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  background-color: var(--primary);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  border-radius: 0 var(--radius) var(--radius) 0;
-}
-
-.search-form button:hover {
-  background-color: var(--secondary);
-}
-
-/* Contenedor para el menú de usuario */
+/* User Menu (Dropdown en el navbar) */
 .user-menu {
   position: relative;
   display: inline-block;
 }
-
-/* Botón que muestra el ícono de usuario */
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -1247,57 +1163,62 @@ img {
   border: none;
   cursor: pointer;
   transition: color 0.3s ease;
-  color: var(--primary);
+  color: var(--text); /* Color por defecto del icono */
 }
-
+.icon-btn:hover {
+    color: var(--primary); /* Color al hacer hover */
+}
 .icon-btn svg {
   width: 24px;
   height: 24px;
+  stroke: currentColor; /* El SVG hereda el color del botón */
 }
-
-/* Menú desplegable oculto por defecto */
 .dropdown-menu {
   display: none;
   position: absolute;
   right: 0;
-  top: 110%;
+  top: calc(100% + 0.5rem); /* Pequeño espacio */
   background-color: var(--background);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 0.5rem 0;
-  z-index: 1000;
-  width: 150px;
+  z-index: 1001; /* Encima de otros elementos del navbar */
+  width: 180px; /* Ancho del dropdown */
+  min-width: max-content;
 }
-
-/* Mostrar el menú cuando se active */
 .dropdown-menu.show {
   display: block;
 }
-
-/* Estilos para los elementos del menú */
 .dropdown-menu a,
 .dropdown-menu button {
   display: block;
   width: 100%;
   text-align: left;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   background: none;
   border: none;
   color: var(--text);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
-
 .dropdown-menu a:hover,
 .dropdown-menu button:hover {
   background-color: var(--gray-100);
+  color: var(--primary);
+}
+.dropdown-menu form { /* Para el botón de logout si es un form */
+    margin: 0;
 }
 
-/* Modal para confirmación */
+
+/* Modal de Confirmación */
+/* (Tus estilos para .modal-content.confirm y .confirm-buttons se ven bien) */
 .modal-content.confirm {
-  margin: 10% auto;
+  margin: 15% auto;
   padding: 2rem;
   border-radius: var(--radius);
   max-width: 400px;
@@ -1305,16 +1226,23 @@ img {
   text-align: center;
   background: var(--background);
 }
-
-/* Contenedor para ambos botones (Aceptar / Cancelar) */
+.modal-content.confirm h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+.modal-content.confirm p {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    color: var(--text);
+    opacity: 0.9;
+}
 .confirm-buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
-
-/* Botones de confirmación */
 .modal-content.confirm button {
   background-color: var(--primary);
   color: #fff;
@@ -1322,22 +1250,27 @@ img {
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  flex-grow: 1;
+  max-width: 150px;
 }
 .modal-content.confirm button:hover {
   background-color: var(--secondary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
-/* Botón de cancelar con un color distinto (opcional) */
 .modal-content.confirm .cancel-button {
-  background-color: #cbd5e1; /* Gris claro */
+  background-color: var(--gray-200);
   color: var(--text);
 }
 .modal-content.confirm .cancel-button:hover {
-  background-color: #94a3b8; /* Gris un poco más oscuro */
+  background-color: #b0bac9; /* Un poco más oscuro que el gris claro */
+  color: var(--text);
 }
 
+
+/* Loading Overlay */
 #loadingOverlay {
   display: none;
   position: fixed;
@@ -1346,43 +1279,86 @@ img {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.6); /* Un poco más oscuro */
+  justify-content: center;
+  align-items: center;
 }
-#loadingOverlay .modal-content {
+#loadingOverlay.active {
+    display: flex;
+}
+#loadingOverlay .modal-content { /* Contenedor del spinner en el overlay */
   background-color: transparent;
   box-shadow: none;
   border: none;
-  max-width: 100px;
-  margin: 40% auto;
+  padding: 2rem;
+  text-align: center;
+  max-width: 200px;
 }
 .spinner {
-  border: 4px solid var(--gray-200);
-  border-top: 4px solid var(--primary);
+  border: 4px solid rgba(255,255,255,0.3); /* Borde claro para overlay oscuro */
+  border-top: 4px solid #fff; /* Parte que gira, blanca */
   border-radius: 50%;
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
-  margin: 0 auto;
+  margin: 0 auto 1rem auto;
 }
+/* Si usas tema oscuro y quieres que el spinner se adapte a --primary del tema oscuro */
+[data-theme="dark"] .spinner {
+    border-top-color: var(--primary); /* Usar el primario del tema oscuro */
+}
+#loadingOverlay p {
+    color: #fff; /* Texto blanco */
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 0;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Por defecto, mostrar el logo completo y ocultar el abreviado */
-.logo .full-logo {
-  display: inline;
+/* Sección de Buscador (general, no el de filtros) */
+.search { /* Contenedor de la sección de búsqueda */
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: center;
 }
-.logo .short-logo {
-  display: none;
+.search-container { /* El div que envuelve el form */
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: var(--gray-100);
+  padding: 1.5rem; /* Más padding */
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
-
-/* En pantallas móviles (por ejemplo, menos de 600px) se oculta el logo completo y se muestra el abreviado */
-@media (max-width: 600px) {
-  .logo .full-logo {
-    display: none;
-  }
-  .logo .short-logo {
-    display: inline;
-  }
+.search-form {
+  display: flex;
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-200);
+  overflow: hidden; /* Para que el borde y radius funcionen bien */
+}
+.search-form input[type="text"] {
+  flex: 1;
+  padding: 0.85rem 1rem; /* Más padding */
+  border: none; /* Borde ya está en .search-form */
+  font-size: 1rem;
+  outline: none;
+  background-color: var(--background);
+  color: var(--text);
+}
+.search-form button {
+  padding: 0.85rem 1.5rem;
+  border: none;
+  background-color: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.search-form button i { /* Si usas un icono */
+    color: #fff;
+}
+.search-form button:hover {
+  background-color: var(--secondary);
 }
