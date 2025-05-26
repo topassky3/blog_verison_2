@@ -249,32 +249,33 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from core.models import Tutorial, Lector
 
+# VISTA views.py - CORREGIDA
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from core.models import Tutorial, Lector
+# No necesitas 'escape' si solo lo usas aquí, puedes borrar el import
+
 def load_all_tutorial_blocks(request, tutorial_id):
     tutorial = get_object_or_404(Tutorial, pk=tutorial_id)
     blocks = tutorial.blocks.all().order_by('order')
     total = blocks.count()
 
-    # Si el usuario no está autenticado, se asigna el usuario "electro"
     if not request.user.is_authenticated:
         user = get_object_or_404(Lector, username="electro")
     else:
         user = request.user
 
-    # Verificar si se debe limitar el contenido:
-    # Si el usuario (real o por defecto) no es el autor y tiene plan "Básico"
     if user != tutorial.author and (user.username == "electro" or (hasattr(user, 'subscription') and user.subscription.plan == "Básico")) and total > 0:
         visible_count = int(total * 0.6)
         blocks = blocks[:visible_count]
 
     blocks_data = []
     for block in blocks:
+        # Aquí ya no escapamos el contenido del código
         content = block.content
-        if block.block_type == 'code':
-            # Escapa el contenido para que se muestre como texto literal
-            content = escape(content)
-        elif block.block_type == 'text':
-            # Envolver el contenido en un contenedor aislado
+        if block.block_type == 'text':
             content = '<div class="text-block-wrapper">' + content + '</div>'
+
         blocks_data.append({
             'id': block.id,
             'block_type': block.block_type,

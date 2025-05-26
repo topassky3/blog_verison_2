@@ -115,6 +115,40 @@ img { max-width: 100%; display: block; }
   gap: 2rem;
 }
 
+article {
+  /* ¡CRUCIAL! Evita que el artículo se expanda si su contenido se desborda. */
+  overflow-x: hidden;
+
+  /* (El resto de tus estilos para article están bien) */
+  padding: 2rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  background-color: var(--background);
+}
+
+.tutorial-content {
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+.block-code {
+  background-color: var(--gray-100);
+  border-left: 4px solid var(--secondary);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius);
+}
+
+/* El elemento <pre> DENTRO del .block-code que tendrá el scroll */
+.block-code pre {
+  margin: 0;
+  padding: 0;
+  overflow-x: auto; /* Genera la barra de scroll horizontal */
+  white-space: pre;  /* Mantiene el código en una sola línea */
+  font-family: "Courier New", monospace;
+  font-size: 0.9em;
+}
+
 @media (max-width: 1024px) {
   .container {
     /* Cambiamos a una sola columna y reducimos margen/padding si quieres */
@@ -171,15 +205,6 @@ article {
   background-color: #f9f9f9;
   border-left: 4px solid var(--primary);
   padding: 1rem;
-}
-.block-code {
-  background-color: var(--gray-100);
-  border-left: 4px solid var(--secondary);
-  padding: 0.25rem 0.5rem;
-  font-family: "Courier New", monospace;
-  white-space: pre-wrap;
-  overflow-wrap: break-word; /* Permite quiebres en palabras largas si es necesario */
-  word-break: normal; /* Evita romper arbitrariamente las palabras */
 }
 
 .hljs {
@@ -1010,7 +1035,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <script>
 // Función para cargar todos los bloques mediante Ajax
 function loadAllBlocks() {
-  // Muestra el overlay de carga antes de iniciar la petición
   const overlay = document.getElementById('loadingOverlay');
   overlay.style.display = 'flex';
 
@@ -1018,33 +1042,50 @@ function loadAllBlocks() {
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById('tutorial-blocks-container');
+
+      // Limpiamos el contenedor por si acaso
+      container.innerHTML = '';
+
       data.blocks.forEach(function(block) {
         const div = document.createElement('div');
         div.classList.add('tutorial-block');
-        // Agrega la clase según el tipo de bloque
-        if (block.block_type === 'text') {
-          div.classList.add('block-text');
-        } else if (block.block_type === 'latex') {
-          div.classList.add('block-latex');
-        } else if (block.block_type === 'code') {
+
+        // Lógica correcta para cada tipo de bloque
+        if (block.block_type === 'code') {
           div.classList.add('block-code');
+          const pre = document.createElement('pre');
+          pre.textContent = block.content; // Usamos textContent para el código
+          div.appendChild(pre);
+        } else {
+          // Para 'text', 'latex', o cualquier otro tipo, usamos innerHTML
+          if (block.block_type === 'text') {
+            div.classList.add('block-text');
+          } else if (block.block_type === 'latex') {
+            div.classList.add('block-latex');
+          }
+          div.innerHTML = block.content;
         }
-        // Inserta el contenido; asegúrate de que block.content sea seguro
-        div.innerHTML = block.content;
+
+        // Añadimos el div a la página UNA SOLA VEZ
         container.appendChild(div);
       });
-      // Oculta el overlay al terminar la carga
+
       overlay.style.display = 'none';
+
+      // Opcional pero recomendado: si usas highlight.js para colorear el código
+      if (typeof hljs !== 'undefined') {
+        document.querySelectorAll('.block-code pre').forEach((pre) => {
+          hljs.highlightElement(pre);
+        });
+      }
     })
     .catch(error => {
       console.error('Error al cargar bloques:', error);
-      // Oculta el overlay aun en caso de error
       overlay.style.display = 'none';
     });
 }
 
 document.addEventListener('DOMContentLoaded', loadAllBlocks);
-
 </script>
 <script>
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn'),
