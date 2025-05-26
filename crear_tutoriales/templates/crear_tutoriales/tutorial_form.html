@@ -270,7 +270,7 @@
             </div>
           {% elif block.block_type == 'code' %}
             <div class="editor-block block-code" draggable="true">
-              <textarea rows="5">{{ block.content|safe }}</textarea>
+              <textarea rows="5">{{ block.content }}</textarea>
             </div>
           {% endif %}
         {% endfor %}
