@@ -1,10 +1,9 @@
 {% extends "core/core.html" %}
 {% load tutorial_tags %}
 
-{% block title %}Politica de privacidad | WebDev Blog{% endblock %}
+{% block title %}Política de Privacidad | Tu Código Cotidiano{% endblock %}
 
 {% block extra_head %}
-  <!-- Estilos específicos para la Política de Privacidad -->
   <style>
     .privacy-policy {
       padding: 2rem;
@@ -26,6 +25,12 @@
       margin-bottom: 1rem;
       color: var(--secondary);
     }
+    .privacy-policy h3 {
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-focus); /* Un color que destaque pero menos que h2 */
+    }
     .privacy-policy p,
     .privacy-policy li {
       font-size: 1rem;
@@ -38,6 +43,9 @@
       list-style: disc;
       padding-left: 1.5rem;
       margin-bottom: 1rem;
+    }
+    .privacy-policy strong {
+        color: var(--text-focus);
     }
     .privacy-policy a {
       color: var(--primary);
@@ -60,6 +68,9 @@
       .privacy-policy h2 {
         font-size: 1.5rem;
       }
+      .privacy-policy h3 {
+        font-size: 1.15rem;
+      }
       .privacy-policy p,
       .privacy-policy li {
         font-size: 0.95rem;
@@ -74,45 +85,146 @@
   <p><strong>&Uacute;ltima actualizaci&oacute;n:</strong> 06 de marzo de 2025</p>
 
   <h2>1. Introducci&oacute;n</h2>
-  <p>En tucodigocotidiano, valoramos tu privacidad y estamos comprometidos a proteger tu informaci&oacute;n personal. Esta Pol&iacute;tica de Privacidad explica c&oacute;mo recopilamos, usamos, almacenamos y protegemos los datos que obtenemos de ti al utilizar nuestro sitio web.</p>
+  <p>Bienvenido/a a Tu C&oacute;digo Cotidiano (tucodigocotidiano.yarumaltech.com). En Tu C&oacute;digo Cotidiano ("nosotros", "nuestro"), valoramos profundamente tu privacidad y estamos comprometidos con la protecci&oacute;n de tu informaci&oacute;n personal. Esta Pol&iacute;tica de Privacidad tiene como objetivo informarte de manera clara y detallada sobre c&oacute;mo recopilamos, usamos, almacenamos, protegemos y compartimos tus datos personales cuando interact&uacute;as con nuestro sitio web y los servicios que ofrecemos.</p>
+  <p>Esta pol&iacute;tica se ha elaborado en consideraci&oacute;n de la legislaci&oacute;n colombiana aplicable en materia de protecci&oacute;n de datos, incluyendo la Ley 1581 de 2012 y sus decretos reglamentarios.</p>
 
-  <h2>2. Informaci&oacute;n que Recopilamos</h2>
+  <h2>2. Responsable del Tratamiento de Datos</h2>
+  <p>El responsable del tratamiento de tus datos personales es Juan Felipe Orozco, propietario de Tu C&oacute;digo Cotidiano. Puedes contactarnos para cualquier asunto relacionado con esta pol&iacute;tica o tus datos personales a trav&eacute;s del correo electr&oacute;nico: <a href="mailto:orozjuanfelipe@gmail.com">orozjuanfelipe@gmail.com</a>.</p>
+
+  <h2>3. Informaci&oacute;n que Recopilamos</h2>
+  <p>Recopilamos diferentes tipos de informaci&oacute;n personal dependiendo de c&oacute;mo interact&uacute;es con nuestro sitio web:</p>
+
+  <h3>3.1. Datos proporcionados directamente por ti:</h3>
   <ul>
-    <li><strong>Datos de contacto:</strong> Nombre, direcci&oacute;n de correo electr&oacute;nico y, en ocasiones, otros datos de contacto que nos facilites.</li>
-    <li><strong>Datos de navegaci&oacute;n:</strong> Informaci&oacute;n obtenida autom&aacute;ticamente, como direcci&oacute;n IP, tipo de navegador, p&aacute;ginas visitadas y tiempo de navegaci&oacute;n.</li>
-    <li><strong>Cookies:</strong> Utilizamos cookies para mejorar la experiencia del usuario y analizar el tr&aacute;fico del sitio. Puedes ajustar la configuraci&oacute;n de cookies en tu navegador.</li>
+    <li><strong>Datos de la cuenta de Lector (`Lector`):</strong>
+      <ul>
+        <li>Nombre de usuario y direcci&oacute;n de correo electr&oacute;nico (y su estado de confirmaci&oacute;n).</li>
+        <li>Contrase&ntilde;a (almacenamos un hash seguro de tu contrase&ntilde;a, nunca la contrase&ntilde;a en texto plano).</li>
+        <li>N&uacute;mero de tel&eacute;fono (opcional, si decides proporcionarlo).</li>
+        <li>Biograf&iacute;a (opcional, si decides completarla).</li>
+        <li>Imagen de perfil (opcional, si decides subirla). Los archivos de imagen se almacenan utilizando GridFSStorage en nuestra base de datos MongoDB.</li>
+        <li>Informaci&oacute;n sobre tu pertenencia a grupos de usuarios (ej. "Escritor").</li>
+      </ul>
+    </li>
+    <li><strong>Datos de Suscripci&oacute;n al Bolet&iacute;n (`Subscriber`):</strong>
+      <ul>
+        <li>Direcci&oacute;n de correo electr&oacute;nico si te suscribes a nuestro bolet&iacute;n informativo.</li>
+      </ul>
+    </li>
+    <li><strong>Datos de Suscripciones de Pago (`Subscription`):</strong>
+      <ul>
+        <li>Plan de suscripci&oacute;n elegido (ej. B&aacute;sico, Premium, Anual).</li>
+        <li>Estado de tu suscripci&oacute;n (activa/inactiva) y fecha de expiraci&oacute;n.</li>
+        <li><strong>Informaci&oacute;n de Pago:</strong> Cuando realizas un pago por una suscripci&oacute;n, el proceso es gestionado por un proveedor de servicios de pago externo. Nosotros <strong>no almacenamos</strong> los datos completos de tu tarjeta de cr&eacute;dito o d&eacute;bito. Solo recibimos informaci&oacute;n necesaria para confirmar el pago y gestionar tu suscripci&oacute;n, como el identificador de la transacci&oacute;n y el estado del pago. Te recomendamos revisar las pol&iacute;ticas de privacidad de nuestro(s) proveedor(es) de pago durante el proceso de compra.</li>
+      </ul>
+    </li>
+    <li><strong>Contenido Generado por el Usuario:</strong>
+      <ul>
+        <li><strong>Para usuarios con rol "Escritor":</strong> T&iacute;tulos, descripciones, duraci&oacute;n, nivel, categor&iacute;as, im&aacute;genes representativas y de carrusel, archivos de c&oacute;digo (.zip), y archivos de audio para los Tutoriales, Gu&iacute;as y Podcasts que crees y publiques. El contenido de los bloques (texto, LaTeX, c&oacute;digo, im&aacute;genes) dentro de Tutoriales y Gu&iacute;as tambi&eacute;n es recopilado. Todos los archivos multimedia y de c&oacute;digo se almacenan utilizando GridFSStorage.</li>
+        <li><strong>Para todos los Lectores registrados:</strong> El contenido de los comentarios que publiques en Tutoriales, Gu&iacute;as y Podcasts, incluyendo las valoraciones (ratings) que asignes.</li>
+      </ul>
+    </li>
+    <li><strong>Datos de Contacto General:</strong> Si nos contactas a trav&eacute;s de nuestro correo electr&oacute;nico o formularios de contacto (si los hubiera), recopilaremos la informaci&oacute;n que nos proporciones, como tu nombre, correo electr&oacute;nico y el contenido de tu mensaje.</li>
   </ul>
 
-  <h2>3. Uso de la Informaci&oacute;n</h2>
-  <p>Utilizamos la informaci&oacute;n recopilada para:</p>
+  <h3>3.2. Datos recopilados autom&aacute;ticamente:</h3>
   <ul>
-    <li>Proveer y mantener nuestros servicios.</li>
-    <li>Personalizar tu experiencia en el sitio.</li>
-    <li>Enviar comunicaciones, actualizaciones o boletines informativos, si has dado tu consentimiento.</li>
-    <li>Analizar el uso del sitio para mejorarlo y ofrecer contenido relevante.</li>
+    <li><strong>Datos de Navegaci&oacute;n y Uso:</strong> Direcci&oacute;n IP, tipo y versi&oacute;n del navegador, sistema operativo, p&aacute;ginas que visitas dentro de nuestro sitio, la fecha y hora de tu visita, el tiempo que pasas en esas p&aacute;ginas y otros datos de diagn&oacute;stico.</li>
+    <li><strong>Informaci&oacute;n de Interacci&oacute;n:</strong> Registros de "me gusta" y "no me gusta" que asignes a los comentarios.</li>
+    <li><strong>Cookies y Tecnolog&iacute;as Similares:</strong> Utilizamos cookies y tecnolog&iacute;as de seguimiento similares para rastrear la actividad en nuestro servicio y mantener cierta informaci&oacute;n. Consulta la secci&oacute;n "6. Cookies y Tecnolog&iacute;as Similares" para m&aacute;s detalles.</li>
   </ul>
 
-  <h2>4. Compartir Informaci&oacute;n</h2>
-  <p>No compartimos tu informaci&oacute;n personal con terceros, salvo en los siguientes casos:</p>
+  <h2>4. Finalidades del Tratamiento de Datos (C&oacute;mo Usamos tu Informaci&oacute;n)</h2>
+  <p>Utilizamos la informaci&oacute;n personal recopilada para las siguientes finalidades:</p>
   <ul>
-    <li>Cuando sea necesario para cumplir con una obligaci&oacute;n legal.</li>
-    <li>Con proveedores de servicios que nos asisten en la operaci&oacute;n del sitio, quienes est&aacute;n obligados a mantener la confidencialidad de los datos.</li>
+    <li><strong>Proveer y mantener nuestro servicio:</strong> Incluyendo la creaci&oacute;n y gesti&oacute;n de tu cuenta de `Lector`, la autenticaci&oacute;n y el acceso a las funcionalidades del sitio.</li>
+    <li><strong>Gestionar tus suscripciones:</strong> Procesar tus suscripciones de pago (a trav&eacute;s de nuestros proveedores externos) y administrar el acceso al contenido y caracter&iacute;sticas seg&uacute;n tu plan.</li>
+    <li><strong>Personalizar tu experiencia:</strong> Mostrar contenido relevante, recordar tus preferencias y facilitar tu navegaci&oacute;n.</li>
+    <li><strong>Comunicarnos contigo:</strong> Enviar notificaciones importantes sobre tu cuenta, cambios en nuestros servicios o pol&iacute;ticas, responder a tus consultas y solicitudes de soporte.</li>
+    <li><strong>Enviar el bolet&iacute;n informativo:</strong> Si te has suscrito (`Subscriber`), te enviaremos nuestro bolet&iacute;n con noticias, art&iacute;culos y ofertas, siempre con la opci&oacute;n de darte de baja.</li>
+    <li><strong>Publicar y mostrar contenido:</strong> Permitir que los "Escritores" publiquen su contenido (tutoriales, gu&iacute;as, podcasts) y que todos los usuarios interact&uacute;en a trav&eacute;s de comentarios y valoraciones.</li>
+    <li><strong>Mejorar nuestro sitio web:</strong> Analizar c&oacute;mo los usuarios utilizan nuestro sitio para entender sus necesidades, mejorar la funcionalidad, optimizar el rendimiento y desarrollar nuevo contenido y servicios.</li>
+    <li><strong>Cumplir con obligaciones legales:</strong> Atender requerimientos de autoridades competentes y defender nuestros derechos.</li>
+    <li><strong>Seguridad:</strong> Para mantener la seguridad de nuestro sitio, prevenir el fraude y hacer cumplir nuestros T&eacute;rminos de Servicio.</li>
   </ul>
 
-  <h2>5. Seguridad de la Informaci&oacute;n</h2>
-  <p>Implementamos medidas de seguridad t&eacute;cnicas y organizativas para proteger tus datos personales contra p&eacute;rdida, acceso no autorizado o divulgaci&oacute;n.</p>
+  <h2>5. Con Qui&eacute;n Compartimos tu Informaci&oacute;n</h2>
+  <p>No vendemos, alquilamos ni cedemos tu informaci&oacute;n personal a terceros con fines de marketing. Solo compartimos tu informaci&oacute;n en las siguientes circunstancias:</p>
+  <ul>
+    <li><strong>Proveedores de Servicios de Pago:</strong> Compartimos la informaci&oacute;n necesaria con nuestros procesadores de pago externos para gestionar tus transacciones de suscripci&oacute;n. Estos proveedores tienen sus propias pol&iacute;ticas de privacidad y est&aacute;n obligados a proteger tu informaci&oacute;n.</li>
+    <li><strong>Proveedores de Servicios T&eacute;cnicos:</strong> Podemos utilizar servicios de terceros que nos ayudan a operar nuestro sitio web, como proveedores de alojamiento web (hosting), servicios de an&aacute;lisis de datos, y servicios de env&iacute;o de correo electr&oacute;nico para el bolet&iacute;n. Estos proveedores solo tienen acceso a la informaci&oacute;n personal necesaria para realizar sus tareas en nuestro nombre y est&aacute;n obligados contractualmente a mantenerla confidencial y segura. (Por ejemplo, el almacenamiento de archivos mediante GridFS en MongoDB puede estar alojado en una infraestructura que gestionamos o a trav&eacute;s de un proveedor de base de datos en la nube).</li>
+    <li><strong>Cumplimiento Legal y Protecci&oacute;n de Derechos:</strong> Podremos divulgar tu informaci&oacute;n personal si creemos de buena fe que es necesario para:
+      <ul>
+        <li>Cumplir con una obligaci&oacute;n legal o un requerimiento judicial.</li>
+        <li>Proteger y defender nuestros derechos o propiedad.</li>
+        <li>Prevenir o investigar posibles irregularidades en relaci&oacute;n con el servicio.</li>
+        <li>Proteger la seguridad personal de los usuarios del servicio o del p&uacute;blico.</li>
+        <li>Protegernos contra la responsabilidad legal.</li>
+      </ul>
+    </li>
+    <li><strong>Con tu Consentimiento:</strong> Podemos compartir tu informaci&oacute;n para cualquier otro prop&oacute;sito si nos has dado tu consentimiento expl&iacute;cito para hacerlo.</li>
+  </ul>
 
-  <h2>6. Tus Derechos</h2>
-  <p>Tienes derecho a acceder, rectificar o eliminar tu informaci&oacute;n personal. Para ejercer estos derechos, cont&aacute;ctanos a trav&eacute;s de <a href="mailto:orozjuanfelipe@gmail.com">orozjuanfelipe@gmail.com</a>.</p>
+  <h2>6. Cookies y Tecnolog&iacute;as Similares</h2>
+  <p>Utilizamos cookies y tecnolog&iacute;as de seguimiento similares (como p&iacute;xeles y balizas web) para mejorar tu experiencia en nuestro sitio, analizar el tr&aacute;fico y entender c&oacute;mo interact&uacute;as con nuestros servicios. Las cookies son peque&ntilde;os archivos de texto que se almacenan en tu dispositivo (ordenador, tableta, m&oacute;vil) cuando visitas un sitio web.</p>
+  <p>Aunque nuestro sitio web no presenta un banner para "aceptar cookies" de forma obligatoria para la navegaci&oacute;n general, el uso de ciertas funcionalidades, como el inicio de sesi&oacute;n o la personalizaci&oacute;n, implica el uso de cookies esenciales. A continuaci&oacute;n, describimos los tipos de cookies que podemos utilizar:</p>
+  <ul>
+    <li><strong>Cookies Esenciales o Necesarias:</strong> Estas cookies son fundamentales para que el sitio web funcione correctamente. Permiten funciones b&aacute;sicas como la navegaci&oacute;n por las p&aacute;ginas, el acceso a &aacute;reas seguras (como tu cuenta de `Lector`), y la gesti&oacute;n de tus sesiones. Sin estas cookies, el sitio no podr&iacute;a funcionar adecuadamente.</li>
+    <li><strong>Cookies de Rendimiento y An&aacute;lisis:</strong> Estas cookies nos ayudan a entender c&oacute;mo los visitantes interact&uacute;an con nuestro sitio web recopilando y reportando informaci&oacute;n de forma an&oacute;nima (ej. Google Analytics). Esto nos permite medir y mejorar el rendimiento de nuestro sitio.</li>
+    <li><strong>Cookies de Funcionalidad:</strong> Estas cookies permiten que el sitio web recuerde las elecciones que haces (como tu nombre de usuario, idioma o la regi&oacute;n en la que te encuentras) y proporcionan caracter&iacute;sticas mejoradas y m&aacute;s personales.</li>
+  </ul>
+  <p>Puedes controlar y/o eliminar las cookies como desees. La mayor&iacute;a de los navegadores web te permiten gestionar tus preferencias de cookies a trav&eacute;s de su configuraci&oacute;n. Ten en cuenta que si deshabilitas o rechazas ciertas cookies, algunas partes de nuestro sitio podr&iacute;an no funcionar correctamente.</p>
 
-  <h2>7. Cambios en la Pol&iacute;tica de Privacidad</h2>
-  <p>Nos reservamos el derecho de modificar esta pol&iacute;tica en cualquier momento. Las actualizaciones se publicar&aacute;n en esta p&aacute;gina con la fecha de la &uacute;ltima actualizaci&oacute;n. Se recomienda revisar esta pol&iacute;tica periódicamente.</p>
+  <h2>7. Seguridad de los Datos</h2>
+  <p>Nos tomamos muy en serio la seguridad de tu informaci&oacute;n personal. Implementamos medidas t&eacute;cnicas, administrativas y f&iacute;sicas apropiadas para proteger tus datos contra el acceso no autorizado, la alteraci&oacute;n, la divulgaci&oacute;n, la p&eacute;rdida o la destrucci&oacute;n accidental. Estas medidas incluyen:</p>
+  <ul>
+    <li>Uso de conexiones seguras (SSL/TLS) para la transmisi&oacute;n de datos.</li>
+    <li>Hashing seguro de contrase&ntilde;as.</li>
+    <li>Controles de acceso estrictos a nuestras bases de datos y sistemas.</li>
+    <li>Almacenamiento seguro de archivos (im&aacute;genes, c&oacute;digo .zip, audio) utilizando GridFSStorage en nuestra base de datos MongoDB.</li>
+    <li>Revisiones peri&oacute;dicas de nuestras pr&aacute;cticas de recopilaci&oacute;n, almacenamiento y procesamiento de datos.</li>
+  </ul>
+  <p>A pesar de nuestros esfuerzos, ning&uacute;n m&eacute;todo de transmisi&oacute;n por Internet o de almacenamiento electr&oacute;nico es 100% seguro. Por lo tanto, aunque nos esforzamos por utilizar medios comercialmente aceptables para proteger tu informaci&oacute;n personal, no podemos garantizar su seguridad absoluta.</p>
 
-  <h2>8. Contacto</h2>
-  <p>Si tienes preguntas o inquietudes sobre esta Pol&iacute;tica de Privacidad, cont&aacute;ctanos en <a href="mailto:orozjuanfelipe@gmail.com">orozjuanfelipe@gmail.com</a>.</p>
+  <h2>8. Conservaci&oacute;n de los Datos (Retenci&oacute;n)</h2>
+  <p>Conservaremos tu informaci&oacute;n personal solo durante el tiempo que sea necesario para los fines establecidos en esta Pol&iacute;tica de Privacidad, a menos que la ley exija o permita un per&iacute;odo de conservaci&oacute;n m&aacute;s largo.</p>
+  <ul>
+    <li><strong>Datos de la cuenta (`Lector`):</strong> Los conservaremos mientras mantengas tu cuenta activa y por un per&iacute;odo razonable despu&eacute;s para fines administrativos o legales, a menos que solicites su eliminaci&oacute;n.</li>
+    <li><strong>Contenido Generado por el Usuario:</strong> El contenido que publiques (tutoriales, gu&iacute;as, podcasts, comentarios) permanecer&aacute; en el sitio indefinidamente, incluso si tu cuenta es eliminada, para mantener la integridad del contenido del sitio, a menos que solicites espec&iacute;ficamente su eliminaci&oacute;n y sea factible.</li>
+    <li><strong>Datos de Suscripci&oacute;n al Bolet&iacute;n (`Subscriber`):</strong> Los conservaremos hasta que decidas darte de baja de nuestra lista de correo.</li>
+    <li><strong>Datos de Suscripciones de Pago:</strong> Los conservaremos durante el tiempo necesario para cumplir con nuestras obligaciones contractuales y legales (por ejemplo, para fines fiscales o de auditor&iacute;a).</li>
+  </ul>
+
+  <h2>9. Tus Derechos como Titular de los Datos</h2>
+  <p>De acuerdo con la Ley 1581 de 2012 de Colombia y otras normativas aplicables, tienes los siguientes derechos con respecto a tu informaci&oacute;n personal:</p>
+  <ul>
+    <li><strong>Derecho de Acceso:</strong> A conocer y obtener informaci&oacute;n sobre los datos personales tuyos que estamos tratando.</li>
+    <li><strong>Derecho de Rectificaci&oacute;n:</strong> A solicitar la correcci&oacute;n o actualizaci&oacute;n de tus datos cuando sean inexactos, incompletos o est&eacute;n desactualizados.</li>
+    <li><strong>Derecho de Supresi&oacute;n (Derecho al Olvido):</strong> A solicitar la eliminaci&oacute;n de tus datos personales cuando consideres que no se est&aacute;n tratando conforme a los principios, deberes y obligaciones legales, o cuando ya no sean necesarios para la finalidad para la que fueron recogidos, entre otros casos.</li>
+    <li><strong>Derecho a Solicitar Prueba de la Autorizaci&oacute;n:</strong> Salvo en los casos exceptuados por la ley.</li>
+    <li><strong>Derecho a ser Informado sobre el Uso:</strong> Respecto del uso que se le ha dado a tus datos personales.</li>
+    <li><strong>Derecho a Presentar Quejas:</strong> Ante la Superintendencia de Industria y Comercio por infracciones a lo dispuesto en la normativa vigente sobre protecci&oacute;n de datos.</li>
+    <li><strong>Derecho a Revocar la Autorizaci&oacute;n y/o a la Limitaci&oacute;n del Tratamiento:</strong> En los casos en que sea procedente.</li>
+    <li><strong>Derecho a la Portabilidad de los Datos:</strong> Donde sea t&eacute;cnicamente posible y aplicable.</li>
+  </ul>
+  <p>Para ejercer estos derechos, puedes contactarnos a trav&eacute;s de <a href="mailto:orozjuanfelipe@gmail.com">orozjuanfelipe@gmail.com</a>. Por favor, indica claramente tu solicitud. Es posible que necesitemos verificar tu identidad antes de procesar tu solicitud.</p>
+
+  <h2>10. Transferencias Internacionales de Datos</h2>
+  <p>Tu informaci&oacute;n, incluidos los datos personales, puede ser transferida a —y mantenida en— computadoras ubicadas fuera de tu estado, provincia, pa&iacute;s u otra jurisdicci&oacute;n gubernamental donde las leyes de protecci&oacute;n de datos pueden diferir de las de tu jurisdicci&oacute;n. Si utilizas servicios de terceros (como procesadores de pago o proveedores de an&aacute;lisis) que operan internacionalmente, tus datos pueden ser transferidos.</p>
+  <p>Si te encuentras en Colombia y transferimos tus datos personales fuera del pa&iacute;s, nos aseguraremos de que se implementen las salvaguardas adecuadas para proteger tu informaci&oacute;n, de acuerdo con la legislaci&oacute;n colombiana.</p>
+  <p>Tu consentimiento a esta Pol&iacute;tica de Privacidad seguido de tu env&iacute;o de dicha informaci&oacute;n representa tu acuerdo con esa transferencia.</p>
+
+  <h2>11. Privacidad de Menores de Edad</h2>
+  <p>Nuestros servicios no est&aacute;n dirigidos a personas menores de 14 a&ntilde;os (o la edad m&iacute;nima legal en tu jurisdicci&oacute;n para consentir el tratamiento de datos personales). No recopilamos conscientemente informaci&он личную информацию de menores de 14 a&ntilde;os. Si eres padre/madre o tutor y tienes conocimiento de que tu hijo/a nos ha proporcionado datos personales sin tu consentimiento, por favor cont&aacute;ctanos. Si descubrimos que hemos recopilado datos personales de un menor sin verificaci&oacute;n del consentimiento parental, tomaremos medidas para eliminar esa informaci&oacute;n de nuestros servidores.</p>
+
+  <h2>12. Cambios en la Pol&iacute;tica de Privacidad</h2>
+  <p>Nos reservamos el derecho de modificar o actualizar esta Pol&iacute;tica de Privacidad en cualquier momento para reflejar cambios en nuestras pr&aacute;cticas o por otras razones operativas, legales o reglamentarias. Te notificaremos cualquier cambio publicando la nueva pol&iacute;tica en esta p&aacute;gina y actualizando la fecha de "&Uacute;ltima actualizaci&oacute;n" en la parte superior. Te recomendamos revisar esta Pol&iacute;tica de Privacidad peri&oacute;dicamente para estar informado sobre c&oacute;mo protegemos tu informaci&oacute;n.</p>
+  <p>El uso continuado de nuestro sitio web despu&eacute;s de la publicaci&oacute;n de los cambios constituir&aacute; tu aceptaci&oacute;n de dichos cambios.</p>
+
+  <h2>13. Contacto</h2>
+  <p>Si tienes alguna pregunta, inquietud o comentario sobre esta Pol&iacute;tica de Privacidad o nuestras pr&aacute;cticas de tratamiento de datos, no dudes en contactarnos a trav&eacute;s de nuestro correo electr&oacute;nico: <a href="mailto:tucodigocotidiano@gmail.com">tucodigocotidiano@gmail.com</a>.</p>
 </article>
 {% endblock %}
 
 {% block extra_js %}
-  <!-- Aquí puedes incluir JavaScript adicional si es necesario -->
-{% endblock %}
+  {% endblock %}

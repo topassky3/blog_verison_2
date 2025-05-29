@@ -1,10 +1,9 @@
 {% extends "core/core.html" %}
 {% load tutorial_tags %}
 
-{% block title %}Términos de Servicio | WebDev Blog{% endblock %}
+{% block title %}Términos de Servicio | Tu Código Cotidiano{% endblock %}
 
 {% block extra_head %}
-  <!-- Estilos específicos para los Términos de Servicio -->
   <style>
     .terms-service {
       padding: 2rem;
@@ -26,6 +25,12 @@
       margin-bottom: 1rem;
       color: var(--secondary);
     }
+    .terms-service h3 {
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-focus);
+    }
     .terms-service p,
     .terms-service li {
       font-size: 1rem;
@@ -39,6 +44,9 @@
       padding-left: 1.5rem;
       margin-bottom: 1rem;
     }
+    .terms-service strong {
+        color: var(--text-focus);
+    }
     .terms-service a {
       color: var(--primary);
       text-decoration: underline;
@@ -46,7 +54,7 @@
     .terms-service a:hover {
       color: var(--secondary);
     }
-    
+
     /* Ajustes para dispositivos móviles */
     @media (max-width: 768px) {
       .terms-service {
@@ -60,6 +68,9 @@
       .terms-service h2 {
         font-size: 1.5rem;
       }
+      .terms-service h3 {
+        font-size: 1.15rem;
+      }
       .terms-service p,
       .terms-service li {
         font-size: 0.95rem;
@@ -71,38 +82,110 @@
 {% block content %}
 <article class="terms-service">
   <h1>Términos de Servicio</h1>
-  <p><strong>Última actualización:</strong> 06 de marzo del 2025</p>
+  <p><strong>&Uacute;ltima actualizaci&oacute;n:</strong> 06 de marzo del 2025</p>
 
-  <h2>1. Aceptación de los Términos</h2>
-  <p>Al acceder y utilizar tucodigocotidiano (en adelante, "el sitio"), aceptas estos Términos de Servicio y te comprometes a cumplirlos. Si no estás de acuerdo, por favor, no utilices el sitio.</p>
+  <h2>1. Aceptaci&oacute;n de los T&eacute;rminos</h2>
+  <p>Bienvenido/a a Tu C&oacute;digo Cotidiano (tucodigocotidiano.yarumaltech.com), en adelante "el Sitio", "nosotros" o "Tu C&oacute;digo Cotidiano". Al acceder, navegar o utilizar este Sitio, incluyendo el registro como usuario, la publicaci&oacute;n de contenido o la suscripci&oacute;n a nuestros servicios, usted (en adelante "el Usuario" o "usted") reconoce que ha le&iacute;do, entendido y aceptado estar sujeto a los presentes T&eacute;rminos de Servicio ("T&eacute;rminos") y a nuestra Pol&iacute;tica de Privacidad, la cual se incorpora aqu&iacute; por referencia. Si no est&aacute; de acuerdo con alguno de estos T&eacute;rminos, por favor, no utilice el Sitio.</p>
 
-  <h2>2. Uso del Sitio</h2>
+  <h2>2. Definiciones Clave</h2>
   <ul>
-    <li><strong>Contenido:</strong> Todo el contenido del sitio es propiedad de tucodigocotidiano o de sus respectivos autores. No se permite la reproducción sin autorización previa.</li>
-    <li><strong>Acceso:</strong> Nos reservamos el derecho de modificar, suspender o interrumpir cualquier aspecto del sitio en cualquier momento.</li>
-    <li><strong>Conducta del Usuario:</strong> Te comprometes a utilizar el sitio de manera lícita y respetuosa, sin infringir derechos de terceros ni comprometer la seguridad del sitio.</li>
+    <li><strong>Sitio:</strong> Se refiere al sitio web tucodigocotidiano.yarumaltech.com, incluyendo todas sus p&aacute;ginas, subdominios, contenido, caracter&iacute;sticas y servicios ofrecidos.</li>
+    <li><strong>Usuario:</strong> Cualquier persona que acceda o utilice el Sitio, ya sea un visitante o un usuario registrado (`Lector`).</li>
+    <li><strong>Contenido del Sitio:</strong> Todo el material, informaci&oacute;n, software, texto, gr&aacute;ficos, im&aacute;genes, audio, video, dise&ntilde;o, c&oacute;digo fuente del Sitio (excluyendo el c&oacute;digo de ejemplo proporcionado bajo licencia MIT) y cualquier otro material proporcionado por Tu C&oacute;digo Cotidiano.</li>
+    <li><strong>Contenido del Usuario:</strong> Cualquier material, informaci&oacute;n, texto, gr&aacute;ficos, im&aacute;genes (incluyendo im&aacute;genes de perfil), archivos de audio, archivos de c&oacute;digo (.zip), comentarios, valoraciones o cualquier otro material que los Usuarios (incluyendo aquellos con rol de "Escritor") env&iacute;en, publiquen, muestren o transmitan en o a trav&eacute;s del Sitio.</li>
+    <li><strong>C&oacute;digo de Ejemplo:</strong> Fragmentos de c&oacute;digo, scripts o proyectos completos proporcionados por Tu C&oacute;digo Cotidiano dentro de tutoriales, gu&iacute;as o art&iacute;culos con fines educativos o ilustrativos.</li>
   </ul>
 
-  <h2>3. Responsabilidad y Garantías</h2>
+  <h2>3. Cuentas de Usuario (`Lector`)</h2>
+  <p>Para acceder a ciertas funcionalidades del Sitio, como publicar comentarios, acceder a contenido exclusivo o realizar compras de suscripciones, podr&iacute;a ser necesario crear una cuenta de usuario.</p>
   <ul>
-    <li><strong>Limitación de Responsabilidad:</strong> tucodigocotidiano no será responsable por daños directos, indirectos, incidentales o consecuentes derivados del uso o la imposibilidad de uso del sitio.</li>
-    <li><strong>Contenido de Terceros:</strong> El sitio puede incluir enlaces a sitios de terceros, cuya gestión y contenido no son responsabilidad de tucodigocotidiano.</li>
+    <li><strong>Registro:</strong> Usted se compromete a proporcionar informaci&oacute;n veraz, precisa, actual y completa durante el proceso de registro y a mantenerla actualizada.</li>
+    <li><strong>Seguridad de la Cuenta:</strong> Usted es el &uacute;nico responsable de mantener la confidencialidad de su contrase&ntilde;a y de todas las actividades que ocurran bajo su cuenta. Notif&iacute;quenos inmediatamente sobre cualquier uso no autorizado de su cuenta o cualquier otra brecha de seguridad.</li>
+    <li><strong>Responsabilidad de la Cuenta:</strong> Tu C&oacute;digo Cotidiano no ser&aacute; responsable por p&eacute;rdidas o da&ntilde;os derivados del incumplimiento de estas obligaciones de seguridad.</li>
+    <li><strong>Terminaci&oacute;n de Cuenta:</strong> Nos reservamos el derecho de suspender o cancelar su cuenta y acceso al Sitio, a nuestra entera discreci&oacute;n, sin previo aviso y sin responsabilidad alguna, por cualquier motivo, incluyendo el incumplimiento de estos T&eacute;rminos.</li>
   </ul>
 
-  <h2>4. Propiedad Intelectual</h2>
-  <p>Todo el contenido, diseños, textos, imágenes y logotipos disponibles en el sitio están protegidos por derechos de autor. El uso no autorizado de este contenido puede constituir una violación de la ley de propiedad intelectual.</p>
+  <h2>4. Uso Aceptable del Sitio y Conducta del Usuario</h2>
+  <p>Usted se compromete a utilizar el Sitio de manera l&iacute;cita, respetuosa y de conformidad con estos T&eacute;rminos y todas las leyes y regulaciones aplicables.</p>
+  <ul>
+    <li>No utilizar&aacute; el Sitio para ning&uacute;n prop&oacute;sito ilegal o no autorizado.</li>
+    <li>No publicar&aacute; ni transmitir&aacute; ning&uacute;n material que sea difamatorio, obsceno, pornogr&aacute;fico, abusivo, amenazante, que invada la privacidad de otros, que incite al odio o que sea de alguna manera objetable.</li>
+    <li>No infringir&aacute; los derechos de propiedad intelectual de Tu C&oacute;digo Cotidiano o de terceros.</li>
+    <li>No intentar&aacute; obtener acceso no autorizado a nuestros sistemas inform&aacute;ticos ni participar&aacute; en ninguna actividad que interrumpa, disminuya la calidad, interfiera con el desempe&ntilde;o o menoscabe la funcionalidad del Sitio.</li>
+    <li>No cargar&aacute; ni transmitir&aacute; virus, troyanos, gusanos, bombas l&oacute;gicas u otro material malicioso o tecnol&oacute;gicamente da&ntilde;ino.</li>
+    <li>No utilizar&aacute; el Sitio para enviar correo no deseado (spam) o mensajes no solicitados.</li>
+  </ul>
 
-  <h2>5. Modificaciones de los Términos</h2>
-  <p>Nos reservamos el derecho de actualizar estos Términos de Servicio en cualquier momento. Las modificaciones entrarán en vigor al momento de su publicación. Es responsabilidad del usuario revisar periódicamente estos términos.</p>
+  <h2>5. Contenido de Tu C&oacute;digo Cotidiano</h2>
+  <h3>5.1. Propiedad Intelectual del Contenido del Sitio</h3>
+  <p>Salvo que se indique lo contrario (ver Secci&oacute;n 5.2), todo el Contenido del Sitio, incluyendo textos, gr&aacute;ficos, logotipos, iconos, im&aacute;genes, clips de audio y video, compilaciones de datos, software y el dise&ntilde;o y la estructura del Sitio, es propiedad de Tu C&oacute;digo Cotidiano o de sus licenciantes y est&aacute; protegido por las leyes de derechos de autor, marcas registradas y otras leyes de propiedad intelectual de Colombia e internacionales. No se permite la reproducci&oacute;n, distribuci&oacute;n, modificaci&oacute;n, creaci&oacute;n de trabajos derivados, exhibici&oacute;n p&uacute;blica, ejecuci&oacute;n p&uacute;blica, republicaci&oacute;n, descarga, almacenamiento o transmisi&oacute;n de ning&uacute;n Contenido del Sitio sin nuestro permiso previo por escrito.</p>
 
-  <h2>6. Ley Aplicable y Jurisdicción</h2>
-  <p>Estos términos se regirán e interpretarán de acuerdo con las leyes vigentes en Colombia. Cualquier disputa que surja del uso del sitio será sometida a la jurisdicción de los tribunales competentes en dicha localidad.</p>
+  <h3>5.2. Licencia para el C&oacute;digo de Ejemplo (Licencia MIT)</h3>
+  <p>Tu C&oacute;digo Cotidiano se complace en fomentar el aprendizaje y la experimentaci&oacute;n. Por ello, cualquier <strong>C&oacute;digo de Ejemplo</strong> (fragmentos de c&oacute;digo, scripts, proyectos en archivos .zip, etc.) que proporcionemos expl&iacute;citamente como parte de nuestros tutoriales, gu&iacute;as o art&iacute;culos educativos en el Sitio, se ofrece bajo los t&eacute;rminos de la <strong>Licencia MIT</strong>.</p>
+  <p>Esto significa que usted es libre de:
+    <ul>
+      <li>Utilizar, copiar, modificar y fusionar el C&oacute;digo de Ejemplo.</li>
+      <li>Publicar, distribuir, sublicenciar y/o vender copias del C&oacute;digo de Ejemplo.</li>
+      <li>Permitir a las personas a quienes se les proporcione el C&oacute;digo de Ejemplo hacer lo mismo.</li>
+    </ul>
+  Todo esto sujeto a las siguientes condiciones establecidas en la Licencia MIT: el aviso de copyright original y este aviso de permiso deben ser incluidos en todas las copias o porciones sustanciales del C&oacute;digo de Ejemplo. EL C&Oacute;DIGO DE EJEMPLO SE PROPORCIONA "TAL CUAL", SIN GARANT&Iacute;A DE NING&Uacute;N TIPO, EXPRESA O IMPL&Iacute;CITA.
+  </p>
+  <p>Puede encontrar el texto completo de la Licencia MIT en: <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">https://opensource.org/licenses/MIT</a>. Esta licencia se aplica &uacute;nicamente al C&oacute;digo de Ejemplo identificado como tal y no al resto del Contenido del Sitio ni al Contenido del Usuario.</p>
 
-  <h2>7. Contacto</h2>
-  <p>Para cualquier consulta relacionada con estos Términos de Servicio, contáctanos a través de <a href="mailto:orozjuanfelipe@gmail.com">orozjuanfelipe@gmail.com</a>.</p>
+  <h2>6. Contenido Generado por el Usuario</h2>
+  <p>El Sitio permite a los Usuarios (especialmente aquellos con rol de "Escritor") enviar, publicar y gestionar Contenido del Usuario, como tutoriales, gu&iacute;as, podcasts (incluyendo archivos de audio y c&oacute;digo), im&aacute;genes de perfil y comentarios.</p>
+  <h3>6.1. Propiedad y Responsabilidad del Contenido del Usuario</h3>
+  <p>Usted retiene todos sus derechos de propiedad sobre su Contenido del Usuario. Sin embargo, usted es el &uacute;nico responsable de su Contenido del Usuario y de las consecuencias de publicarlo o compartirlo. Al enviar Contenido del Usuario, usted afirma, representa y garantiza que:</p>
+  <ul>
+    <li>Es el creador y propietario del Contenido del Usuario o tiene los derechos, licencias, consentimientos y permisos necesarios para usarlo y autorizarnos a usarlo como se describe en estos T&eacute;rminos.</li>
+    <li>Su Contenido del Usuario no infringe ni violar&aacute; los derechos de terceros, incluyendo derechos de autor, marcas registradas, patentes, secretos comerciales, derechos morales, derechos de privacidad, derechos de publicidad o cualquier otro derecho de propiedad intelectual o de propiedad.</li>
+    <li>Su Contenido del Usuario no es ilegal, difamatorio, calumnioso, amenazante, pornogr&aacute;fico, acosador, odioso, racial o &eacute;tnicamente ofensivo, ni fomenta conductas que se considerar&iacute;an un delito penal, dar&iacute;an lugar a responsabilidad civil, violar&iacute;an alguna ley o ser&iacute;an inapropiadas.</li>
+    <li>Los archivos que suba (im&aacute;genes, .zip, audio) est&aacute;n libres de virus o cualquier otro c&oacute;digo malicioso.</li>
+  </ul>
+
+  <h3>6.2. Licencia Otorgada a Tu C&oacute;digo Cotidiano</h3>
+  <p>Al enviar, publicar o mostrar Contenido del Usuario en o a trav&eacute;s del Sitio, usted otorga a Tu C&oacute;digo Cotidiano una licencia mundial, no exclusiva, libre de regal&iacute;as, sublicenciable y transferible para usar, reproducir, distribuir, preparar trabajos derivados, mostrar, ejecutar, transmitir y publicar dicho Contenido del Usuario en conexi&oacute;n con el funcionamiento del Sitio y para nuestros fines promocionales y de marketing, en cualquier formato y a trav&eacute;s de cualquier canal de medios.</p>
+
+  <h3>6.3. Contenido Prohibido y Moderaci&oacute;n</h3>
+  <p>Nos reservamos el derecho (pero no la obligaci&oacute;n) de revisar, filtrar, modificar, rechazar o eliminar cualquier Contenido del Usuario, a nuestra entera discreci&oacute;n, que consideremos que viola estos T&eacute;rminos o que es de alguna manera perjudicial, objetable o inexacto, sin previo aviso.</p>
+
+  <h2>7. Suscripciones y Pagos (Membres&iacute;as)</h2>
+  <p>Tu C&oacute;digo Cotidiano puede ofrecer planes de suscripci&oacute;n (ej. B&aacute;sico, Premium, Anual) que otorgan acceso a contenido, caracter&iacute;sticas o servicios exclusivos.</p>
+  <h3>7.1. Planes y Facturaci&oacute;n</h3>
+  <p>Los detalles espec&iacute;ficos de cada plan de suscripci&oacute;n, incluyendo precios, beneficios y duraci&oacute;n, se describir&aacute;n en la secci&oacute;n correspondiente del Sitio. Al suscribirse, usted acepta pagar las tarifas aplicables. Los pagos se procesar&aacute;n a trav&eacute;s de nuestros proveedores de servicios de pago externos. Usted se compromete a proporcionar informaci&oacute;n de pago v&aacute;lida y actualizada. Las suscripciones pueden renovarse autom&aacute;ticamente a menos que se cancelen.</p>
+  <h3>7.2. Cancelaciones y Reembolsos</h3>
+  <p>Puede cancelar su suscripci&oacute;n en cualquier momento de acuerdo con los procedimientos especificados en el Sitio. La pol&iacute;tica de reembolso, si la hubiera, se detallar&aacute; en el momento de la compra o en una secci&oacute;n espec&iacute;fica del Sitio. Generalmente, los pagos de suscripci&oacute;n no son reembolsables, salvo que la ley aplicable exija lo contrario o se indique expresamente.</p>
+  <h3>7.3. Cambios de Precios</h3>
+  <p>Nos reservamos el derecho de cambiar las tarifas de suscripci&oacute;n. Cualquier cambio de precio se le notificar&aacute; con antelaci&oacute;n razonable.</p>
+
+  <h2>8. Descargo de Garant&iacute;as y Limitaci&oacute;n de Responsabilidad</h2>
+  <p>EL SITIO Y TODO SU CONTENIDO (INCLUYENDO EL CONTENIDO DEL USUARIO Y EL C&Oacute;DIGO DE EJEMPLO) SE PROPORCIONAN "TAL CUAL" Y "SEG&Uacute;N DISPONIBILIDAD", SIN GARANT&Iacute;AS DE NING&Uacute;N TIPO, YA SEAN EXPRESAS O IMPL&Iacute;CITAS, INCLUYENDO, ENTRE OTRAS, GARANT&Iacute;AS IMPL&Iacute;CITAS DE COMERCIABILIDAD, IDONEIDAD PARA UN PROP&Oacute;SITO PARTICULAR, NO INFRACCI&Oacute;N Y DISFRUTE PAC&Iacute;FICO.</p>
+  <p>TU C&Oacute;DIGO COTIDIANO NO GARANTIZA QUE EL SITIO SER&Aacute; ININTERRUMPIDO, SEGURO, LIBRE DE ERRORES O QUE EL CONTENIDO SER&Aacute; PRECISO, COMPLETO O ACTUALIZADO. USTED ACEPTA QUE EL USO DEL SITIO Y SU CONTENIDO ES BAJO SU PROPIO RIESGO, ESPECIALMENTE EN LO REFERENTE A LA APLICACI&Oacute;N DE CUALQUIER C&Oacute;DIGO DE EJEMPLO O CONSEJO T&Eacute;CNICO.</p>
+  <p>EN LA M&Aacute;XIMA MEDIDA PERMITIDA POR LA LEY APLICABLE, TU C&Oacute;DIGO COTIDIANO, SUS AFILIADOS, DIRECTORES, EMPLEADOS, AGENTES O LICENCIANTES NO SER&Aacute;N RESPONSABLES POR NING&Uacute;N DA&Ntilde;O INDIRECTO, INCIDENTAL, ESPECIAL, CONSECUENTE O PUNITIVO, INCLUYENDO, SIN LIMITACI&Oacute;N, P&Eacute;RDIDA DE BENEFICIOS, DATOS, USO, FONDO DE COMERCIO U OTRAS P&Eacute;RDIDAS INTANGIBLES, RESULTANTES DE (I) SU ACCESO O USO O INCAPACIDAD PARA ACCEDER O USAR EL SITIO; (II) CUALQUIER CONDUCTA O CONTENIDO DE CUALQUIER TERCERO EN EL SITIO; (III) CUALQUIER CONTENIDO OBTENIDO DEL SITIO; Y (IV) ACCESO NO AUTORIZADO, USO O ALTERACI&Oacute;N DE SUS TRANSMISIONES O CONTENIDO.</p>
+
+  <h2>9. Enlaces a Terceros</h2>
+  <p>El Sitio puede contener enlaces a sitios web o servicios de terceros que no son propiedad ni est&aacute;n controlados por Tu C&oacute;digo Cotidiano. No tenemos control sobre el contenido, las pol&iacute;ticas de privacidad o las pr&aacute;cticas de los sitios web o servicios de terceros y no asumimos ninguna responsabilidad por ellos. Le recomendamos leer los t&eacute;rminos y condiciones y las pol&iacute;ticas de privacidad de cualquier sitio web o servicio de terceros que visite.</p>
+
+  <h2>10. Modificaciones de los T&eacute;rminos</h2>
+  <p>Nos reservamos el derecho, a nuestra entera discreci&Оacute;n, de modificar o reemplazar estos T&eacute;rminos en cualquier momento. Si una revisi&oacute;n es material, intentaremos proporcionar un aviso con al menos 30 d&iacute;as de anticipaci&oacute;n antes de que los nuevos t&eacute;rminos entren en vigor. Lo que constituye un cambio material se determinar&aacute; a nuestra entera discreci&oacute;n. Al continuar accediendo o utilizando nuestro Sitio despu&eacute;s de que esas revisiones entren en vigor, usted acepta estar sujeto a los t&eacute;rminos revisados.</p>
+
+  <h2>11. Terminaci&oacute;n</h2>
+  <p>Podemos terminar o suspender su acceso al Sitio inmediatamente, sin previo aviso ni responsabilidad, por cualquier motivo, incluyendo, sin limitaci&oacute;n, si usted incumple los T&eacute;rminos. Tras la terminaci&oacute;n, su derecho a utilizar el Sitio cesar&aacute; inmediatamente. Todas las disposiciones de los T&eacute;rminos que por su naturaleza deber&iacute;an sobrevivir a la terminaci&oacute;n sobrevivir&aacute;n a la terminaci&oacute;n, incluyendo, sin limitaci&oacute;n, las disposiciones de propiedad, las renuncias de garant&iacute;a, la indemnizaci&oacute;n y las limitaciones de responsabilidad.</p>
+
+  <h2>12. Ley Aplicable y Jurisdicci&oacute;n</h2>
+  <p>Estos T&eacute;rminos se regir&aacute;n e interpretar&aacute;n de acuerdo con las leyes de la Rep&uacute;blica de Colombia, sin tener en cuenta sus disposiciones sobre conflicto de leyes. Usted acepta someterse a la jurisdicci&oacute;n personal y exclusiva de los tribunales competentes ubicados en Yarumal, Antioquia, Colombia, para la resoluci&oacute;n de cualquier disputa que surja de o est&eacute; relacionada con estos T&eacute;rminos o el uso del Sitio.</p>
+
+  <h2>13. Disposiciones Generales</h2>
+  <ul>
+    <li><strong>Acuerdo Completo:</strong> Estos T&eacute;rminos, junto con la Pol&iacute;tica de Privacidad, constituyen el acuerdo completo entre usted y Tu C&oacute;digo Cotidiano con respecto al uso del Sitio y reemplazan todos los acuerdos anteriores.</li>
+    <li><strong>Divisibilidad:</strong> Si alguna disposici&oacute;n de estos T&eacute;rminos se considera inv&aacute;lida o inaplicable por un tribunal de jurisdicci&oacute;n competente, las disposiciones restantes de estos T&eacute;rminos permanecer&aacute;n en pleno vigor y efecto.</li>
+    <li><strong>No Renuncia:</strong> Ninguna renuncia a cualquier t&eacute;rmino de estos T&eacute;rminos se considerar&aacute; una renuncia adicional o continua de dicho t&eacute;rmino o cualquier otro t&eacute;rmino, y el hecho de que no hagamos valer ning&uacute;n derecho o disposici&oacute;n bajo estos T&eacute;rminos no constituir&aacute; una renuncia a dicho derecho o disposici&oacute;n.</li>
+  </ul>
+
+  <h2>14. Contacto</h2>
+  <p>Si tiene alguna pregunta, inquietud o comentario sobre estos T&eacute;rminos de Servicio, por favor cont&aacute;ctenos a trav&eacute;s de nuestro correo electr&oacute;nico: <a href="mailto:tucodigocotidiano@gmail.com">tucodigocotidiano@gmail.com</a>.</p>
 </article>
 {% endblock %}
 
 {% block extra_js %}
-  <!-- Aquí puedes incluir JavaScript adicional si es necesario -->
 {% endblock %}
