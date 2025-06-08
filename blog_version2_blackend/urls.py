@@ -18,12 +18,15 @@ from django.contrib import admin
 from django.urls import path, include
 from core.views import confirmar_email, serve_media
 from django.contrib.sitemaps.views import sitemap
-from core.sitemaps import StaticViewSitemap
+from core.sitemaps import StaticViewSitemap, GuiaSitemap, TutorialSitemap, PodcastSitemap
 from django.conf import settings
 from django.conf.urls.static import static
 
 sitemaps = {
     'static': StaticViewSitemap,
+    'guias': GuiaSitemap,
+    'tutoriales': TutorialSitemap,
+    'podcasts': PodcastSitemap,
 }
 urlpatterns = [
     path('admin/', admin.site.urls),
