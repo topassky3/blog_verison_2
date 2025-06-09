@@ -71,6 +71,31 @@
   }
 }
 
+        .tutorial-content {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1; /* Permite que este div ocupe el espacio sobrante */
+      padding: 1rem;
+      min-height: 180px; /* Le damos una altura mínima para consistencia */
+    }
+
+    /* Estilos para la descripción en la tarjeta */
+    .tutorial-description {
+      font-size: 0.9rem;
+      color: #555; /* Un color más suave para el texto del resumen */
+      margin: 0.5rem 0 1rem 0; /* Espaciado vertical */
+      line-height: 1.5;
+      flex-grow: 1; /* Ocupa el espacio disponible para empujar el footer hacia abajo */
+    }
+
+    [data-theme="dark"] .tutorial-description {
+      color: #bbb; /* Ajuste para el modo oscuro */
+    }
+
+    .tutorial-footer {
+      margin-top: auto; /* Empuja el footer siempre al final de la tarjeta */
+    }
+
 
     </style>
 {% endblock %}

@@ -54,6 +54,7 @@ class Tutorial(models.Model):
         verbose_name="Autor"
     )
     title = models.CharField("Título", max_length=200)
+    description = models.TextField("Descripción", blank=True, null=True)
     duration = models.CharField("Duración", max_length=50, blank=True, null=True)
     level = models.CharField("Nivel", max_length=50, blank=True, null=True)
     category = models.ForeignKey(

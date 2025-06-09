@@ -19,6 +19,11 @@
 
       <div class="tutorial-content">
         <h3>{{ tutorial.title }}</h3>
+          {% if tutorial.description %}
+              <p class="tutorial-description">
+                {{ tutorial.description|truncatewords:15 }}
+              </p>
+            {% endif %}
         <p class="tutorial-meta">
           Duración: {{ tutorial.duration|default:"Desconocida" }} |
           Nivel: {{ tutorial.level|default:"General" }}
