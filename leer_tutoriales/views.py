@@ -31,6 +31,7 @@ class TutorialDetailView(FormMixin, DetailView):
         context = super().get_context_data(**kwargs)
         tutorial = self.object
         current_user = self.request.user
+        context['tutorial_blocks'] = tutorial.blocks.all().order_by('order')
 
         # --- Lógica para limitación de contenido (60%) ---
         # Esta lógica asume que los bloques se cargan vía AJAX y la plantilla decide si mostrar el mensaje.

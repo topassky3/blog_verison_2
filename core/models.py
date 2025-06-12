@@ -54,7 +54,15 @@ class Tutorial(models.Model):
         verbose_name="Autor"
     )
     title = models.CharField("Título", max_length=200)
+
     description = models.TextField("Descripción", blank=True, null=True)
+    meta_description = models.CharField(
+        "Meta Descripción (para SEO)",
+        max_length=165,  # Límite seguro para Google
+        blank=True,
+        null=True,
+        help_text="Texto que aparece en Google (aprox. 150-160 caracteres)."
+    )
     duration = models.CharField("Duración", max_length=50, blank=True, null=True)
     level = models.CharField("Nivel", max_length=50, blank=True, null=True)
     category = models.ForeignKey(

@@ -205,6 +205,13 @@
       <label for="id_description">Descripción:</label>
       {{ form.description }}
     </div>
+      <div style="background-color: #eef2ff; padding: 1rem; border-radius: var(--radius); margin-bottom: 1rem; border-left: 4px solid var(--primary);">
+          <label for="id_meta_description">Meta Descripción (para SEO en Google):</label>
+          <p style="font-size: 0.8rem; color: #4b5563; margin-top: 0; margin-bottom: 0.5rem;">
+            Este es el texto que aparecerá en los resultados de búsqueda de Google. Debe ser atractivo y no superar los 165 caracteres.
+          </p>
+          {{ form.meta_description }}
+        </div>
     <div>
       <label for="id_duration">Duración:</label>
       {{ form.duration }}

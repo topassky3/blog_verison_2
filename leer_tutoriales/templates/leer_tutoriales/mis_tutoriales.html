@@ -5,15 +5,66 @@
 {% block title %}{{ tutorial.title }} | WebDev Blog{% endblock %}
 
 {% block extra_head %}
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <meta name="description" content="{{ tutorial.meta_description }}">
+      <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+      <meta property="og:title" content="{{ tutorial.title }}">
+      <meta property="og:description" content="{{ tutorial.meta_description }}">
+      <meta property="og:url" content="{{ request.build_absolute_uri }}">
+      {% if tutorial.image %}
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ tutorial.image.url }}">
+      {% elif tutorial.carousel_images.first %}
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ tutorial.carousel_images.first.image.url }}">
+      {% else %}
+        <meta property="og:image" content="https://tucodigocotidiano.yarumaltech.com/files/icono.png">
+      {% endif %}
+      <meta property="og:type" content="article">
+      <meta property="og:site_name" content="TuCodigoCotidiano">
+
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="{{ tutorial.title }}">
+      <meta name="twitter:description" content="{{ tutorial.meta_description }}">
+      {% if tutorial.image %}
+        <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ tutorial.image.url }}">
+      {% elif tutorial.carousel_images.first %}
+        <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ tutorial.carousel_images.first.image.url }}">
+      {% else %}
+        <meta name="twitter:image" content="https://tucodigocotidiano.yarumaltech.com/files/icono.png">
+      {% endif %}
+
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "{{ request.build_absolute_uri }}"
+        },
+        "headline": "{{ tutorial.title }}",
+        "description": "{{ tutorial.meta_description }}",
+        {% if tutorial.image %}
+          "image": "{{ request.scheme }}://{{ request.get_host }}{{ tutorial.image.url }}",
+        {% elif tutorial.carousel_images.first %}
+          "image": "{{ request.scheme }}://{{ request.get_host }}{{ tutorial.carousel_images.first.image.url }}",
+        {% endif %}
+        "author": {
+          "@type": "Person",
+          "name": "{{ tutorial.author.get_full_name|default:tutorial.author.username }}"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "TuCodigoCotidiano",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://tucodigocotidiano.yarumaltech.com/files/icono.png"
+          }
+        },
+        "datePublished": "{{ tutorial.created_at|date:"c" }}",
+        "dateModified": "{{ tutorial.updated_at|date:"c" }}"
+      }
+      </script>
 
 
 <style>
@@ -912,8 +963,29 @@ background-color: var(--primary);
 
 <!-- Contenedor donde se insertarán los bloques -->
 <section class="tutorial-content" id="tutorial-blocks-container">
-  <!-- Aquí se cargarán dinámicamente los bloques -->
-</section>
+  </section>
+
+<noscript>
+  <div class="tutorial-content">
+    {% for block in tutorial_blocks %}
+      <div class="tutorial-block">
+        {% if block.block_type == 'code' %}
+          <div class="block-code">
+            <pre>{{ block.content }}</pre>
+          </div>
+        {% elif block.block_type == 'text' %}
+          <div class="block-text">
+            {{ block.content|safe }}
+          </div>
+        {% elif block.block_type == 'latex' %}
+          <div class="block-latex">
+            {{ block.content|safe }}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</noscript>
 
 
   <!-- Contenedor donde se insertarán los bloques -->
