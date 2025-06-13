@@ -1,0 +1,223 @@
+[33mf1be9c1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m cambi en .env de mongo respaldo
+[33m4a7041b[m Se booro el back d emongo y se subi verison gemi
+[33me45be3e[m SE agreo el valro de metadatos verison gemini
+[33m802123b[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Descrcion del los tutriales funcional
+[33me913669[m Se mejroo el sitemap
+[33m17a493e[m Se agrego la piltica d eprivacidad y terminos y condicones
+[33m5c9bc8a[m Se corrigio la idea apra que html funcione
+[33m1d10ed4[m Se quito los elementos h de la tabla de cotnendio
+[33mbeac51a[m Se mejoro el bloque cdogio para que no colapse
+[33ma4be054[m Debug false
+[33m738727e[m Se ve bien en todoas las pantallas
+[33m8467633[m Verison en github
+[33md75eb81[m VErsion fucniona 22/05/2025
+[33m2fa93ee[m no funcional
+[33ma3adee5[m[33m ([m[1;32mtemp-feature[m[33m)[m Version todo
+[33m08745af[m Se organizo las difenrtentes patalals de blog
+[33mbc9be48[m Se agrego el valor nuevo de commit viejo
+[33m77fc540[m Verison de prueba
+[33ma063938[m Revert "Se agrego el calor flase a la deputacion"
+[33m26520b2[m Se organizo la vista para las difentes aptallas
+[33m9c09055[m Se agrego el calor flase a la deputacion
+[33ma68d0c9[m Se agrego el icono de tu cdoigo coditdiono y se organizo los coemtnairos apr ale suario electro
+[33m9ca5fb1[m Se agrego el valor de guia_detail.html apra ver las tablas de forma correcta
+[33mbc8db7a[m Se cambio el facebook por tiktok
+[33m9627787[m Se agrego la red spoicla de isntagram
+[33m8d9bc94[m Se agrego el valor de episodos antieorr
+[33m8988d80[m Se agrego el vlaor de lectura d ela guia
+[33m6380539[m Version mejroada de blqoue de iamgne. croe que esto esta bien
+[33m32768aa[m Priemera veriso par asubir iamgnes a las guias
+[33m3136897[m Se agrego el valor canonical
+[33m7783785[m Se agrego quito la duracion y el nivel que no los vi encesario
+[33med97628[m Se agrego el valor del cambio de perpectiva entre membresia y suscricion
+[33m31e15a7[m Se agrego el valor de quitar la tabla d econtnedio en la vista celular en las guias
+[33m9412059[m Se agrego el valor de la vista del carrucel apra que se vea todoa la iamgen
+[33mcafadc8[m Se agrego un vlaor
+[33m82cba83[m Se agrego apr aque s evea mejro la vista de celualr
+[33m0d93365[m Se agrego la forma apra que el suario electro no peuda comentar
+[33m9323326[m Se agrego el valor de quitar la descarga a electro
+[33m5a625d1[m Se agrego el suairo electro al podcast
+[33mba1bc42[m Se agrego el valor del servidro
+[33mbe3a54b[m Se agrego el valor nuebvo de github
+[33m33ca60f[m prueba 1
+[33m0e09aa5[m Prueba de cerrar session github
+[33mf0be3ab[m Se agrego el usario lectro a las guias
+[33md3650c9[m Se agrego el valor para ver normal el blqoue codigo en las palñabras
+[33md0a531f[m SE agrego el valor tucc
+[33m7cb1750[m Se agrego l vlaor de celuar
+[33mcf48c21[m Se retrocedio en la idea de agregar el menu de navegacion
+[33m7356a88[m Se agrego el vlaor
+[33m36cc482[m Se agrego el valor de git
+[33mebbd72a[m Prueba en el docker
+[33m9df7df3[m SE agrego el valor
+[33m9d3059f[m Se agrego el valor TuCC
+[33m45781aa[m Se organizo lo des los sucriptore sapra no publciar ifnroamcion sencible
+[33m019fed9[m Se organizo el bloque codigod e guias
+[33m130f118[m Se agrego la guia
+[33mce57ff8[m bsucador
+[33mf3afdf9[m Merge branch 'main' of https://github.com/topassky3/blog_verison_2
+[33mbf105da[m Rename robots.txt  to robots.txt
+[33mb15497c[m Rename  .gitignore  to .gitignore
+[33m4f8750e[m Resuelto merge: recuperado .env desde origin/main y ajustado localmente
+[33mb0626e9[m Verison funcional con paypal
+[33ma782904[m Merge branch 'main' of https://github.com/topassky3/blog_verison_2
+[33mb97b23d[m Se orgnizo el valor de la descaga d elos tutoriales
+[33m7eb2d15[m Merge branch 'main' of https://github.com/topassky3/blog_verison_2
+[33mdc631fa[m Se organizo apr aque cualquier suairo peuda ver el cotnenido sin registrarse
+[33m190b0e0[m Merge branch 'main' of https://github.com/topassky3/blog_verison_2
+[33md62efd5[m Se agrego el valor
+[33me16b2bb[m Merge branch 'main' of https://github.com/topassky3/blog_verison_2
+[33m42bda45[m Se agrego el vlaor
+[33m0b06578[m Merge branch 'main' of https://github.com/topassky3/blog_verison_2
+[33m099c349[m Se agrego el valor de la imagenes
+[33m3ab138a[m Merge branch 'main' of https://github.com/topassky3/blog_verison_2
+[33medd388c[m  prgianar
+[33m31518b9[m Resolver conflicto en .env eliminándolo
+[33mf251460[m Eliminar .env del tracking
+[33m1da9c9c[m se agreogo una mejor vista celualr
+[33mc89530e[m Se agrego el valor del rpcoeos
+[33m7696736[m Se agego el valor
+[33m39b7bc0[m Se mejroo el rederizadod e codigo
+[33m09c150c[m se agrego la forma de agregar html
+[33m997ec9d[m Se agrego la carga del turial desde el ajax
+[33mdfb0886[m se agrego el valor
+[33m84a6ed9[m Se agrego elv alor
+[33m9de81cc[m Se gego el valor
+[33me24d1f8[m Se agrego error
+[33mddead64[m Se agrego el valor
+[33m7cc7ab0[m Se agrego el vlaor
+[33md865f87[m Version de prubea
+[33m5b627b1[m Verison antiugua
+[33m2224cb9[m Se agregoe l valor
+[33m8f066f2[m Primier archio del bsucado
+[33m2856d23[m se agrego la aprte de TCC
+[33mda5952d[m se agrego el valor
+[33md1308bf[m Se agrego mongo
+[33m0057f02[m Se agrego lso comentarios al podcast
+[33m384ce29[m Se agrego el vlaor
+[33mb7b5102[m version
+[33mdcca870[m modificacion
+[33mf7fac0d[m Se agrego el calo
+[33m10c294c[m Mongo
+[33mc76b2d3[m Se corrgio la urls para lograr que lo encitren lso navegadores
+[33m336e91b[m Se agrego la seccion de cambio a tucidigo contiando
+[33m625488f[m Se agrego los newletters en el correo
+[33ma469103[m se agrego la seccion de agregar newletters a guias
+[33m4b06d39[m Se agrego la version de newletters
+[33m73a1100[m Ignore
+[33mdeb222d[m Se agrego al secicond e minitaciones
+[33m239850b[m Se agrego la seccion de limitar las guais y los tutoriales
+[33m4992faf[m Se logro un objetivo
+[33m99759fc[m Se agrego el valor de guias casi completo
+[33m4842e64[m Se agrego hasta la app de tutoriales
+[33m69d6a3e[m Se agrego la verison para elimnar la guia
+[33m52035df[m En esta vverison se pueden crear la guia
+[33m90fa4cd[m Se agrego el valor el bsucador
+[33m2ce2004[m Se agrego el froned
+[33m0086e79[m Se agrgo la version
+[33mc80ae62[m Se organizo los tutriale son el app d eincio
+[33m514f338[m Se agrego el valor de de contacto
+[33m6b1469c[m Se agregaron losd ecoradores
+[33m5e100e7[m Se agrego longig con github
+[33m0af374c[m Hola
+[33m2b99179[m Todo en http
+[33m65e8aba[m Se agrego
+[33m8cf6530[m 1
+[33mb45c7f6[m se agrego social SOCIALACCOUNT_AUTO_SIGNU
+[33m116112e[m Se agrego /
+[33m8ebfc9a[m Se agrego el valor
+[33m790a82e[m Se organizo las urls
+[33m859867b[m Se agrego el id del suario
+[33m88ee9bd[m Se agrego el procoe
+[33mfa94369[m Se agrego el valor de docjer nuevo
+[33m093eb5b[m Version con suscricion venisonse
+[33md17fd1b[m Se agego la aprte apra que se guarde en la abse de datos la suscricipm del usario
+[33mce53520[m priemra version
+[33ma06eebb[m Se agrego el valor de los rerimeintos
+[33med8d41b[m Esta verison tiene paypal funcionando
+[33m1f8a997[m Version con paypal
+[33m6e8794b[m pasarela sin suscripcion
+[33meafd48b[m Se agrego el valor
+[33m328a8f7[m Se utilizo el patreon
+[33m73b4a52[m Se utilizo la opcion actulizar la apsarela de apgo
+[33mff83a78[m Se congiro la opcion de patreo a ver si la url de permitir carga bien
+[33m1f9c8b9[m Version de patreoon con url completa
+[33m20e7cf8[m primera prueba
+[33m6f5b2f5[m Se agrego bton de plan basico actual
+[33m55bbe40[m El usairo se registra con plan basico
+[33m79943a2[m Se agrego el id
+[33m057d989[m Se agrrego el csrg
+[33m3272831[m Se agrego el subdominio
+[33mcc8f12e[m Se agrego el archivo settings
+[33m4f4d0e8[m H
+[33me0380b4[m Se agrego el valor de gunircorn
+[33mc10b5f3[m Se agrego la verison de static
+[33mc3d1b19[m Se agrego lo vlaores de Django 4.2
+[33m6e2e90d[m Se agrego la verison de requerimeintos
+[33m60db261[m Se agrego el Dockerfile
+[33m4e48f21[m Se agrego la poiltica de privacidad
+[33m26135d8[m Se agrego lso temrinso de referencia
+[33m150c7f5[m Se agrego el codgio para agregar el cdogio para el el sauriod escargue el cdogio en tutoriales
+[33mdaec411[m Se agrego los estilos del bton de borrar y se organizo la aprte de espera
+[33m96a1149[m Se agrego los coemtnairios a lso podcast
+[33mcaafa00[m Se agrego la seccion de los coemtnairos junto con la seccion de podcasta antieores se dbee mejrarlos estilsod e lsos pdocast
+[33mc0b66f2[m Se agrego la apginacion a los podcast
+[33m8470e76[m Se pagino tutirla y eprfi del podcast
+[33m7cff77e[m Se agrego als categorias a la aprte de crear el podast
+[33m2c75052[m Se agrego la opcion para que el suario peuda borra rlso datos
+[33m852f996[m La categorias de los pdocast
+[33mc1abad4[m Version funcional con iamgens por defecto en los pdocast
+[33mf630638[m Verison que tiene la ecuaha de podcast bien
+[33me8a2c85[m Se agrego el boton apr asubir podcast
+[33mb79d939[m Se añadio la paginacion de escritor
+[33me47e647[m Se agrego los estils al tuitulo del tutorial
+[33m3ececc0[m Se agrego la seccion de publicdiad
+[33mb0c3492[m Version fucnional de lso cmentarios 1.0
+[33mf78a106[m Se agrego un valor
+[33mab915a6[m Se agrego la secciond e coemntairos fucnioanl se empieza a que no s ele exija que el siario teng aque dar un raking apra saber su coemtnario
+[33m8a908e1[m Version funcional de comentairos flat aquieta rle numero leugo de quitar la rpesuatas
+[33mdc0a8c0[m Version estable de coemtnairos
+[33m1518904[m Se agrego los estlos con codigo
+[33m7cabbfc[m Se agrego la mejor version
+[33m569f09a[m Se agrego el diseño del bton responder
+[33m6bfae87[m Se encotnro la version mas moderna para los estilos apr aborra rel coemtnrios
+[33md14baa5[m Version funcional
+[33m4a11231[m Revert "Cada usario puede borrar su propio coemtnairo"
+[33macfb23e[m Cada usario puede borrar su propio coemtnairo
+[33m3ec6bd0[m Se organizo la aprte de color dle megusta y no me gusta
+[33mfe2425e[m Se agrego la verison de los coemtnairos
+[33m606874c[m Se agrego el dsieño de me gusta y no em gusta
+[33m1e71d94[m Se agrego la cantidad de coemtnairos y el raking al tempalte de tutoriales
+[33m1548095[m Se agrego la seccion de cmenntarios del suairo lector se pretende hacer que el saurio lectro le pueda repsonder al usairo lector
+[33mc769ef6[m Se agrego el diseñod e los coemtarios d elso tutoriales
+[33m5ada134[m Se agrego el cdogio icono de la pagina
+[33m7574796[m Verison para tutoriales
+[33me026d9f[m Version estable
+[33m6007f22[m Se agrego el icino del suairo en el menu de navegacion
+[33m7dac907[m Verison fucional
+[33m6c784a2[m Se agrego la parte para se cree el tutorial y se peuda leer el tutorial version 1.0 lo idela es optimzia rla lectura apra quitar los praches
+[33mfa99995[m Ya s epued eller el tutorial con los estilos
+[33m7239821[m Ya se peude cargar los tutorial es publicados
+[33m7b058f0[m Se agrego el bton de agregar celualr
+[33m5117d1c[m version estable apra gardar tutroailes en asbe d edatos
+[33mb1d0a5e[m Verison estable d elos tutoriales
+[33mdae33a2[m Version restable aunque con el error de 'ocurrio un eroro al guardar cuando se da neuvament ela boton buardar'
+[33m1e4453c[m Se agrego el diseño de agregar tutoriales a proeycto solo el diseño
+[33m2a6537b[m Se agrego la actualziacion del perfil
+[33mf496636[m Se agrego los eprfiles en html
+[33m6d36124[m Excluir .env del repositorio mediante .gitignore
+[33md7e81dd[m Excluir .env del repositorio mediante .gitignore
+[33m1297f31[m Se agrego el mensaje
+[33mf8eb1d3[m Se agrego la priemr aversion de la confirmacion del correo electronico
+[33m7fc15cb[m Se agrego el servicio de registrase con github
+[33m6396501[m Se agrego la politica de privacidad
+[33m170576e[m Se agrego el login con gmail
+[33m368260b[m Se agrego el logout y el y el cachat
+[33me146068[m Se agrego la aprte apr ael el suario s epeuda logeear
+[33mc3b396d[m Se agrego el msanej de eoror en español y mejor
+[33mc316a1b[m Se agrego la primera verison del login
+[33mf522d7c[m Se agregaron todos los archivos estaticos
+[33m8e111a3[m Se agrego el serivicio de guias
+[33ma8ffa5e[m Se agrego la app de inicio
+[33m9f89bb0[m Se agrego la opcion para logearse al suario
+[33m4cfb54d[m first commit

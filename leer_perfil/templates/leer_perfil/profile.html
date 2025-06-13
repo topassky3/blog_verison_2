@@ -1,0 +1,182 @@
+{% extends "core/core.html" %}
+
+{% block title %}Perfil de {{ author.get_full_name|default:author.username }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  .profile-header-container {
+    max-width: 900px;
+    margin: 3rem auto 1rem;
+    padding: 2rem;
+    background-color: var(--background);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary);
+  }
+  .profile-info h1 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin: 0 0 0.5rem 0;
+  }
+  .profile-info .username {
+    color: var(--text);
+    opacity: 0.8;
+    margin-bottom: 1rem;
+  }
+  .profile-info .bio {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .content-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .tab-btn {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+  }
+  .tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+  }
+  .tab-content {
+    display: none;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .content-card {
+    background-color: var(--gray-100);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    transition: transform 0.3s ease;
+  }
+  .content-card:hover {
+    transform: translateY(-5px);
+  }
+  .content-card h3 {
+    margin: 0 0 0.5rem 0;
+  }
+  .content-card a {
+    text-decoration: none;
+    color: inherit;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-header-container">
+  {% if author.profile_image %}
+    <img src="{{ author.profile_image.url }}" alt="Foto de {{ author.get_full_name|default:author.username }}" class="profile-avatar">
+  {% else %}
+    <svg class="profile-avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+      <circle cx="64" cy="64" r="60" fill="var(--primary)"/>
+      <circle cx="64" cy="50" r="20" fill="#ffffff"/>
+      <path d="M44,90c0-10,8-18,20-18s20,8,20,18v6H44V90z" fill="#ffffff"/>
+    </svg>
+  {% endif %}
+  <div class="profile-info">
+    <h1>{{ author.get_full_name|default:"Sin nombre" }}</h1>
+    <p class="username">@{{ author.username }}</p>
+    {% if author.bio %}
+      <p class="bio">{{ author.bio|linebreaks }}</p>
+    {% else %}
+      <p class="bio">Este autor aún no ha añadido una biografía.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="content-tabs">
+  <button class="tab-btn active" onclick="showTab('tutorials')">Tutoriales ({{ tutorials.count }})</button>
+  <button class="tab-btn" onclick="showTab('guias')">Guías ({{ guias.count }})</button>
+  <button class="tab-btn" onclick="showTab('podcasts')">Podcasts ({{ podcasts.count }})</button>
+</div>
+
+<div id="tutorials" class="tab-content active">
+  <div class="content-grid">
+    {% for item in tutorials %}
+      <div class="content-card">
+        <a href="{% url 'tutorial_detail' pk=item.pk %}">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description|truncatewords:20 }}</p>
+        </a>
+      </div>
+    {% empty %}
+      <p>Este autor no ha publicado tutoriales.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="guias" class="tab-content">
+  <div class="content-grid">
+    {% for item in guias %}
+      <div class="content-card">
+        {# Cambio aquí: Se usa la URL con el nombre 'guia_detail' #}
+        <a href="{% url 'guia_detail' pk=item.pk %}">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description|truncatewords:20 }}</p>
+        </a>
+      </div>
+    {% empty %}
+      <p>Este autor no ha publicado guías.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="podcasts" class="tab-content">
+  <div class="content-grid">
+    {% for item in podcasts %}
+      <div class="content-card">
+         {# Cambio aquí: Se usa la URL con el nombre 'escuchar_podcast' #}
+        <a href="{% url 'escuchar_podcast' pk=item.pk %}">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description|truncatewords:20 }}</p>
+        </a>
+      </div>
+    {% empty %}
+      <p>Este autor no ha publicado podcasts.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function showTab(tabId) {
+    // Ocultar todos los contenidos
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    // Desactivar todos los botones
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+    // Mostrar el contenido y activar el botón seleccionado
+    document.getElementById(tabId).classList.add('active');
+    document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
+  }
+</script>
+{% endblock %}

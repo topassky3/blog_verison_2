@@ -299,6 +299,46 @@
   }
 }
 
+    /* --- Estilos para las Tarjetas de Estadísticas --- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+.stat-card {
+  background-color: var(--gray-100);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border-left: 5px solid var(--primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.stat-card-header .fa-icon {
+  font-size: 1.25rem;
+  color: var(--primary);
+}
+.stat-card-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-left: auto; /* Alinea el número a la derecha */
+  padding-left: 1rem;
+}
+.stat-card h4 {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+    color: var(--secondary);
+}
   </style>
 {% endblock %}
 
@@ -445,57 +485,52 @@
 
 </section>
 
-
-
       <!-- Sección: Guías Subidas -->
-<section id="guides" class="content-section section-guides">
-  <h2>Guías Subidas</h2>
-  <div class="content-grid">
-    {% for guia in guias %}
-      <div class="content-card">
-        <a href="{% url 'guia_update' guia.pk %}" style="text-decoration:none; color:inherit;">
-          <h3>{{ guia.title }}</h3>
-          <p>Publicado: {{ guia.created_at|date:"d M Y" }}</p>
-        </a>
-        <!-- Enlace para eliminar la guía -->
-        <a href="{% url 'guia_delete' guia.pk %}" class="delete-guia" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
-          Eliminar
-        </a>
-      </div>
-    {% empty %}
-      <p>No tienes guías subidas.</p>
-    {% endfor %}
-    <!-- Botón para agregar una nueva guía -->
-    <div class="content-card add-new">
-      <a href="{% url 'guia_create' %}" class="add-new-btn">&#43; Agregar Nueva Guía</a>
-    </div>
-  </div>
-  <!-- Paginación para guías -->
-  <div class="pagination">
-    {% if guias.has_previous %}
-      <a class="page-btn" href="?guide_page={{ guias.previous_page_number }}#guides">&laquo; Anterior</a>
-    {% else %}
-      <button class="page-btn" disabled>&laquo; Anterior</button>
-    {% endif %}
+        <section id="guides" class="content-section section-guides">
+          <h2>Guías Subidas</h2>
+          <div class="content-grid">
+            {% for guia in guias %}
+              <div class="content-card">
+                <a href="{% url 'guia_update' guia.pk %}" style="text-decoration:none; color:inherit;">
+                  <h3>{{ guia.title }}</h3>
+                  <p>Publicado: {{ guia.created_at|date:"d M Y" }}</p>
+                </a>
+                <!-- Enlace para eliminar la guía -->
+                <a href="{% url 'guia_delete' guia.pk %}" class="delete-guia" style="display:inline-block; margin-top:0.5rem; color:#ef4444; font-weight:bold; text-decoration:none;">
+                  Eliminar
+                </a>
+              </div>
+            {% empty %}
+              <p>No tienes guías subidas.</p>
+            {% endfor %}
+            <!-- Botón para agregar una nueva guía -->
+            <div class="content-card add-new">
+              <a href="{% url 'guia_create' %}" class="add-new-btn">&#43; Agregar Nueva Guía</a>
+            </div>
+          </div>
+          <!-- Paginación para guías -->
+          <div class="pagination">
+            {% if guias.has_previous %}
+              <a class="page-btn" href="?guide_page={{ guias.previous_page_number }}#guides">&laquo; Anterior</a>
+            {% else %}
+              <button class="page-btn" disabled>&laquo; Anterior</button>
+            {% endif %}
 
-    {% for num in guias.paginator.page_range %}
-      {% if guias.number == num %}
-        <button class="page-btn active">{{ num }}</button>
-      {% else %}
-        <a class="page-btn" href="?guide_page={{ num }}#guides">{{ num }}</a>
-      {% endif %}
-    {% endfor %}
+            {% for num in guias.paginator.page_range %}
+              {% if guias.number == num %}
+                <button class="page-btn active">{{ num }}</button>
+              {% else %}
+                <a class="page-btn" href="?guide_page={{ num }}#guides">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
 
-    {% if guias.has_next %}
-      <a class="page-btn" href="?guide_page={{ guias.next_page_number }}#guides">Siguiente &raquo;</a>
-    {% else %}
-      <button class="page-btn" disabled>Siguiente &raquo;</button>
-    {% endif %}
-  </div>
-</section>
-
-
-
+            {% if guias.has_next %}
+              <a class="page-btn" href="?guide_page={{ guias.next_page_number }}#guides">Siguiente &raquo;</a>
+            {% else %}
+              <button class="page-btn" disabled>Siguiente &raquo;</button>
+            {% endif %}
+          </div>
+        </section>
 
        <!-- Sección: Podcasts Subidos -->
       <section id="podcasts" class="content-section section-podcasts">
@@ -543,21 +578,81 @@
           {% endif %}
         </div>
 
-
-      <!-- Sección: Estadísticas del Sitio -->
-      <section id="stats" class="content-section section-stats">
-        <h2>Estadísticas del Sitio</h2>
-        <p style="font-size: 1rem; color: var(--gray-text);">
-          Aquí se muestran algunos datos relevantes del sitio.
-        </p>
-        <ul style="list-style: disc; margin-left: 1.5rem; color: var(--gray-text);">
-          <li>Total de usuarios: 1,250</li>
-          <li>Tutoriales publicados: 75</li>
-          <li>Guías publicadas: 45</li>
-          <li>Podcasts publicados: 30</li>
-          <li>Visitas mensuales: 15,000</li>
-        </ul>
       </section>
+      <!-- Sección: Estadísticas del Sitio -->
+      <section id="stats" class="content-section section-info">
+  <h2>Estadísticas</h2>
+
+  <h4>Tus Estadísticas Personales</h4>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <i class="fas fa-book-open fa-icon"></i>
+        <span>Tus Tutoriales</span>
+      </div>
+      <span class="stat-card-value">{{ stats_autor.total_tutoriales }}</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <i class="fas fa-map-signs fa-icon"></i>
+        <span>Tus Guías</span>
+      </div>
+      <span class="stat-card-value">{{ stats_autor.total_guias }}</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <i class="fas fa-microphone-alt fa-icon"></i>
+        <span>Tus Podcasts</span>
+      </div>
+      <span class="stat-card-value">{{ stats_autor.total_podcasts }}</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <i class="fas fa-comments fa-icon"></i>
+        <span>Comentarios Recibidos</span>
+      </div>
+      <span class="stat-card-value">{{ stats_autor.total_comentarios }}</span>
+    </div>
+  </div>
+
+  <h4>Estadísticas Generales del Sitio</h4>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <i class="fas fa-users fa-icon"></i>
+        <span>Usuarios Totales</span>
+      </div>
+      <span class="stat-card-value">{{ stats_generales.total_usuarios }}</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <i class="fas fa-book fa-icon"></i>
+        <span>Tutoriales Publicados</span>
+      </div>
+      <span class="stat-card-value">{{ stats_generales.total_tutoriales_publicados }}</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <i class="fas fa-compass fa-icon"></i>
+        <span>Guías Publicadas</span>
+      </div>
+      <span class="stat-card-value">{{ stats_generales.total_guias_publicadas }}</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <i class="fas fa-podcast fa-icon"></i>
+        <span>Podcasts Publicados</span>
+      </div>
+      <span class="stat-card-value">{{ stats_generales.total_podcasts_publicados }}</span>
+    </div>
+  </div>
+
+  <p style="font-size: 0.9rem; color: var(--gray-text); margin-top: 2rem; font-style: italic;">
+    Nota: Las visitas mensuales y otras métricas de tráfico se gestionan a través de herramientas externas como Google Analytics y no se muestran aquí.
+  </p>
+</section>
+
+
     </main>
   </div>
 

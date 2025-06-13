@@ -714,7 +714,8 @@ background-color: var(--primary);
 .tutorial-info {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1rem; /* Puedes reducir el gap a 0.75rem si quieres menos espacio horizontal */
+  align-items: center; /* <-- ¡ESTA ES LA LÍNEA MÁGICA! */
   font-size: 0.9rem;
   color: var(--text);
 }
@@ -916,8 +917,33 @@ background-color: var(--primary);
 .carousel-next {
   right: 1rem;
 }
+/* --- Estilos para los Íconos Sociales en la Cabecera del Tutorial --- */
+/* Este selector asegura que solo afectamos al div dentro de .tutorial-info */
+.tutorial-info .header-social-links {
+  display: inline-flex; /* Se alinea horizontalmente con los otros spans */
+  align-items: center;
+  gap: 0.8rem; /* Espacio entre los íconos */
 
+  /* Los siguientes estilos lo hacen lucir como los otros spans */
+  background-color: var(--gray-100);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
 
+/* Estilo para cada ícono individual. El selector es muy específico. */
+.tutorial-info .header-social-links a {
+  color: var(--text);
+  font-size: 1.1rem; /* Tamaño de los íconos */
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* Efecto al pasar el ratón por encima de los íconos */
+.tutorial-info .header-social-links a:hover {
+  color: var(--primary);
+  transform: scale(1.2); /* Un pequeño zoom para dar feedback */
+}
 
 </style>
 {% endblock %}
@@ -935,13 +961,23 @@ background-color: var(--primary);
         </a>
       {% endif %}
       <div class="tutorial-info">
-          <!--
-        <span class="tutorial-duration">Duración: {{ tutorial.duration|default:"Desconocida" }}</span>
-        <span class="tutorial-level">Nivel: {{ tutorial.level|default:"General" }}</span>
-        -->
-        <span class="tutorial-date">Publicado: {{ tutorial.created_at|date:"d/m/Y" }}</span>
-        <span class="tutorial-author">Por: {{ tutorial.author.get_full_name|default:tutorial.author.username }}</span>
-      </div>
+          <span class="tutorial-date">Publicado: {{ tutorial.created_at|date:"d/m/Y" }}</span>
+          <span class="tutorial-author">
+            Por:
+            <a href="{% url 'leer_perfil:author_profile' pk=tutorial.author.pk %}" style="text-decoration: none; color: inherit;">
+              {{ tutorial.author.get_full_name|default:tutorial.author.username }}
+            </a>
+          </span>
+
+          <div class="header-social-links">
+            {# NOTA: He corregido la clase del ícono de 'X' a la estándar de Font Awesome y el enlace de YouTube #}
+            <a href="https://x.com/tucodigocotiano" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en X"><i class="fab fa-x"></i></a>
+            <a href="https://github.com/tucodigocotidiano" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://youtube.com/tucodigocotidiano" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.tiktok.com/@tucodigocotidiano123_" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/tucodigocotidiano/" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+          </div>
     </header>
 
 <!-- Carrusel de Imágenes -->

@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'crear_guia',
     'leer_guias',
     'newsletter',
+    'leer_perfil',
 ]
 
 SITE_ID = 5

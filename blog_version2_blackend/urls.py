@@ -56,6 +56,7 @@ urlpatterns = [
     path('crear_guia/', include('crear_guia.urls')),
     path('leer_guias/', include('leer_guias.urls')),
     path('newsletter/', include('newsletter.urls')),
+    path('autor/', include('leer_perfil.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
     path('media2/<path:filename>/', serve_media, name='serve_media'),
 ]
