@@ -223,7 +223,7 @@ class DownloadGuiaCodeFileView(LoginRequiredMixin, View):  # Ya usa LoginRequire
 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import Guia, Lector  # Asegúrate de que los modelos necesarios estén importados
+from core.models import Guia, Lector  # Asegúrate de que los modelos necesarios estén importados
 
 # ... (tus otras vistas como GuiaDetailView, etc., se quedan como están) ...
 
