@@ -21,6 +21,15 @@
       {{ form.description }}
     </div>
     <div>
+      <label for="id_meta_description">{{ form.meta_description.label }}:</label>
+      {{ form.meta_description }}
+      {% if form.meta_description.help_text %}
+        <small style="color: #6c757d; display: block; margin-top: 5px;">
+          {{ form.meta_description.help_text }}
+        </small>
+      {% endif %}
+    </div>
+    <div>
       <label for="id_category">Categoría:</label>
       {{ form.category }}
     </div>
