@@ -322,6 +322,13 @@ class Guia(models.Model):
     )
     title = models.CharField("Título", max_length=200)
     description = models.TextField("Descripción", blank=True, null=True)
+    meta_description = models.CharField(
+        "Meta Descripción (para SEO)",
+        max_length=165,
+        blank=True,
+        null=True,
+        help_text="Texto que aparece en Google (aprox. 150-160 caracteres)."
+    )
     category = models.ForeignKey(
         GuiaCategory,
         on_delete=models.SET_NULL,

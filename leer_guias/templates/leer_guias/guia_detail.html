@@ -15,6 +15,65 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
+  {# 1. METADATOS BÁSICOS PARA SEO #}
+  {# Usamos el nuevo campo meta_description, y si está vacío, usamos la descripción normal como respaldo #}
+  <meta name="description" content="{{ guia.meta_description|default:guia.description|truncatewords:25 }}">
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+  {# 2. OPEN GRAPH (PARA COMPARTIR EN FACEBOOK, LINKEDIN, ETC.) #}
+  <meta property="og:title" content="{{ guia.title }}">
+  <meta property="og:description" content="{{ guia.meta_description|default:guia.description|truncatewords:25 }}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  {% if guia.image %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ guia.image.url }}">
+  {% else %}
+    <meta property="og:image" content="https://tucodigocotidiano.yarumaltech.com/files/icono.png">
+  {% endif %}
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="TuCodigoCotidiano">
+
+  {# 3. TWITTER CARDS (PARA COMPARTIR EN X/TWITTER) #}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ guia.title }}">
+  <meta name="twitter:description" content="{{ guia.meta_description|default:guia.description|truncatewords:25 }}">
+  {% if guia.image %}
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ guia.image.url }}">
+  {% else %}
+    <meta name="twitter:image" content="https://tucodigocotidiano.yarumaltech.com/files/icono.png">
+  {% endif %}
+
+  {# 4. DATOS ESTRUCTURADOS (JSON-LD) - ¡LO MÁS IMPORTANTE PARA GOOGLE! #}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{ request.build_absolute_uri }}"
+    },
+    "headline": "{{ guia.title }}",
+    "description": "{{ guia.meta_description|default:guia.description|truncatewords:30 }}",
+    {% if guia.image %}
+      "image": {
+        "@type": "ImageObject",
+        "url": "{{ request.scheme }}://{{ request.get_host }}{{ guia.image.url }}"
+      },
+    {% endif %}
+    "author": {
+      "@type": "Person",
+      "name": "{{ guia.author.get_full_name|default:guia.author.username }}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "TuCodigoCotidiano",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tucodigocotidiano.yarumaltech.com/files/icono.png"
+      }
+    },
+    "datePublished": "{{ guia.created_at|date:"c" }}",
+    "dateModified": "{{ guia.updated_at|date:"c" }}"
+  }
 
   <style>
     :root {
@@ -924,69 +983,6 @@ function customConfirm(message) {
     });
   });
 }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Función para cargar los bloques de la guía mediante AJAX
-    function loadGuiaBlocks() {
-      const overlay = document.getElementById('loadingOverlay');
-      if(overlay) overlay.style.display = 'flex';
-
-      fetch("{% url 'load_all_guia_blocks' guia_id=guia.id %}")
-        .then(response => response.json())
-        .then(data => {
-          const container = document.getElementById('guia-blocks-container');
-          container.innerHTML = ''; // Limpiar el contenedor
-
-          data.blocks.forEach(function(block) {
-            const div = document.createElement('div');
-            div.classList.add('tutorial-block');
-
-            if (block.block_type === 'code') {
-              div.classList.add('block-code');
-              const pre = document.createElement('pre');
-              const code = document.createElement('code');
-              code.textContent = block.content;
-              pre.appendChild(code);
-              div.appendChild(pre);
-            } else if (block.block_type === 'image' && block.image_url) {
-              div.classList.add('block-image');
-              div.style.cssText = 'margin: 1.5rem auto; text-align: center; max-width: 80%;';
-              const img = document.createElement('img');
-              img.src = block.image_url;
-              img.alt = 'Imagen de la guía';
-              img.style.cssText = 'max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);';
-              div.appendChild(img);
-            } else { // Para 'text', 'latex', etc.
-              div.classList.add(block.block_type === 'text' ? 'block-text' : 'block-latex');
-              div.innerHTML = block.content;
-            }
-            container.appendChild(div);
-          });
-
-          // Mostrar mensaje de límite si es necesario
-          const limitMessageContainer = document.getElementById('content-limit-message-container');
-          if (data.mostrar_limite) {
-            limitMessageContainer.style.display = 'block';
-          }
-
-          // Re-aplicar resaltado de sintaxis si usas highlight.js
-          if (typeof hljs !== 'undefined') {
-            document.querySelectorAll('#guia-blocks-container .block-code code').forEach((codeBlock) => {
-              hljs.highlightElement(codeBlock);
-            });
-          }
-
-          if(overlay) overlay.style.display = 'none';
-        })
-        .catch(error => {
-          console.error('Error al cargar los bloques de la guía:', error);
-          if(overlay) overlay.style.display = 'none';
-        });
-    }
-
-    // Llamar a la función al cargar la página
-    loadGuiaBlocks();
-  });
 
 </script>
 {% endblock %}
