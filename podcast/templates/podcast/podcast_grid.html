@@ -17,7 +17,7 @@
       <div class="podcast-content">
         <h3>{{ podcast.title }}</h3>
         <p class="podcast-meta">Publicado: {{ podcast.created_at|date:"d M Y" }}</p>
-        <p>{{ podcast.description }}</p>
+        <p>{{ podcast.description|truncatewords:20 }}</p>
         <div class="podcast-footer">
           <!-- El enlace se mantiene si deseas enfatizarlo; pero no es indispensable -->
           <a href="{% url 'escuchar_podcast' podcast.pk %}" class="read-more">Escuchar Podcast →</a>

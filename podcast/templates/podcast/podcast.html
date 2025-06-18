@@ -5,53 +5,67 @@
 
 {% block extra_head %}
   <style>
-    .pagination {
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .pagination .page-btn {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .pagination .page-btn:hover {
+      background-color: var(--secondary);
+      transform: translateY(-1px);
+    }
+    .pagination .page-btn:disabled {
+      background-color: var(--gray-200);
+      cursor: not-allowed;
+    }
+    .pagination .page-info {
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .full-name {
+      display: inline;
+    }
+    .short-name {
+      display: none;
+    }
+
+    /* === REGLAS CORREGIDAS Y MÁS ESPECÍFICAS === */
+    .podcast-grid .podcast-card {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 2rem;
+      flex-direction: column;
     }
-    .pagination .page-btn {
-      background-color: var(--primary);
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
+    .podcast-grid .podcast-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
     }
-    .pagination .page-btn:hover {
-      background-color: var(--secondary);
-      transform: translateY(-1px);
+    .podcast-grid .podcast-footer {
+      margin-top: auto;
     }
-    .pagination .page-btn:disabled {
-      background-color: var(--gray-200);
-      cursor: not-allowed;
-    }
-    .pagination .page-info {
-      font-size: 1rem;
-      color: var(--text);
-    }
-    .full-name {
-  display: inline;
-}
-.short-name {
-  display: none;
-}
+    /* === FIN DE LAS REGLAS CORREGIDAS === */
 
-@media (max-width: 600px) {
-  .full-name {
-    display: none;
-  }
-  .short-name {
-    display: inline;
-  }
-}
-
-  </style>
+    @media (max-width: 600px) {
+      .full-name {
+        display: none;
+      }
+      .short-name {
+        display: inline;
+      }
+    }
+  </style>
 {% endblock %}
 
 
