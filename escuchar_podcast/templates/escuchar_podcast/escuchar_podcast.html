@@ -1,9 +1,62 @@
 {% extends "core/core.html" %}
-{% load podcast_comments_tags %}  {# Carga el tag para renderizar comentarios de podcasts #}
+{% load podcast_comments_tags %}
 
-{% block title %}Escuchar Podcast | WebDev Blog{% endblock %}
+{# ================================================================= #}
+{# 1. TÍTULO DINÁMICO                                                #}
+{# Ahora el título de la pestaña será el del episodio específico.     #}
+{# ================================================================= #}
+{% block title %}{{ podcast.title }} | Tu Codigo Cotidiano Podcast{% endblock %}
 
+
+{# ================================================================= #}
+{# 2. METADATOS ESPECÍFICOS, CANONICAL Y DATOS ESTRUCTURADOS         #}
+{# Este bloque completo es nuevo y es el cambio más importante.      #}
+{# ================================================================= #}
 {% block extra_head %}
+    {{ block.super }} {# Hereda los datos base de core.html #}
+
+    <meta name="description" content="{{ podcast.description|truncatewords:25 }}">
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}">
+
+    <meta property="og:title" content="{{ podcast.title }}">
+    <meta property="og:description" content="{{ podcast.description|truncatewords:25 }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}">
+    {% if podcast.cover %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ podcast.cover.url }}">
+    {% endif %}
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ podcast.title }}">
+    <meta name="twitter:description" content="{{ podcast.description|truncatewords:25 }}">
+    {% if podcast.cover %}
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ podcast.cover.url }}">
+    {% endif %}
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "PodcastEpisode",
+      "name": "{{ podcast.title|escapejs }}",
+      "description": "{{ podcast.description|escapejs }}",
+      "url": "{{ request.scheme }}://{{ request.get_host }}{{ request.get_full_path }}",
+      {% if podcast.cover %}
+      "image": "{{ request.scheme }}://{{ request.get_host }}{{ podcast.cover.url }}",
+      {% endif %}
+      "datePublished": "{{ podcast.created_at|date:'Y-m-d' }}",
+      "partOfSeries": {
+        "@type": "PodcastSeries",
+        "name": "Tu codigo cotidiano",
+        "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'podcast_home' %}"
+      },
+      "audio": {
+        "@type": "AudioObject",
+        "contentUrl": "{{ request.scheme }}://{{ request.get_host }}{{ podcast.audio.url }}",
+        "encodingFormat": "audio/wav"
+      }
+    }
+    </script>
+    
 <style>
   :root {
     --primary: #2563eb;
@@ -16,366 +69,85 @@
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }
 
-  /* Estilos principales para Podcast */
-  .podcast-main {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    font-family: 'Helvetica Neue', sans-serif;
-  }
-  .podcast-header {
-    text-align: center;
-    margin-bottom: 4rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-radius: var(--radius);
-    color: white;
-  }
-  .podcast-header h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  .podcast-header p {
-    font-size: 1.25rem;
-    max-width: 800px;
-    margin: 0 auto;
-    opacity: 0.9;
-  }
-  .podcast-player {
-    background: var(--gray-100);
-    border-radius: var(--radius);
-    padding: 2rem;
-    box-shadow: var(--shadow);
-    margin-bottom: 3rem;
-    text-align: center;
-    transition: transform 0.3s ease;
-  }
+  /* Estilos principales para Podcast (sin cambios) */
+  .podcast-main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; font-family: 'Helvetica Neue', sans-serif; }
+  .podcast-header { text-align: center; margin-bottom: 4rem; padding: 2rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: var(--radius); color: white; }
+  .podcast-header h1 { font-size: 3rem; margin-bottom: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  .podcast-header p { font-size: 1.25rem; max-width: 800px; margin: 0 auto; opacity: 0.9; }
+  .podcast-player { background: var(--gray-100); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); margin-bottom: 3rem; text-align: center; transition: transform 0.3s ease; }
   .podcast-player:hover { transform: scale(1.02); }
-  .cover-art {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    margin: 0 auto 1.5rem;
-    overflow: hidden;
-    border: 4px solid var(--primary);
-  }
-  .cover-art img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .episodes-section {
-    background: var(--gray-100);
-    border-radius: var(--radius);
-    padding: 2rem;
-    box-shadow: var(--shadow);
-  }
-  .episodes-section h2 {
-    font-size: 1.75rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid var(--gray-200);
-    padding-bottom: 0.5rem;
-    text-align: center;
-    color: var(--primary);
-  }
-  .episode-card {
-    display: flex;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    background: var(--background);
-    border-radius: var(--radius);
-    margin-bottom: 1rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid var(--gray-200);
-  }
-  .episode-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  .episode-number {
-    font-size: 1.5rem;
-    color: var(--primary);
-    min-width: 50px;
-    text-align: center;
-  }
-  .episode-content h3 {
-    font-size: 1.4rem;
-    margin: 0 0 0.5rem;
-    color: var(--text);
-  }
-  .episode-date {
-    color: var(--text);
-    opacity: 0.8;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-  }
+  .cover-art { width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 1.5rem; overflow: hidden; border: 4px solid var(--primary); }
+  .cover-art img { width: 100%; height: 100%; object-fit: cover; }
+  .episodes-section { background: var(--gray-100); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); }
+  .episodes-section h2 { font-size: 1.75rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--gray-200); padding-bottom: 0.5rem; text-align: center; color: var(--primary); }
+  .episode-card { display: flex; gap: 1.5rem; padding: 1.5rem; background: var(--background); border-radius: var(--radius); margin-bottom: 1rem; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid var(--gray-200); }
+  .episode-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+  .episode-number { font-size: 1.5rem; color: var(--primary); min-width: 50px; text-align: center; }
+  .episode-content h3 { font-size: 1.4rem; margin: 0 0 0.5rem; color: var(--text); }
+  .episode-date { color: var(--text); opacity: 0.8; font-size: 0.9rem; margin-bottom: 0.5rem; }
 
-  /* Estilos para Comentarios */
-  .comments-section {
-    margin-top: 4rem;
-    padding: 2.5rem;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    background-color: var(--background);
-    box-shadow: var(--shadow);
-  }
-  .comments-section h2 {
-    font-size: 1.75rem;
-    color: var(--primary);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--primary);
-    text-align: center;
-  }
+  /* Estilos para Comentarios (sin cambios) */
+  .comments-section { margin-top: 4rem; padding: 2.5rem; border: 1px solid var(--gray-200); border-radius: var(--radius); background-color: var(--background); box-shadow: var(--shadow); }
+  .comments-section h2 { font-size: 1.75rem; color: var(--primary); margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary); text-align: center; }
   .comment-form .form-group { margin-bottom: 1.5rem; }
-  .comment-form label {
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 0.75rem;
-    display: block;
-  }
-  .comment-form textarea {
-    width: 100%;
-    min-height: 150px;
-    padding: 1rem;
-    border: 2px solid var(--gray-200);
-    border-radius: var(--radius);
-    background: var(--background);
-    color: var(--text);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  .comment-form textarea:focus {
-    border-color: var(--primary);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-  }
-  .submit-comment {
-    width: 100%;
-    font-size: 1rem;
-    font-weight: 600;
-    background-color: var(--primary);
-    color: #fff;
-    padding: 0.75rem;
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.3s ease;
-    margin-top: 1rem;
-  }
-  .submit-comment:hover {
-    transform: translateY(-2px);
-    background-color: var(--secondary);
-  }
+  .comment-form label { font-weight: 600; color: var(--primary); margin-bottom: 0.75rem; display: block; }
+  .comment-form textarea { width: 100%; min-height: 150px; padding: 1rem; border: 2px solid var(--gray-200); border-radius: var(--radius); background: var(--background); color: var(--text); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+  .comment-form textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
+  .submit-comment { width: 100%; font-size: 1rem; font-weight: 600; background-color: var(--primary); color: #fff; padding: 0.75rem; border: none; border-radius: var(--radius); cursor: pointer; transition: transform 0.2s ease, background-color 0.3s ease; margin-top: 1rem; }
+  .submit-comment:hover { transform: translateY(-2px); background-color: var(--secondary); }
   .comments-list { margin-top: 3rem; }
-
-  /* Estrellas de calificación */
-  .star-rating {
-    display: inline-flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    gap: 0.25rem;
-  }
+  .star-rating { display: inline-flex; flex-direction: row-reverse; justify-content: flex-end; gap: 0.25rem; }
   .star-rating input[type="radio"] { display: none; }
-  .star-rating label {
-    font-size: 1.5rem;
-    color: #d1d5db;
-    cursor: pointer;
-    transition: color 0.2s ease;
-  }
+  .star-rating label { font-size: 1.5rem; color: #d1d5db; cursor: pointer; transition: color 0.2s ease; }
   .star-rating label:hover,
-  .star-rating label:hover ~ label {
-    color: #fcd34d;
-  }
-  .star-rating input[type="radio"]:checked ~ label {
-    color: #f59e0b;
-  }
-
-  /* Comentario general */
-  .comment {
-    position: relative;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    background: var(--gray-100);
-    border-radius: var(--radius);
-    border: 1px solid var(--gray-200);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .comment:hover {
-    transform: translateX(5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  .comment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  .comment-author {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .comment-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--primary);
-    padding: 2px;
-    background: var(--background);
-  }
+  .star-rating label:hover ~ label { color: #fcd34d; }
+  .star-rating input[type="radio"]:checked ~ label { color: #f59e0b; }
+  .comment { position: relative; padding: 1.5rem; margin: 1.5rem 0; background: var(--gray-100); border-radius: var(--radius); border: 1px solid var(--gray-200); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .comment:hover { transform: translateX(5px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+  .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .comment-author { display: flex; align-items: center; gap: 1rem; }
+  .comment-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); padding: 2px; background: var(--background); }
   .comment-body { margin-bottom: 1rem; }
-  .comment-reactions {
-    margin-top: 1rem;
-    display: flex;
-    gap: 1rem;
-  }
-  .reaction-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
+  .comment-reactions { margin-top: 1rem; display: flex; gap: 1rem; }
+  .reaction-button { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: transform 0.2s ease; }
   .reaction-button:hover { transform: scale(1.1); }
-  .reaction-button svg {
-    width: 20px;
-    height: 20px;
-    fill: var(--gray-400);
-    transition: fill 0.3s ease;
-  }
+  .reaction-button svg { width: 20px; height: 20px; fill: var(--gray-400); transition: fill 0.3s ease; }
   .reaction-button.active svg { fill: var(--primary); }
   .reaction-button span { font-size: 0.875rem; color: var(--text); }
-  .comment-replies {
-    margin-left: 2rem;
-    border-left: 2px solid var(--secondary);
-    padding-left: 1rem;
-  }
-  .delete-comment-button {
-      background-color: var(--secondary);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 14px;
-      line-height: 20px;
-      text-align: center;
-      cursor: pointer;
-      padding: 0;
-      margin-left: 1rem;
-      transition: background-color 0.3s;
-    }
-    .delete-comment-button:hover {
-      background-color: var(--primary);
-    }
-
-    .download-button {
-  display: inline-block;
-  background-color: var(--primary);
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius);
-  text-decoration: none;
-  font-weight: 600;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-.download-button:hover {
-  background-color: var(--secondary);
-  transform: translateY(-2px);
-}
-
+  .comment-replies { margin-left: 2rem; border-left: 2px solid var(--secondary); padding-left: 1rem; }
+  .delete-comment-button { background-color: var(--secondary); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 14px; line-height: 20px; text-align: center; cursor: pointer; padding: 0; margin-left: 1rem; transition: background-color 0.3s; }
+  .delete-comment-button:hover { background-color: var(--primary); }
+  .download-button { display: inline-block; background-color: var(--primary); color: #fff; padding: 0.75rem 1.5rem; border-radius: var(--radius); text-decoration: none; font-weight: 600; transition: background-color 0.3s ease, transform 0.2s ease; }
+  .download-button:hover { background-color: var(--secondary); transform: translateY(-2px); }
 @media (max-width: 600px) {
-  /* Contenedor en grid: 2 columnas */
-  .comment-reactions {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
-    gap: 0.5rem;                   /* Espacio entre celdas */
-  }
-
-  /* Estilo base de cada botón */
-  .comment-reactions .reaction-button {
-    display: flex;               /* Para alinear icono y texto en la misma fila */
-    align-items: center;
-    justify-content: center;     /* Centra contenido dentro del botón */
-    gap: 0.5rem;                 /* Espacio entre icono y texto */
-    padding: 0.5rem;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    background-color: var(--background);
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-  }
-
-  .comment-reactions .reaction-button:hover {
-    background-color: var(--gray-100);
-    transform: scale(1.02);
-  }
-
-  /* Icono SVG dentro del botón */
-  .comment-reactions .reaction-button svg {
-    width: 18px;
-    height: 18px;
-    fill: var(--gray-400);
-    transition: fill 0.3s ease;
-  }
-  /* Si está activo (like/dislike) */
-  .comment-reactions .reaction-button.active svg {
-    fill: var(--primary);
-  }
-
-  /* Texto dentro del botón */
-  .comment-reactions .reaction-button span {
-    font-size: 0.875rem;
-    color: var(--text);
-    white-space: nowrap; /* Mantiene el texto en una línea; cámbialo a 'normal' si quieres que se parta */
-  }
-
-  /* Ubicamos cada botón en la celda que queremos:
-     1er y 2do en la misma fila,
-     3er y 4to cada uno en fila propia */
-  .comment-reactions .reaction-button:nth-child(1) {
-    grid-column: 1; /* Fila 1, Columna 1 */
-    grid-row: 1;
-  }
-  .comment-reactions .reaction-button:nth-child(2) {
-    grid-column: 2; /* Fila 1, Columna 2 */
-    grid-row: 1;
-  }
-  .comment-reactions .reaction-button:nth-child(3) {
-    grid-column: 1 / span 2; /* Ocupa 2 columnas */
-    grid-row: 2;             /* Fila 2 */
-  }
-  .comment-reactions .reaction-button:nth-child(4) {
-    grid-column: 1 / span 2; /* Ocupa 2 columnas */
-    grid-row: 3;             /* Fila 3 */
-  }
+  .comment-reactions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .comment-reactions .reaction-button { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem; border: 1px solid var(--gray-200); border-radius: var(--radius); background-color: var(--background); cursor: pointer; transition: background-color 0.2s ease, transform 0.2s ease; }
+  .comment-reactions .reaction-button:hover { background-color: var(--gray-100); transform: scale(1.02); }
+  .comment-reactions .reaction-button svg { width: 18px; height: 18px; fill: var(--gray-400); transition: fill 0.3s ease; }
+  .comment-reactions .reaction-button.active svg { fill: var(--primary); }
+  .comment-reactions .reaction-button span { font-size: 0.875rem; color: var(--text); white-space: nowrap; }
+  .comment-reactions .reaction-button:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .comment-reactions .reaction-button:nth-child(2) { grid-column: 2; grid-row: 1; }
+  .comment-reactions .reaction-button:nth-child(3) { grid-column: 1 / span 2; grid-row: 2; }
+  .comment-reactions .reaction-button:nth-child(4) { grid-column: 1 / span 2; grid-row: 3; }
 }
-
-
-
 </style>
 {% endblock %}
 
 {% block content %}
 <main class="podcast-main">
-  <!-- Cabecera del Podcast -->
   <header class="podcast-header">
     <h1 class="section-title">Tu codigo cotidiano</h1>
     <p class="podcast-description">Explora el mundo del desarrollo web a través de conversaciones con expertos de la industria.</p>
   </header>
 
-  <!-- Reproductor principal -->
   <section class="podcast-player">
     <div class="cover-art">
       {% if podcast.cover %}
         <img src="{{ podcast.cover.url }}" alt="Cover del Podcast">
       {% else %}
-        <!-- SVG por defecto -->
         <svg class="podcast-logo" width="200" height="200" viewBox="0 0 64 64" aria-label="Podcast Logo">
-          <!-- ... -->
-        </svg>
+          </svg>
       {% endif %}
     </div>
     <div class="podcast-meta">
@@ -384,13 +156,11 @@
     </div>
     <div class="audio-controls">
   {% if request.user.subscription.plan == "Básico" %}
-    <!-- Usuario Básico: reproduce sin opción de descarga en el menú (no se muestra la opción de descarga en el reproductor) -->
     <audio controls controlsList="nodownload">
       <source src="{{ podcast.audio.url }}" type="audio/mpeg">
       Tu navegador no soporta el elemento de audio.
     </audio>
   {% else %}
-    <!-- Usuarios Premium/Anual: reproducción normal -->
     <audio controls>
       <source src="{{ podcast.audio.url }}" type="audio/mpeg">
       Tu navegador no soporta el elemento de audio.
@@ -399,14 +169,12 @@
 </div>
 
 {% if effective_user and effective_user.username != "electro" and effective_user.subscription and effective_user.subscription.plan != "Básico" %}
-  <!-- Botón para descargar el podcast (solo para usuarios con planes superiores a Básico y que no sean "electro") -->
   <div class="download-podcast" style="text-align: center; margin: 2rem 0;">
     <a href="{{ podcast.audio.url }}" class="download-button" download>
       Descargar Podcast
     </a>
   </div>
 {% else %}
-  <!-- Mensaje solicitando la suscripción que redirige a la vista de suscripción -->
   <div class="download-podcast" style="text-align: center; margin: 2rem 0;">
     <a href="{% url 'suscripcion_home' %}" class="download-message" style="font-weight: 600; font-size: 1.1rem; color: var(--primary); text-decoration: none;">
       Únete a la Membresía Premium para descargar el podcast.
@@ -416,7 +184,6 @@
 
   </section>
 
-  <!-- Episodios Anteriores -->
   <section class="episodes-section">
   <h2 class="section-title">Episodios Anteriores</h2>
   {% for episode in previous_episodes %}
@@ -437,11 +204,9 @@
 </section>
 
 
-  <!-- Comentarios y Valoraciones -->
   <section id="comments" class="comments-section">
     <h2>Comentarios y Valoraciones</h2>
 
-    <!-- Formulario para comentar -->
     <form class="comment-form" method="post" action="{% url 'escuchar_podcast' podcast.pk %}#comments">
       {% csrf_token %}
       <div class="form-group">
@@ -459,7 +224,6 @@
       <button type="submit" class="submit-comment">Enviar Comentario</button>
     </form>
 
-    <!-- Lista de comentarios -->
     <div class="comments-list">
       {% for comment in top_level_comments %}
         {% render_podcast_comentario comment %}
