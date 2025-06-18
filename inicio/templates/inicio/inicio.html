@@ -3,6 +3,17 @@
 {% block title %}Inicio - TuCodigoCotidiano Blog{% endblock %}
 
 {% block extra_head %}
+  {# 1. CARGA LOS METADATOS DEL PADRE (¡LA LÍNEA MÁS IMPORTANTE!) #}
+  {{ block.super }}
+
+  {# 2. OPCIONAL: SOBRESCRIBE METADATOS ESPECÍFICOS PARA EL INICIO #}
+  {# Esto le da a tu página de inicio una descripción única y más atractiva que la genérica. #}
+  <meta name="description" content="Bienvenido a TuCodigoCotidiano. Explora tutoriales, guías y podcasts sobre desarrollo web, Python, Django y más para potenciar tu código día a día.">
+  <meta property="og:description" content="Bienvenido a TuCodigoCotidiano. Explora tutoriales, guías y podcasts sobre desarrollo web, Python, Django y más para potenciar tu código día a día.">
+  <meta name="twitter:description" content="Bienvenido a TuCodigoCotidiano. Explora tutoriales, guías y podcasts sobre desarrollo web, Python, Django y más para potenciar tu código día a día.">
+
+
+  {# 3. AÑADE TUS ESTILOS ESPECÍFICOS PARA EL INICIO (como ya lo tenías) #}
   <style>
     /* Estilo para las imágenes de los posts destacados */
     .post-image {
@@ -64,23 +75,22 @@
     }
 
     /* Mostrar por defecto el nombre completo */
-.full-name {
-  display: inline;
-}
-.short-name {
-  display: none;
-}
+    .full-name {
+      display: inline;
+    }
+    .short-name {
+      display: none;
+    }
 
-/* En dispositivos móviles (por ejemplo, menos de 600px) mostrar solo el nombre abreviado */
-@media (max-width: 600px) {
-  .full-name {
-    display: none;
-  }
-  .short-name {
-    display: inline;
-  }
-}
-
+    /* En dispositivos móviles (por ejemplo, menos de 600px) mostrar solo el nombre abreviado */
+    @media (max-width: 600px) {
+      .full-name {
+        display: none;
+      }
+      .short-name {
+        display: inline;
+      }
+    }
   </style>
 {% endblock %}
 
