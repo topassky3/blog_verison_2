@@ -10,7 +10,7 @@
           {{ tutorial.category.name|default:"Sin Categoría" }}
         </span>
         {% if tutorial.image %}
-          <img src="{{ tutorial.image.url }}" alt="{{ tutorial.title }}" class="tutorial-image">
+          <img src="{{ tutorial.image.url }}" alt="{{ tutorial.title }}" class="tutorial-image" loading="lazy">
         {% else %}
           <img src="data:image/svg+xml;utf8,<svg ...>No Image</svg>"
                alt="{{ tutorial.title }}" class="tutorial-image">
