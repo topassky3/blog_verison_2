@@ -3,21 +3,7 @@
 {% block title %}Inicio - TuCodigoCotidiano Blog{% endblock %}
 
 {% block extra_head %}
- 
-  {% block meta_tags %}
-      {# Aquí sobreescribimos los metadatos para que sean específicos de la página de inicio #}
-      <meta name="description" content="Bienvenido a TuCodigoCotidiano. Explora tutoriales, guías y podcasts sobre desarrollo web, Python, Django y más para potenciar tu código día a día.">
-      <link rel="canonical" href="{{ request.build_absolute_uri }}">
-      <meta property="og:title" content="TuCodigoCotidiano - Tu Blog de Desarrollo Web">
-      <meta property="og:description" content="Bienvenido a TuCodigoCotidiano. Explora tutoriales, guías y podcasts sobre desarrollo web, Python, Django y más.">
-      <meta name="twitter:title" content="TuCodigoCotidiano - Tu Blog de Desarrollo Web">
-      <meta name="twitter:description" content="Bienvenido a TuCodigoCotidiano. Explora tutoriales, guías y podcasts sobre desarrollo web, Python, Django y más.">
-      {# El resto de metas como la imagen, etc., se heredarán o puedes sobreescribirlas aquí #}
-  {% endblock meta_tags %}
-
-
-  {% block page_specific_styles %}
-    <style>
+  <style>
     /* Estilo para las imágenes de los posts destacados */
     .post-image {
       width: 100%;
@@ -78,25 +64,24 @@
     }
 
     /* Mostrar por defecto el nombre completo */
-    .full-name {
-      display: inline;
-    }
-    .short-name {
-      display: none;
-    }
+.full-name {
+  display: inline;
+}
+.short-name {
+  display: none;
+}
 
-    /* En dispositivos móviles (por ejemplo, menos de 600px) mostrar solo el nombre abreviado */
-    @media (max-width: 600px) {
-      .full-name {
-        display: none;
-      }
-      .short-name {
-        display: inline;
-      }
-    }
+/* En dispositivos móviles (por ejemplo, menos de 600px) mostrar solo el nombre abreviado */
+@media (max-width: 600px) {
+  .full-name {
+    display: none;
+  }
+  .short-name {
+    display: inline;
+  }
+}
+
   </style>
-  {% endblock page_specific_styles %}
-  
 {% endblock %}
 
 {% block content %}
