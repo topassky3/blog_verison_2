@@ -5,6 +5,11 @@ FROM python:3.9-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# ===== AÑADIR ESTO =====
+# Creamos un grupo y un usuario sin privilegios llamado 'app'
+RUN groupadd -r app && useradd --no-log-init -r -g app app
+# ========================
+
 # Definir el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
@@ -18,14 +23,19 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copiar el resto del código de la aplicación
 COPY . /app/
 
+# ===== AÑADIR ESTO =====
+# Le damos la propiedad de los archivos de la app al nuevo usuario
+RUN chown -R app:app /app
+# ========================
+
 # Ejecutar collectstatic para recopilar los archivos estáticos
 RUN python manage.py collectstatic --noinput
 
-# Copiar la configuración de Supervisor (asegúrate de que supervisord.conf se encuentre en el contexto de build)
+# Copiar la configuración de Supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Exponer el puerto que usará Gunicorn (en este caso el 7090)
+# Exponer el puerto
 EXPOSE 7090
 
-# Comando para iniciar Supervisor, el cual gestionará Gunicorn, Celery Worker y Celery Beat
+# Comando para iniciar Supervisor
 CMD ["/usr/bin/supervisord", "-n"]
