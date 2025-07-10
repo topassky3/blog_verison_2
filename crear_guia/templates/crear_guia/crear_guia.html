@@ -119,212 +119,218 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-  // Funciones para asignar botones y eventos a los bloques del editor
-  function addDeleteButton(block) {
-    if (block.querySelector('.delete-block')) return;
-    const btn = document.createElement('button');
-    btn.className = 'delete-block';
-    btn.textContent = '×';
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      block.remove();
-    });
-    block.appendChild(btn);
-  }
+document.addEventListener('DOMContentLoaded', function() {
+    const editor = document.getElementById('editor');
+    const guiaForm = document.getElementById('guia-form');
+    const publishBtn = document.getElementById('publish-btn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    let draggedBlock = null;
 
-  function addDragHandle(block) {
-    if (block.querySelector('.drag-handle')) return;
-    const handle = document.createElement('span');
-    handle.className = 'drag-handle';
-    handle.textContent = '≡';
-    block.appendChild(handle);
-  }
+    // --- FUNCIONES AUXILIARES ---
 
-  function assignDragEvents(block) {
-    block.addEventListener('dragstart', () => {
-      block.classList.add('dragging');
-      draggedBlock = block;
-    });
-    block.addEventListener('dragend', () => {
-      block.classList.remove('dragging');
-      draggedBlock = null;
-    });
-  }
-
-  let draggedBlock = null;
-  document.querySelectorAll('.editor-block').forEach(block => {
-    addDeleteButton(block);
-    addDragHandle(block);
-    assignDragEvents(block);
-  });
-
-  const editor = document.getElementById('editor');
-  editor.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    const afterElement = getDragAfterElement(editor, e.clientY);
-    if (!afterElement) {
-      editor.appendChild(draggedBlock);
-    } else {
-      editor.insertBefore(draggedBlock, afterElement);
+    // Añade un botón para borrar un bloque
+    function addDeleteButton(block) {
+        if (block.querySelector('.delete-block')) return;
+        const btn = document.createElement('button');
+        btn.className = 'delete-block';
+        btn.type = 'button';
+        btn.textContent = '×';
+        btn.addEventListener('click', () => block.remove());
+        block.appendChild(btn);
     }
-  });
 
-  function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('.editor-block:not(.dragging)')];
-    return draggableElements.reduce((closest, child) => {
-      const box = child.getBoundingClientRect();
-      const offset = y - box.top - (box.height / 2);
-      if (offset < 0 && offset > closest.offset) {
-        return { offset: offset, element: child };
-      }
-      return closest;
-    }, { offset: Number.NEGATIVE_INFINITY }).element;
-  }
-
-  // Barra de herramientas: agregar nuevos bloques
-  const toolbarButtons = document.querySelectorAll('.toolbar button');
-  toolbarButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const type = button.dataset.type;
-      const newBlock = document.createElement('div');
-      newBlock.classList.add('editor-block');
-      newBlock.setAttribute('draggable', 'true');
-      const textArea = document.createElement('textarea');
-      textArea.rows = 5;
-      if (type === 'text') {
-        newBlock.classList.add('block-text');
-        textArea.placeholder = 'HTML normal (encabezados, párrafos, etc.)';
-      } else if (type === 'latex') {
-        newBlock.classList.add('block-latex');
-        textArea.placeholder = 'Aquí tu LaTeX (usa $$...$$ o \\(...\\))';
-      }else if (type === 'image') {                // ← NUEVO
-          newBlock.classList.add('block-image');
-          // file input
-          const input = document.createElement('input');
-          input.type = 'file';
-          input.accept = 'image/*';
-          input.name = 'block_image_' + Date.now(); // nombre único
-
-          // preview
-          const preview = document.createElement('img');
-          preview.style.maxWidth = '100%';
-          preview.style.display = 'none';
-
-          input.onchange = e=>{
-             const f=e.target.files[0];
-             if(f){ preview.src = URL.createObjectURL(f); preview.style.display='block'; }
-          };
-
-          newBlock.append(input, preview);
-        } else if (type === 'code') {
-        newBlock.classList.add('block-code');
-        textArea.placeholder = '<pre><code class="language-xxx">\n // tu código \n</code></pre>';
-      }
-      newBlock.appendChild(textArea);
-      assignDragEvents(newBlock);
-      addDeleteButton(newBlock);
-      addDragHandle(newBlock);
-      editor.appendChild(newBlock);
-    });
-  });
-
-  // Función para obtener la cookie CSRF
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
+    // Añade el manejador para arrastrar un bloque
+    function addDragHandle(block) {
+        if (block.querySelector('.drag-handle')) return;
+        const handle = document.createElement('span');
+        handle.className = 'drag-handle';
+        handle.textContent = '≡';
+        block.appendChild(handle);
     }
-    return cookieValue;
-  }
 
-  // Publicar guía (toggle)
-  const publishBtn = document.getElementById('publish-btn');
-  if (publishBtn) {
-    publishBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      // Se obtiene la URL desde el atributo data-url generado con el template tag
-      const toggleUrl = this.getAttribute('data-url');
-      fetch(toggleUrl, {
-        method: 'POST',
-        headers: {
-          'X-CSRFToken': getCookie('csrftoken'),
-          'Content-Type': 'application/json'
+    // Asigna los eventos de 'drag' a un bloque
+    function assignDragEvents(block) {
+        block.addEventListener('dragstart', () => {
+            draggedBlock = block;
+            setTimeout(() => block.classList.add('dragging'), 0);
+        });
+        block.addEventListener('dragend', () => {
+            if (draggedBlock) {
+                draggedBlock.classList.remove('dragging');
+            }
+            draggedBlock = null;
+        });
+    }
+
+    // Obtiene el token CSRF de las cookies para las peticiones POST
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
         }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.published) {
-          publishBtn.textContent = 'Publicado';
-        } else {
-          publishBtn.textContent = 'Publicar Guía';
+        return cookieValue;
+    }
+
+    // --- INICIALIZACIÓN DEL EDITOR ---
+
+    // Configura el área del editor para permitir soltar bloques
+    editor.addEventListener('dragover', e => {
+        e.preventDefault();
+        const afterElement = [...editor.querySelectorAll('.editor-block:not(.dragging)')]
+            .reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = e.clientY - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                }
+                return closest;
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+
+        if (draggedBlock) {
+            if (afterElement) {
+                editor.insertBefore(draggedBlock, afterElement);
+            } else {
+                editor.appendChild(draggedBlock);
+            }
         }
-      })
-      .catch(error => console.error('Error:', error));
     });
-  }
 
-  // Mostrar/Ocultar Overlay de carga
-  function showLoading() {
-    document.getElementById('loadingOverlay').style.display = 'block';
-  }
-  function hideLoading() {
-    document.getElementById('loadingOverlay').style.display = 'none';
-  }
-
-  // Al enviar el formulario, se recogen los bloques y se envían vía AJAX
-  document.getElementById('guia-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    document.getElementById('submit-btn').disabled = true;
-    showLoading();
-    const blocks = [];
+    // Añade controles (borrar, arrastrar) a los bloques ya existentes
     document.querySelectorAll('.editor-block').forEach(block => {
-      let blockType = 'text';
-        if (block.classList.contains('block-latex')) blockType='latex';
-        if (block.classList.contains('block-code'))  blockType='code';
-
-        let content='';
-
-        if (block.classList.contains('block-image')) {
-            const inp = block.querySelector('input[type=file]');
-            content = inp ? inp.name : 'keep-'+block.querySelector('.keep-image').value;
-            blockType = 'image';
-        } else {                       // 👈 aquí
-            const ta = block.querySelector('textarea');
-            content = ta ? ta.value.trim() : '';
-        }
-
-        blocks.push({type:blockType, content});
+        addDeleteButton(block);
+        addDragHandle(block);
+        assignDragEvents(block);
     });
-    document.getElementById('blocks-input').value = JSON.stringify(blocks);
-    const formData = new FormData(this);
-    fetch(this.action, {
-      method: 'POST',
-      headers: { 'X-Requested-With': 'XMLHttpRequest' },
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      hideLoading();
-      if ("{{ object.pk|default_if_none:'' }}" === "") {
-          window.location.href = '/crear_guia/editar/' + data.guia_pk + '/';
-      } else {
-          window.location.reload();
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      hideLoading();
-      document.getElementById('submit-btn').disabled = false;
+
+    // --- BARRA DE HERRAMIENTAS PARA AÑADIR BLOQUES ---
+
+    document.querySelectorAll('.toolbar button').forEach(button => {
+        button.addEventListener('click', () => {
+            const type = button.dataset.type;
+            const newBlock = document.createElement('div');
+            newBlock.className = 'editor-block';
+            newBlock.setAttribute('draggable', 'true');
+
+            if (type === 'image') {
+                newBlock.classList.add('block-image');
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.name = `block_image_${Date.now()}`;
+                const preview = document.createElement('img');
+                preview.style.maxWidth = '100%';
+                preview.style.display = 'none';
+                input.onchange = () => {
+                    if (input.files && input.files[0]) {
+                        preview.src = URL.createObjectURL(input.files[0]);
+                        preview.style.display = 'block';
+                    }
+                };
+                newBlock.append(input, preview);
+            } else {
+                const textArea = document.createElement('textarea');
+                textArea.rows = 5;
+                if (type === 'text') {
+                    newBlock.classList.add('block-text');
+                    textArea.placeholder = 'Escribe aquí... (puedes usar HTML)';
+                } else if (type === 'latex') {
+                    newBlock.classList.add('block-latex');
+                    textArea.placeholder = 'Escribe tu código LaTeX...';
+                } else if (type === 'code') {
+                    newBlock.classList.add('block-code');
+                    textArea.placeholder = 'Escribe tu código...';
+                }
+                newBlock.appendChild(textArea);
+            }
+
+            addDeleteButton(newBlock);
+            addDragHandle(newBlock);
+            assignDragEvents(newBlock);
+            editor.appendChild(newBlock);
+        });
     });
-  });
+
+    // --- LÓGICA DE BOTONES Y FORMULARIO ---
+
+    // 1. Botón de Publicar / Despublicar
+    if (publishBtn) {
+        publishBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = this.dataset.url;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.textContent = data.published ? 'Publicado' : 'Publicar Guía';
+            })
+            .catch(error => console.error('Error al cambiar estado de publicación:', error));
+        });
+    }
+
+    // 2. Envío del formulario principal para Guardar/Crear
+    if (guiaForm) {
+        guiaForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            loadingOverlay.style.display = 'block';
+
+            const blocksData = Array.from(document.querySelectorAll('.editor-block')).map(block => {
+                let blockType = 'text';
+                let content = '';
+
+                if (block.classList.contains('block-image')) {
+                    blockType = 'image';
+                    const newImageInput = block.querySelector('input[type=file]');
+                    const existingImageInput = block.querySelector('input.keep-image');
+                    if (newImageInput && newImageInput.files.length > 0) {
+                        content = newImageInput.name;
+                    } else if (existingImageInput) {
+                        content = `keep-${existingImageInput.value}`;
+                    }
+                } else {
+                    if (block.classList.contains('block-latex')) blockType = 'latex';
+                    if (block.classList.contains('block-code')) blockType = 'code';
+                    const textarea = block.querySelector('textarea');
+                    if (textarea) content = textarea.value;
+                }
+                return { type: blockType, content: content };
+            });
+
+            document.getElementById('blocks-input').value = JSON.stringify(blocksData);
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.guia_pk && "{{ object.pk|default_if_none:'' }}" === "") {
+                    window.location.href = `/crear_guia/editar/${data.guia_pk}/`;
+                } else {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error al guardar la guía:', error);
+                loadingOverlay.style.display = 'none';
+                alert('Ocurrió un error al guardar. Revisa la consola para más detalles.');
+            });
+        });
+    }
 });
-    </script>
+</script>
 {% endblock %}

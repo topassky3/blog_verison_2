@@ -825,15 +825,19 @@
 
     {% comment %} ¡NUEVA INSTRUCCIÓN PARA BLOQUES DE IMAGEN! {% endcomment %}
     {% elif block.block_type == 'image' %}
-      <div class="tutorial-block block-image" style="margin: 1.5rem auto; text-align: center; max-width: 80%;">
+      <figure class="tutorial-block block-image" style="margin: 2rem 0; text-align: center;">
         {% if block.image_url %}
-          <img src="{{ block.image_url }}"
-               alt="Imagen de la guía {{ guia.title }}"
-               style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        {% else %}
-          <p><em>[Imagen no disponible o no encontrada]</em></p>
+          <img src="{{ block.image_url }}" alt="Imagen de la guía {{ guia.title }}" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+          {# --- ¡LÍNEA CLAVE! Mostramos el pie de foto si no está vacío --- #}
+          {% if block.content %}
+            <figcaption style="margin-top: 0.75rem; font-size: 0.9rem; color: #6c757d; font-style: italic;">
+              {{ block.content }}
+            </figcaption>
+          {% endif %}
+
         {% endif %}
-      </div>
+      </figure>
     {% comment %} Instrucción por si aparece un tipo de bloque desconocido {% endcomment %}
     {% else %}
       <div class="tutorial-block block-unknown">

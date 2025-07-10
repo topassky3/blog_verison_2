@@ -1,89 +1,67 @@
 import json
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView
+from django.contrib import messages
 from core.models import Guia, GuiaBlock
-from .forms import GuiaForm  # El formulario debe incluir el campo "code_file"
+from .forms import GuiaForm
 
-# Vista para crear una nueva Guía
+
 class GuiaCreateView(CreateView):
     model = Guia
     form_class = GuiaForm
     template_name = 'crear_guia/crear_guia.html'
 
     def dispatch(self, request, *args, **kwargs):
-        # Solo usuarios autenticados pueden crear una guía
         if not request.user.is_authenticated:
             return redirect('login')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        # Asignamos el autor
         form.instance.author = self.request.user
-        # Si el usuario NO es escritor, ignoramos el archivo subido
-        if not self.request.user.es_escritor:
-            form.instance.code_file = None
         self.object = form.save()
 
-        # Procesamos los bloques enviados desde el editor (campo oculto "blocks" en formato JSON)
-        blocks_json = self.request.POST.get('blocks')
-        # Se eliminó la línea duplicada de 'blocks_json = self.request.POST.get('blocks')'
-        if blocks_json:
-            try:
-                blocks_data = json.loads(blocks_json)
-            except json.JSONDecodeError:
-                # Manejar el error si el JSON no es válido
-                # Puedes añadir un mensaje de error al formulario o loggear el error
-                print(f"Error decodificando JSON para Guia {self.object.pk}: {blocks_json}")
-                blocks_data = []  # O decidir otra acción
+        blocks_json = self.request.POST.get('blocks', '[]')
+        try:
+            blocks_data = json.loads(blocks_json)
+        except json.JSONDecodeError:
+            blocks_data = []
 
-            # En CreateView, no necesitamos borrar bloques previos, solo crearlos.
+        for idx, blk_data in enumerate(blocks_data):
+            block_type = blk_data.get('type')
+            content = blk_data.get('content', '')
 
-            # --- BUCLE ÚNICO PARA CREAR BLOQUES ---
-            for idx, blk in enumerate(blocks_data):
-                if blk['type'] == 'image':
-                    # 'blk['content']' debe contener el *nombre* del input file del frontend
-                    image_file = self.request.FILES.get(blk['content'])
-                    if image_file:
-                        GuiaBlock.objects.create(
-                            guia=self.object,
-                            block_type='image',
-                            image=image_file,
-                            content='',  # El contenido no aplica directamente a la imagen
-                            order=idx
-                        )
-                    else:
-                        # Opcional: Manejar si no se encuentra el archivo esperado
-                        print(
-                            f"Advertencia: No se encontró el archivo de imagen '{blk['content']}' para el bloque {idx} de la Guia {self.object.pk}")
-                else:
+            if block_type == 'image':
+                # El 'content' aquí es el nombre del campo input (ej: 'block_image_12345')
+                image_file = self.request.FILES.get(content)
+                if image_file:
                     GuiaBlock.objects.create(
                         guia=self.object,
-                        block_type=blk['type'],
-                        content=blk['content'],
+                        block_type='image',
+                        image=image_file,
+                        content='',  # El contenido de texto está vacío para las imágenes
                         order=idx
                     )
-            # --- FIN DEL BUCLE ÚNICO ---
+            elif block_type in ['text', 'latex', 'code']:
+                GuiaBlock.objects.create(
+                    guia=self.object,
+                    block_type=block_type,
+                    content=content,  # Aquí sí guardamos el contenido de texto
+                    order=idx
+                )
 
-        # Si la petición es AJAX se devuelve JSON; de lo contrario se redirige a la vista de edición
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({
-                'message': 'Guía creada exitosamente.',
-                'guia_pk': self.object.pk
-            })
-        else:
-            return redirect('guia_update', pk=self.object.pk)
+            return JsonResponse({'message': 'Guía creada exitosamente.', 'guia_pk': self.object.pk})
+
+        messages.success(self.request, '¡Guía creada exitosamente!')
+        return redirect('guia_update', pk=self.object.pk)
 
     def form_invalid(self, form):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({
-                'errors': form.errors,
-                'message': 'Error en el formulario.'
-            }, status=400)
+            return JsonResponse({'errors': form.errors}, status=400)
         return super().form_invalid(form)
 
 
-# Vista para actualizar una Guía existente
 class GuiaUpdateView(UpdateView):
     model = Guia
     form_class = GuiaForm
@@ -91,79 +69,66 @@ class GuiaUpdateView(UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         guia = self.get_object()
-        # Solo el autor de la guía puede editarla
         if not request.user.is_authenticated or request.user != guia.author:
             return redirect('login')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        # Si el usuario NO es escritor, se mantiene el archivo de código ya existente
-        if not self.request.user.es_escritor:
-            # Asegúrate que el archivo no se borre si no se sube uno nuevo y no es escritor
-            if 'code_file' not in form.changed_data:
-                form.instance.code_file = self.get_object().code_file
-            elif not form.cleaned_data.get('code_file'):  # Si se intentó borrar pero no es escritor
-                form.instance.code_file = self.get_object().code_file
         self.object = form.save()
 
-        # Se actualizan los bloques: se eliminan los anteriores y se crean nuevos a partir del JSON enviado
-        blocks_json = self.request.POST.get('blocks')
-        # Se eliminó la línea duplicada de 'blocks_json = self.request.POST.get('blocks')'
-        if blocks_json:
-            try:
-                blocks_data = json.loads(blocks_json)
-            except json.JSONDecodeError:
-                # Manejar el error si el JSON no es válido
-                print(f"Error decodificando JSON para Guia {self.object.pk}: {blocks_json}")
-                blocks_data = []  # O decidir otra acción
+        blocks_json = self.request.POST.get('blocks', '[]')
+        try:
+            blocks_data = json.loads(blocks_json)
+        except json.JSONDecodeError:
+            blocks_data = []
 
-            # Update → limpiar bloques anteriores ANTES de crear los nuevos
-            if hasattr(self.object, "blocks"):
-                old_images = {b.id: b.image for b in self.object.blocks.filter(block_type='image')}
-                self.object.blocks.all().delete()
+        # Guardar rutas de imágenes antiguas antes de borrar los bloques
+        old_images = {str(b.id): b.image for b in self.object.blocks.filter(block_type='image')}
+        self.object.blocks.all().delete()
 
-            # --- BUCLE ÚNICO PARA CREAR BLOQUES ---
-            for idx, blk in enumerate(blocks_data):
-                if blk['type'] == 'image':
-                    # 'blk['content']' debe contener el *nombre* del input file del frontend
-                    image_file = self.request.FILES.get(blk['content'])
-                    if blk['content'].startswith('keep-'):
-                        img = old_images.get(int(blk['content'][5:]))
-                        GuiaBlock.objects.create(guia=self.object, block_type='image',
-                                                 image=img, order=idx)
-                    else:
-                        image_file = self.request.FILES.get(blk['content'])
-                        if image_file:
-                            GuiaBlock.objects.create(guia=self.object, block_type='image',
-                                                     image=image_file, order=idx)
+        for idx, blk_data in enumerate(blocks_data):
+            block_type = blk_data.get('type')
+            content_payload = blk_data.get('content', '')
+
+            if block_type == 'image':
+                image_to_save = None
+                # Caso 1: Se mantiene una imagen existente
+                if content_payload.startswith('keep-'):
+                    img_id = content_payload.replace('keep-', '')
+                    image_to_save = old_images.get(img_id)
+                # Caso 2: Se sube una imagen nueva
                 else:
+                    image_to_save = self.request.FILES.get(content_payload)
+
+                if image_to_save:
                     GuiaBlock.objects.create(
                         guia=self.object,
-                        block_type=blk['type'],
-                        content=blk['content'],
+                        block_type='image',
+                        image=image_to_save,
+                        content='',  # El contenido de texto es vacío para imágenes
                         order=idx
                     )
-            # --- FIN DEL BUCLE ÚNICO ---
+            elif block_type in ['text', 'latex', 'code']:
+                GuiaBlock.objects.create(
+                    guia=self.object,
+                    block_type=block_type,
+                    content=content_payload,  # Guardamos el texto
+                    order=idx
+                )
 
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'message': 'Guía actualizada exitosamente.'})
-        else:
-            # Es mejor usar messages framework en lugar de alert JS directo
-            from django.contrib import messages
-            messages.success(self.request, 'Guía actualizada exitosamente.')
-            # Redirigir a la misma página de edición o a la de detalle
-            return redirect('guia_update', pk=self.object.pk)
-            # O si prefieres el alert y volver atrás (menos ideal):
-            # return HttpResponse("<script>alert('Guía actualizada.');history.back();</script>")
+
+        messages.success(self.request, '¡Guía actualizada exitosamente!')
+        return redirect('guia_update', pk=self.object.pk)
 
     def form_invalid(self, form):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({
-                'errors': form.errors,
-                'message': 'Error en el formulario.'
-            }, status=400)
+            return JsonResponse({'errors': form.errors}, status=400)
         return super().form_invalid(form)
 
+
+# Aquí puedes mantener tus otras vistas como GuiaDeleteView y toggle_publish sin cambios.
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import DeleteView
