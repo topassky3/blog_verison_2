@@ -268,15 +268,29 @@ MEDIA_URL = '/media2/'
 
 # 1. Etiquetas HTML permitidas
 BLEACH_ALLOWED_TAGS = [
+    # Etiquetas existentes
     'p', 'b', 'i', 'u', 'em', 'strong', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'ul', 'ol', 'li', 'br', 'div', 'span', 'img', 'code', 'pre'
+    'ul', 'ol', 'li', 'br', 'div', 'span', 'img', 'code', 'pre',
+    'style', 'blockquote', 'cite', 'details', 'summary', 'iframe', 'label',
+    'progress',
+
+    # --- NUEVAS ETIQUETAS PARA TABLAS ---
+    'table', 'thead', 'tbody', 'tr', 'th', 'td', 'caption',
 ]
 
-# 2. Atributos permitidos en las etiquetas
+# 2. Añadimos los atributos para las nuevas etiquetas
 BLEACH_ALLOWED_ATTRIBUTES = {
     'a': ['href', 'title'],
     'img': ['src', 'alt', 'style', 'width', 'height'],
-    '*': ['style', 'class', 'id'], # Permite style, class e id en cualquier etiqueta (*)
+    'iframe': ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen', 'title'],
+
+    # --- AÑADE ESTAS DOS NUEVAS REGLAS ---
+    'label': ['for'],
+    'progress': ['id', 'max', 'value'],
+    # ------------------------------------
+
+    # Esta regla general se mantiene
+    '*': ['style', 'class', 'id'],
 }
 
 # 3. Estilos CSS en línea permitidos
@@ -287,4 +301,5 @@ BLEACH_ALLOWED_STYLES = [
 
 # 4. (Opcional) Si quieres que Bleach elimine las etiquetas no permitidas en lugar de escaparlas
 BLEACH_STRIP_TAGS = False
+BLEACH_STRIP_COMMENTS = True
 BLEACH_STRIP_COMMENTS = True
