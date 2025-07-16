@@ -21,3 +21,5 @@ celery==5.4.0
 redis==4.6.0
 pymongo==4.11.2
 gevent
+bleach==5.0.1
+django-bleach==3.1.0

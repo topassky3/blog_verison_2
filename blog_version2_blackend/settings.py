@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django_bleach',
     'paypal.standard.ipn',
     'payment',
     'core',
@@ -260,3 +261,30 @@ MONGO_PASSWORD = env('MONGO_PASSWORD')
 # ya que queremos que se sirvan mediante serve_media.
 
 MEDIA_URL = '/media2/'
+
+# blog_version2_blackend/settings.py (al final del archivo)
+
+# --- Configuración de Django Bleach ---
+
+# 1. Etiquetas HTML permitidas
+BLEACH_ALLOWED_TAGS = [
+    'p', 'b', 'i', 'u', 'em', 'strong', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'ul', 'ol', 'li', 'br', 'div', 'span', 'img', 'code', 'pre'
+]
+
+# 2. Atributos permitidos en las etiquetas
+BLEACH_ALLOWED_ATTRIBUTES = {
+    'a': ['href', 'title'],
+    'img': ['src', 'alt', 'style', 'width', 'height'],
+    '*': ['style', 'class', 'id'], # Permite style, class e id en cualquier etiqueta (*)
+}
+
+# 3. Estilos CSS en línea permitidos
+BLEACH_ALLOWED_STYLES = [
+    'color', 'background-color', 'font-weight', 'font-style', 'text-align',
+    'width', 'height', 'float', 'margin', 'padding', 'border', 'display'
+]
+
+# 4. (Opcional) Si quieres que Bleach elimine las etiquetas no permitidas en lugar de escaparlas
+BLEACH_STRIP_TAGS = False
+BLEACH_STRIP_COMMENTS = True
