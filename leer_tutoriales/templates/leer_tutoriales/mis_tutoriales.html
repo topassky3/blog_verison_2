@@ -1307,26 +1307,6 @@ function loadAllBlocks() {
 
 document.addEventListener('DOMContentLoaded', loadAllBlocks);
 </script>
-<script>
-const mobileMenuBtn = document.querySelector('.mobile-menu-btn'),
-      navMenu = document.querySelector('.nav-menu'),
-      themeToggle = document.querySelector('.theme-toggle'),
-      html = document.documentElement;
-
-if (mobileMenuBtn && navMenu) {
-  mobileMenuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
-}
-
-if (themeToggle) {
-  themeToggle.addEventListener('click', () => {
-    html.dataset.theme = (html.dataset.theme === 'dark') ? 'light' : 'dark';
-    localStorage.setItem('theme', html.dataset.theme);
-  });
-}
-
-html.dataset.theme = localStorage.getItem('theme') ||
-  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-</script>
 
 <script>
 
