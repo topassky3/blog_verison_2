@@ -1059,6 +1059,19 @@ background-color: var(--primary);
   }
 
 </style>
+
+    <script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -1291,6 +1304,12 @@ function loadAllBlocks() {
       });
 
       overlay.style.display = 'none';
+
+      // --- LÍNEA CLAVE A AÑADIR ---
+      // Si MathJax está disponible, le decimos que renderice el nuevo contenido
+      if (typeof MathJax !== 'undefined') {
+        MathJax.typesetPromise([container]);
+      }
 
       // Opcional pero recomendado: si usas highlight.js para colorear el código
       if (typeof hljs !== 'undefined') {

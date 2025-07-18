@@ -183,6 +183,9 @@ class DownloadCodeFileView(LoginRequiredMixin, View):
 
 
 # Asegúrate de tener estos imports al principio del archivo
+# leer_tutoriales/views.py
+
+# Asegúrate de tener estos imports al principio del archivo
 import re
 from django.utils.html import escape
 from django.conf import settings
@@ -190,11 +193,9 @@ import bleach
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from core.models import Tutorial, Lector
-
-
 # ... y tus otros imports
 
-# Esta es la versión final y definitiva de la función
+
 def load_all_tutorial_blocks(request, tutorial_id):
     tutorial = get_object_or_404(Tutorial, pk=tutorial_id)
     blocks = tutorial.blocks.all().order_by('order')
@@ -210,18 +211,11 @@ def load_all_tutorial_blocks(request, tutorial_id):
     for block in blocks:
         content = block.content
         if block.block_type == 'text':
-
-            # --- TÉCNICA DEL PLACEHOLDER ---
-
             code_snippets = []
-
             def replace_with_placeholder(match):
-                # Guarda el código original en nuestra lista
                 code_snippets.append(match.group(1))
-                # Reemplázalo con un marcador único en el texto principal
                 return f"__CODE_PLACEHOLDER_{len(code_snippets) - 1}__"
 
-            # 1. Reemplazamos todos los <code>...</code> con marcadores
             content_with_placeholders = re.sub(
                 r'<code>(.*?)</code>',
                 replace_with_placeholder,
@@ -229,25 +223,23 @@ def load_all_tutorial_blocks(request, tutorial_id):
                 flags=re.DOTALL
             )
 
-            # 2. Limpiamos el HTML principal. Bleach ignorará los marcadores.
+            # --- LLAMADA CORREGIDA PARA BLEACH v5 ---
+            # Eliminamos el parámetro 'styles' que causaba el error
             sanitized_content = bleach.clean(
                 content_with_placeholders,
                 tags=settings.BLEACH_ALLOWED_TAGS,
                 attributes=settings.BLEACH_ALLOWED_ATTRIBUTES
             )
+            # ----------------------------------------
 
-            # 3. Reemplazamos los marcadores por el código original, ahora sí, escapado.
             final_content = sanitized_content
             for i, raw_code in enumerate(code_snippets):
-                # Creamos la etiqueta <code> con el contenido escapado
                 escaped_code_tag = f"<code>{escape(raw_code)}</code>"
                 final_content = final_content.replace(
                     f"__CODE_PLACEHOLDER_{i}__",
                     escaped_code_tag
                 )
-
             content = final_content
-            # --- FIN DE LA TÉCNICA ---
 
         blocks_data.append({
             'id': block.id,

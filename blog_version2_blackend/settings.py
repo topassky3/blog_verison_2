@@ -272,12 +272,11 @@ BLEACH_ALLOWED_TAGS = [
     'p', 'b', 'i', 'u', 'em', 'strong', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'ul', 'ol', 'li', 'br', 'div', 'span', 'img', 'code', 'pre',
     'style', 'blockquote', 'cite', 'details', 'summary', 'iframe', 'label',
-    'progress',
+    'progress', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'caption',
 
-    # --- NUEVAS ETIQUETAS PARA TABLAS ---
-    'table', 'thead', 'tbody', 'tr', 'th', 'td', 'caption',
+    # --- NUEVAS ETIQUETAS PARA FIGURAS ---
+    'figure', 'figcaption', 'dl', 'dt', 'dd','sub', 'sup',
 ]
-
 # 2. Añadimos los atributos para las nuevas etiquetas
 BLEACH_ALLOWED_ATTRIBUTES = {
     'a': ['href', 'title'],
@@ -296,7 +295,9 @@ BLEACH_ALLOWED_ATTRIBUTES = {
 # 3. Estilos CSS en línea permitidos
 BLEACH_ALLOWED_STYLES = [
     'color', 'background-color', 'font-weight', 'font-style', 'text-align',
-    'width', 'height', 'float', 'margin', 'padding', 'border', 'display'
+    'width', 'height', 'float', 'margin', 'padding', 'border', 'display',
+    'max-width', 'margin-left', 'margin-right',
+    'justify-content', # <--- AÑADE ESTA PROPIEDAD
 ]
 
 # 4. (Opcional) Si quieres que Bleach elimine las etiquetas no permitidas en lugar de escaparlas
