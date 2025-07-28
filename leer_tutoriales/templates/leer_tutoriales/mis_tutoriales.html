@@ -1058,6 +1058,27 @@ background-color: var(--primary);
     }
   }
 
+/* --- ESTILOS PARA PANTALLAS PEQUEÑAS (MÓVILES) --- */
+@media (max-width: 768px) {
+
+  /* Ajusta el tamaño de tu título para que no sea tan grande en el celular */
+  .titulo-explicacion {
+    font-size: 1.25rem; /* Un tamaño más razonable para móviles */
+    line-height: 1.4;   /* Mejora el espaciado entre líneas */
+  }
+
+  /* Asegura que los contenedores de código tengan su propio scroll
+     y no hagan que toda la página se desborde. */
+  .block-code {
+    overflow-x: auto; /* ¡Esta es la línea clave! */
+  }
+
+  /* Evita que cualquier otro contenido dentro del artículo cause desbordamiento */
+  article {
+    overflow-x: hidden;
+  }
+}
+
 </style>
 
     <script>
