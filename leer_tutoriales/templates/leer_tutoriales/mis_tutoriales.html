@@ -1059,21 +1059,47 @@ background-color: var(--primary);
   }
 
 /* --- ESTILOS PARA PANTALLAS PEQUEÑAS (MÓVILES) --- */
+/* ======================================================================== */
+/* ===         SOLUCIÓN CSS DEFINITIVA PARA VISTA MÓVIL         === */
+/* ======================================================================== */
+
 @media (max-width: 768px) {
 
-  /* Ajusta el tamaño de tu título para que no sea tan grande en el celular */
-  .titulo-explicacion {
-    font-size: 1.25rem; /* Un tamaño más razonable para móviles */
-    line-height: 1.4;   /* Mejora el espaciado entre líneas */
+  /*
+   * SOLUCIÓN AUTOMÁTICA PARA TÍTULOS GRANDES
+   * Esta regla se aplica a cualquier párrafo (<p>) que tenga una clase
+   * que contenga la palabra "titulo". Reduce su tamaño de forma segura.
+   */
+  .tutorial-content p[class*="titulo"] {
+    font-size: 1.2rem !important;
+    line-height: 1.4 !important;
   }
 
-  /* Asegura que los contenedores de código tengan su propio scroll
-     y no hagan que toda la página se desborde. */
+  /*
+   * SOLUCIÓN AUTOMÁTICA PARA EL PROBLEMA DE SUPERPOSICIÓN DEL '+'
+   * Esta regla obliga a CUALQUIER etiqueta <code> dentro del contenido
+   * a no ocupar nunca todo el ancho, dejando siempre espacio a la derecha.
+   */
+  .tutorial-content code {
+    /* 1. Aseguramos que el texto se ajuste (esto ya lo teníamos) */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+
+    /* 2. ✅ LA CLAVE: Forzamos a que el elemento de código sea un bloque
+       y que su ancho máximo sea el 100% del espacio MENOS 3 caracteres.
+       Esto crea un espacio físico a la derecha para cualquier ícono. */
+    display: inline-block;
+    max-width: calc(100% - 3em);
+  }
+
+  /*
+   * REGLAS DE SEGURIDAD GENERALES (ya las tenías y están bien)
+   */
   .block-code {
-    overflow-x: auto; /* ¡Esta es la línea clave! */
+    overflow-x: auto;
   }
-
-  /* Evita que cualquier otro contenido dentro del artículo cause desbordamiento */
   article {
     overflow-x: hidden;
   }
@@ -1323,6 +1349,7 @@ function loadAllBlocks() {
         // Añadimos el div a la página UNA SOLA VEZ
         container.appendChild(div);
       });
+
 
       overlay.style.display = 'none';
 
