@@ -4,12 +4,13 @@
 
 {% block extra_head %}
   <style>
+    /* --- Estilos Generales (Pantalla Grande) --- */
     .subscription-info {
       background-color: var(--gray-100);
       border: 1px solid var(--gray-200);
       padding: 1rem;
       border-radius: var(--radius);
-      margin: 1rem auto;
+      margin: 1rem auto; /* Centrado en escritorio */
       text-align: center;
       box-shadow: var(--shadow);
       max-width: 600px;
@@ -63,75 +64,106 @@
     }
 
     .full-name {
-  display: inline;
-}
-.short-name {
-  display: none;
-}
+      display: inline;
+    }
+    .short-name {
+      display: none;
+    }
 
-@media (max-width: 600px) {
-  .full-name {
-    display: none;
-  }
-  .short-name {
-    display: inline;
-  }
-}
+    /* Estilos para la sección del Boletín */
+    .boletin-section {
+      background-color: #f7f7f7;
+      border: 1px solid var(--gray-200);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      margin: 2rem auto; /* Centrado en escritorio */
+      text-align: center;
+      box-shadow: none;
+      max-width: 700px;
+    }
+    .boletin-section h2 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+    .boletin-section p {
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .boletin-form {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .boletin-form input[type="email"] {
+      flex-grow: 1;
+      min-width: 250px;
+      padding: 0.75rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+    }
+    .boletin-form button {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .boletin-form button:hover {
+      background-color: #0056b3;
+    }
 
-    /* ... (tus estilos existentes) ... */
+    /* --- ESTILOS RESPONSIVOS PARA MÓVILES Y PANTALLAS PEQUEÑAS --- */
+    @media (max-width: 720px) { /* Aplicamos a pantallas de 720px o menos */
 
-/* Estilos para la nueva sección del Boletín */
-.boletin-section {
-  background-color: #f7f7f7; /* Un color de fondo suave y diferente */
-  border: 1px solid var(--gray-200);
-  padding: 1.5rem;
-  border-radius: var(--radius);
-  margin: 2rem auto; /* Más margen para separarlo del resto */
-  text-align: center;
-  box-shadow: none; /* Sin sombra para que sea menos prominente que los planes */
-  max-width: 700px;
-}
+      /* ======================================================= */
+      /* INICIO: NUEVO AJUSTE PARA DAR "AIRE" A LOS LADOS        */
+      /* ======================================================= */
+      .boletin-section,
+      .subscription-info {
+        margin-left: 1rem;   /* Añadimos margen a la izquierda */
+        margin-right: 1rem;  /* Añadimos margen a la derecha */
+      }
+      /* ======================================================= */
+      /* FIN: NUEVO AJUSTE                                       */
+      /* ======================================================= */
 
-.boletin-section h2 {
-  color: var(--primary);
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem; /* Un poco más pequeño que los títulos principales */
-}
+      .full-name {
+        display: none;
+      }
+      .short-name {
+        display: inline;
+      }
 
-.boletin-section p {
-  margin-bottom: 1rem;
-  color: var(--text);
-}
+      /* Ajustes para el cuadro de estado de la suscripción */
+      .subscription-info {
+        padding: 1rem 0.8rem;
+      }
 
-.boletin-form {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  flex-wrap: wrap; /* Para que se adapte en móviles */
-}
+      .subscription-info h3 {
+        font-size: 1.35rem;
+      }
 
-.boletin-form input[type="email"] {
-  flex-grow: 1;
-  min-width: 250px;
-  padding: 0.75rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-}
+      .subscription-info p {
+        font-size: 0.9rem;
+      }
 
-.boletin-form button {
-  background-color: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
+      /* Hacemos que el formulario del boletín se apile verticalmente */
+      .boletin-form {
+        flex-direction: column;
+        align-items: stretch;
+      }
 
-.boletin-form button:hover {
-  background-color: #0056b3; /* Un tono más oscuro de tu color primario */
-}
+      .boletin-form input[type="email"],
+      .boletin-form button {
+        width: 100%;
+        min-width: unset;
+      }
+    }
   </style>
 {% endblock %}
 
