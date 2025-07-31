@@ -78,31 +78,90 @@
   }
 }
 
+    /* ... (tus estilos existentes) ... */
+
+/* Estilos para la nueva sección del Boletín */
+.boletin-section {
+  background-color: #f7f7f7; /* Un color de fondo suave y diferente */
+  border: 1px solid var(--gray-200);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  margin: 2rem auto; /* Más margen para separarlo del resto */
+  text-align: center;
+  box-shadow: none; /* Sin sombra para que sea menos prominente que los planes */
+  max-width: 700px;
+}
+
+.boletin-section h2 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem; /* Un poco más pequeño que los títulos principales */
+}
+
+.boletin-section p {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.boletin-form {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap; /* Para que se adapte en móviles */
+}
+
+.boletin-form input[type="email"] {
+  flex-grow: 1;
+  min-width: 250px;
+  padding: 0.75rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+}
+
+.boletin-form button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.boletin-form button:hover {
+  background-color: #0056b3; /* Un tono más oscuro de tu color primario */
+}
   </style>
 {% endblock %}
 
 {% block content %}
-  <!-- Hero Section -->
-    <section class="hero" id="inicio">
+  <section class="hero" id="inicio">
       <h1>
-        Suscríbete a
+        Únete a la Membresía de
         <span class="full-name">TuCodigoCotidiano</span>
         <span class="short-name">TuCC</span>
         Blog
       </h1>
-      <p>Únete a nuestra comunidad y recibe las últimas novedades, tutoriales y recursos de desarrollo web directamente en tu correo.</p>
+      <p>Accede a tutoriales, guías y recursos exclusivos de desarrollo web uniéndote a uno de nuestros planes de membresía.</p>
     </section>
 
-  <!-- Información de Suscripción Actual -->
+  <section class="boletin-section">
+    <h2>Mantente al Día con Nuestro Boletín Gratuito</h2>
+    <p>Recibe en tu correo las últimas noticias, anuncios de nuevos tutoriales y recursos. ¡Sin costo alguno!</p>
+    <form class="boletin-form" method="post" action="{% url 'newsletter:subscribe' %}">
+      {% csrf_token %}
+      <input type="email" name="email" placeholder="Ingresa tu correo electrónico" required>
+      <button type="submit">Suscribirme al Boletín</button>
+    </form>
+  </section>
   {% if user.is_authenticated and subscription %}
     <div class="subscription-info">
       {% if subscription.is_expired %}
-        <!-- Si la suscripción está vencida, mostramos un mensaje y asumimos que está en Básico -->
-        <p class="expired-note">Tu suscripción anterior ha expirado. Se te ha asignado el plan Básico.</p>
-        <h3>Tu suscripción actual es: <span class="badge">Básico</span></h3>
+        <p class="expired-note">Tu membresía anterior ha expirado. Se te ha asignado el plan Básico.</p>
+        <h3>Tu membresía actual es: <span class="badge">Básico</span></h3>
       {% else %}
-        <!-- Si no está vencida, mostramos el plan y su fecha de vencimiento -->
-        <h3>Tu suscripción actual es: <span class="badge">{{ subscription.plan }}</span></h3>
+        <h3>Tu membresía actual es: <span class="badge">{{ subscription.plan }}</span></h3>
         {% if subscription.expiration_date %}
           <p>Vence el: {{ subscription.expiration_date|date:"d/m/Y" }}</p>
         {% else %}
@@ -112,40 +171,24 @@
     </div>
   {% endif %}
 
-  <!-- Sección para Suscribirse al Newsletter
-    <section class="subscription-section">
-      <h2>Forma Parte de Nuestra Comunidad</h2>
-      <p>Suscríbete para recibir contenido exclusivo, actualizaciones y ofertas especiales.</p>
-      <form class="subscription-form" method="post" action="{% url 'newsletter:subscribe' %}">
-        {% csrf_token %}
-        <input type="email" name="email" placeholder="Ingresa tu correo electrónico" required>
-        <button type="submit">Suscribirse</button>
-      </form>
-    </section>
-    -->
 
-  <!-- Sección de Planes de Suscripción -->
   <section class="subscriptions">
-    <h2>Planes de Membresia</h2>
+    <h2>Planes de Membresía</h2>
     <div class="plan-grid">
 
-      <!-- Plan Básico -->
       <div class="plan">
         <h3>Básico</h3>
         <p class="price">$0<span style="font-size: 1rem;">/mes</span></p>
         <p>Acceso limitado a artículos y podcasts. Ideal para comenzar a explorar nuestro contenido.</p>
         {% if user.is_authenticated %}
           {% if subscription.is_expired %}
-            <!-- Si está vencida, asumimos que ya está en Básico por defecto -->
             <span class="plan-current">Plan Actual</span>
           {% else %}
             {% if subscription.plan == "Básico" %}
               <span class="plan-current">Plan Actual</span>
             {% elif subscription.plan == "Premium" or subscription.plan == "Anual" %}
-              <!-- Si el usuario tiene un plan superior, no permitimos bajar a Básico -->
               <span class="plan-disabled">No disponible</span>
             {% else %}
-              <!-- Caso extremo: si no existe plan, aunque tu lógica ya crea uno por defecto -->
               <a class="cta" href="{% url 'payment:paypal_payment' 'basico' %}">
                   Únete a la Membresía Básica
                 </a>
@@ -156,14 +199,12 @@
         {% endif %}
       </div>
 
-      <!-- Plan Premium -->
       <div class="plan">
         <h3>Premium</h3>
         <p class="price">$9.99<span style="font-size: 1rem;">/mes</span></p>
         <p>Acceso ilimitado a tutoriales, guías completas, podcasts exclusivos y descargas de recursos.</p>
         {% if user.is_authenticated %}
           {% if subscription.is_expired %}
-            <!-- Si está vencida, asumimos plan Básico, por lo que puede subir a Premium -->
             <a class="cta" href="{% url 'payment:paypal_payment' 'premium' %}">
               Únete a la Membresía Premium
             </a>
@@ -171,10 +212,8 @@
             {% if subscription.plan == "Premium" %}
               <span class="plan-current">Plan Actual</span>
             {% elif subscription.plan == "Anual" %}
-              <!-- Si ya está en Anual, no permitimos bajar a Premium -->
               <span class="plan-disabled">No disponible</span>
             {% else %}
-              <!-- Si está en Básico, permitimos upgrade a Premium -->
               <a class="cta" href="{% url 'payment:paypal_payment' 'premium' %}">
                   Únete a la Membresía Premium
                 </a>
@@ -187,14 +226,12 @@
         {% endif %}
       </div>
 
-      <!-- Plan Anual -->
       <div class="plan">
         <h3>Anual</h3>
         <p class="price">$99<span style="font-size: 1rem;">/año</span></p>
         <p>Aprovecha un gran descuento y obtén acceso premium durante todo el año, además de contenido exclusivo adicional.</p>
         {% if user.is_authenticated %}
           {% if subscription.is_expired %}
-            <!-- Si está vencida, asumimos plan Básico, por lo que puede subir a Anual -->
             <a class="cta" href="{% url 'payment:paypal_payment' 'anual' %}">
               Únete a la Membresía Anual
             </a>
@@ -202,7 +239,6 @@
             {% if subscription.plan == "Anual" %}
               <span class="plan-current">Plan Actual</span>
             {% else %}
-              <!-- Permitimos upgrade a Anual desde cualquier otro plan (Básico o Premium) -->
               <a class="cta" href="{% url 'payment:paypal_payment' 'anual' %}">Únete a la Membresía Anual</a>
             {% endif %}
           {% endif %}
