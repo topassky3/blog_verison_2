@@ -182,23 +182,7 @@ article {
   line-height: 1.8;
 }
 
-.block-code {
-  background-color: var(--gray-100);
-  border-left: 4px solid var(--secondary);
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: var(--radius);
-}
 
-/* El elemento <pre> DENTRO del .block-code que tendrá el scroll */
-.block-code pre {
-  margin: 0;
-  padding: 0;
-  overflow-x: auto; /* Genera la barra de scroll horizontal */
-  white-space: pre;  /* Mantiene el código en una sola línea */
-  font-family: "Courier New", monospace;
-  font-size: 0.9em;
-}
 
 @media (max-width: 1024px) {
   .container {
@@ -1094,16 +1078,46 @@ background-color: var(--primary);
     max-width: calc(100% - 3em);
   }
 
-  /*
-   * REGLAS DE SEGURIDAD GENERALES (ya las tenías y están bien)
-   */
-  .block-code {
-    overflow-x: auto;
-  }
-  article {
-    overflow-x: hidden;
-  }
+
 }
+
+/* Contenedor principal del bloque de código */
+.block-code {
+  margin: 1.5rem 0;
+  border-radius: var(--radius);
+  background-color: #282a36; /* Fondo oscuro (tema Dracula) */
+  padding: 1.5em; /* Espaciado interno */
+  box-shadow: var(--shadow);
+  overflow: hidden; /* Oculta cualquier desbordamiento del div principal */
+}
+
+/* El <pre> dentro del .block-code que contiene el código */
+.block-code pre {
+  margin: 0; /* Quita márgenes por defecto */
+  padding: 0; /* Quita paddings por defecto */
+  overflow-x: auto; /* ✅ AÑADE SCROLL HORIZONTAL SI EL CÓDIGO ES MUY LARGO */
+  background: none; /* Sin fondo, ya lo tiene el div padre */
+  white-space: pre; /* Mantiene los espacios y saltos de línea */
+}
+
+/* La fuente del código */
+.block-code pre code {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-shadow: none;
+}
+
+.block-code pre[class*="language-"] .token.comment {
+  color: #6272a4 !important; /* Color de comentario estándar de Dracula */
+  font-style: italic;
+  background: none !important;
+  position: static !important;
+  display: inline !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
 
 </style>
 
@@ -1333,8 +1347,21 @@ function loadAllBlocks() {
         // Lógica correcta para cada tipo de bloque
         if (block.block_type === 'code') {
           div.classList.add('block-code');
+
           const pre = document.createElement('pre');
-          pre.textContent = block.content; // Usamos textContent para el código
+          const code = document.createElement('code');
+
+          // ✅ LA CLAVE ESTÁ AQUÍ:
+          // Usamos una clase genérica FIJA para todos los bloques.
+          // 'language-clike' funciona razonablemente bien para Java, Kotlin, C#, etc.
+          const langClass = 'language-clike';
+
+          pre.classList.add(langClass);
+          code.classList.add(langClass);
+
+          code.textContent = block.content;
+
+          pre.appendChild(code);
           div.appendChild(pre);
         } else {
           // Para 'text', 'latex', o cualquier otro tipo, usamos innerHTML
@@ -1357,6 +1384,10 @@ function loadAllBlocks() {
       // Si MathJax está disponible, le decimos que renderice el nuevo contenido
       if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise([container]);
+      }
+
+      if (typeof Prism !== 'undefined') {
+        Prism.highlightAll(); // ✨ ¡Esta es la línea mágica!
       }
 
       // Opcional pero recomendado: si usas highlight.js para colorear el código

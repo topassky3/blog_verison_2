@@ -12,9 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-  <script>hljs.highlightAll();</script>
+
   {# 1. METADATOS BÁSICOS PARA SEO #}
   {# Usamos el nuevo campo meta_description, y si está vacío, usamos la descripción normal como respaldo #}
   <meta name="description" content="{{ guia.meta_description|default:guia.description|truncatewords:25 }}">
@@ -260,26 +258,8 @@
       border-left: 4px solid var(--primary);
       padding: 1rem;
     }
-    .block-code {
-      background-color: var(--gray-100);
-      border-left: 4px solid var(--secondary);
-      padding: 0.25rem 0.5rem;
-      font-family: "Courier New", monospace;
-      white-space: pre-wrap;
-    }
-    .hljs {
-      margin: 0 !important;
-      padding: 0 !important;
-      line-height: 1.2 !important;
-      background: none !important;
-    }
-    .block-code pre,
-    .block-code code {
-      margin: 0 !important;
-      padding: 0 !important;
-      line-height: 1.2 !important;
-      display: block;
-    }
+
+
 
     /* TOC */
     .toc {
@@ -652,15 +632,6 @@
   }
 }
 
-    .block-code {
-      background-color: var(--gray-100);
-      border-left: 4px solid var(--secondary);
-      padding: 0.25rem 0.5rem;
-      font-family: "Courier New", monospace;
-      white-space: pre-wrap;
-      overflow-wrap: break-word; /* Permite quiebres en palabras largas si es necesario */
-      word-break: normal; /* Evita romper arbitrariamente las palabras */
-    }
 
    /* ================================================= */
   /* ==      1. VARIABLES Y ESTILOS GLOBALES        == */
@@ -774,7 +745,48 @@
     }
   }
 
+/* ================================================================== */
+/* ===      ESTILOS UNIFICADOS Y CORREGIDOS PARA CÓDIGO         === */
+/* ================================================================== */
 
+/* 1. Contenedor principal del bloque de código */
+.block-code {
+  background-color: #282a36; /* Fondo oscuro (tema Dracula) */
+  border-radius: var(--radius);
+  /* ✅ PADDING AJUSTADO Y APLICADO DIRECTAMENTE AQUÍ */
+  padding: 1em 1.5em;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow);
+  overflow: hidden; /* Importante para que el <pre> no se desborde */
+}
+
+/* 2. El <pre> que contiene el código (AHORA SIN PADDING PROPIO) */
+.block-code pre[class*="language-"] {
+  margin: 0;
+  padding: 0; /* Quitamos el padding de aquí para evitar duplicados */
+  overflow-x: auto; /* Mantenemos el scroll horizontal */
+  background: none;
+  text-shadow: none;
+}
+
+/* 3. La fuente y color del código */
+.block-code pre[class*="language-"] code[class*="language-"] {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #f8f8f2;
+}
+
+/* 4. FIX para los comentarios flotantes */
+.block-code pre[class*="language-"] .token.comment {
+  color: #6272a4 !important;
+  font-style: italic;
+  background: none !important;
+  position: static !important;
+  display: inline !important;
+  padding: 0 !important;
+  border: none !important;
+}
 
   </style>
 {% endblock %}
@@ -807,42 +819,28 @@
     <!-- Bloques de contenido de la Guía -->
 <section class="tutorial-content">
   {% for block in visible_blocks %}
+    <div class="tutorial-block">
 
-    {% comment %} Instrucción para bloques de CÓDIGO {% endcomment %}
-    {% if block.block_type == 'code' %}
-      {# Quitamos |safe para que Django escape el HTML automáticamente #}
-      <div class="tutorial-block block-code">{{ block.content }}</div> {# <--- LÍNEA MODIFICADA #}
+      {% if block.block_type == 'code' %}
+        <div class="block-code">
+          <pre class="language-clike"><code class="language-clike">{{ block.content }}</code></pre>
+        </div>
 
-    {% comment %} Instrucción para bloques de TEXTO {% endcomment %}
-    {% elif block.block_type == 'text' %}
-      {# Mantenemos |safe si los bloques de texto pueden contener HTML intencional #}
-      <div class="tutorial-block block-text">{{ block.content|safe }}</div>
+      {% elif block.block_type == 'text' %}
+        <div class="block-text">{{ block.content|safe }}</div>
 
-    {% comment %} Instrucción para bloques de LATEX {% endcomment %}
-    {% elif block.block_type == 'latex' %}
-      {# Mantenemos |safe para que MathJax reciba el contenido crudo #}
-      <div class="tutorial-block block-latex">{{ block.content|safe }}</div>
+      {% elif block.block_type == 'latex' %}
+        <div class="block-latex">{{ block.content|safe }}</div>
 
-    {% comment %} ¡NUEVA INSTRUCCIÓN PARA BLOQUES DE IMAGEN! {% endcomment %}
-    {% elif block.block_type == 'image' %}
-      <div class="tutorial-block block-image" style="margin: 1.5rem auto; text-align: center; max-width: 80%;">
-        {% if block.image_url %}
-          <img src="{{ block.image_url }}"
-               alt="Imagen de la guía {{ guia.title }}"
-               style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        {% else %}
-          <p><em>[Imagen no disponible o no encontrada]</em></p>
-        {% endif %}
-      </div>
-    {% comment %} Instrucción por si aparece un tipo de bloque desconocido {% endcomment %}
-    {% else %}
-      <div class="tutorial-block block-unknown">
-         <p><em>(Bloque de tipo desconocido: {{ block.block_type }})</em></p>
-         {# Mantenemos |safe aquí por si acaso #}
-         {{ block.content|safe }}
-      </div>
-    {% endif %}
+      {% elif block.block_type == 'image' %}
+        <div class="block-image" style="margin: 1.5rem auto; text-align: center; max-width: 80%;">
+          {% if block.image_url %}
+            <img src="{{ block.image_url }}" alt="Imagen de la guía {{ guia.title }}" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          {% endif %}
+        </div>
+      {% endif %}
 
+    </div>
   {% endfor %}
 </section>
 
@@ -929,6 +927,10 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // 👇 AÑADE ESTA LÍNEA AQUÍ 👇
+  if (typeof Prism !== 'undefined') {
+    Prism.highlightAll();
+  }
 
   const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
