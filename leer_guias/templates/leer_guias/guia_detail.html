@@ -239,6 +239,43 @@
       color: var(--primary);
     }
     .tutorial-content p { margin-bottom: 1rem; }
+
+    /* ESTO ES LO QUE DEBES AÑADIR */
+
+.tutorial-content h2,
+.tutorial-content h3,
+.tutorial-content h4,
+.tutorial-content h5,
+.tutorial-content h6 {
+  font-family: 'Inter', sans-serif; /* Hereda la misma fuente que el resto del texto */
+  font-weight: 700; /* Hace que los títulos sean negrita */
+  color: var(--primary); /* Usa el color primario de tu tema */
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Ajustes específicos para cada nivel de título si lo deseas */
+.tutorial-content h2 { font-size: 1.75rem; }
+.tutorial-content h3 { font-size: 1.5rem; }
+.tutorial-content h4 { font-size: 1.25rem; }
+
+/* Adicionalmente, vamos a asegurarnos que el texto normal y las citas también usen la fuente correcta */
+.tutorial-content p,
+.tutorial-content blockquote,
+.tutorial-content li {
+    font-family: 'Inter', sans-serif;
+}
+
+.tutorial-content blockquote {
+    border-left: 4px solid var(--gray-200);
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-bottom: 1rem;
+    font-style: italic;
+    color: var(--text);
+    opacity: 0.9;
+}
+
     .back-button {
       display: inline-block;
       margin-top: 2rem;
@@ -787,6 +824,82 @@
   padding: 0 !important;
   border: none !important;
 }
+
+/* Añade esto dentro de tu etiqueta <style> en guia_detail.html */
+
+/* Estilos para los bloques de explicación (var, let, const) */
+.explanation-block {
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+.explanation-block h3, .explanation-block h4 {
+  scroll-margin-top: 5rem; /* Evita que el menú fijo tape el título */
+}
+.explanation-block h4 {
+    color: #4b5563;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+}
+.explanation-block .highlight {
+  background-color: #fef3c7;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+/* Estilo para la caja de advertencia (punto clave de const) */
+.warning-box {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 5px solid #f59e0b;
+  padding: 1rem;
+  border-radius: 5px;
+  margin: 1.5rem 0;
+}
+.warning-box strong {
+  color: #b45309;
+}
+
+/* Estilos para la tabla comparativa (ya los tienes, pero por si acaso) */
+.comparison-table-container {
+  margin: 2rem auto;
+}
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+.comparison-table th, .comparison-table td {
+  border: 1px solid var(--gray-200);
+  padding: 0.8rem;
+}
+.comparison-table th { background-color: var(--gray-100); }
+.comparison-table .feature-col { text-align: left; font-weight: bold; }
+.comparison-table .check { color: #16a34a; font-weight: bold; }
+.comparison-table .cross { color: #dc2626; font-weight: bold; }
+
+.rules-list {
+  list-style: none; /* Quitamos los puntos negros por defecto de la lista */
+  padding-left: 0;  /* Quitamos el espaciado por defecto */
+  margin-top: 1.5rem;
+}
+
+.rules-list li {
+  display: flex;          /* ¡La magia de Flexbox para alinear! */
+  align-items: flex-start;  /* Alinea el ícono y el texto en la parte superior */
+  margin-bottom: 1.25rem; /* Espacio vertical entre cada regla */
+  font-size: 1.1rem;      /* Hacemos el texto un poco más grande */
+}
+
+.rules-list .icon {
+  font-size: 1.5rem;    /* Tamaño del emoji/ícono */
+  margin-right: 1rem;   /* Espacio entre el ícono y el texto */
+  line-height: 1.4;     /* Ajuste fino para la alineación vertical del emoji */
+}
+
 
   </style>
 {% endblock %}
