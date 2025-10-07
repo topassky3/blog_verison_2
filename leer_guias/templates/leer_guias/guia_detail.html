@@ -900,6 +900,58 @@
   line-height: 1.4;     /* Ajuste fino para la alineación vertical del emoji */
 }
 
+/* ===== FIX 1: El artículo debe poder encoger en el grid ===== */
+main.container article,
+.tutorial-content {
+  min-width: 0; /* evita que el contenido largo (código) fuerce el ancho de la columna */
+}
+
+/* ===== FIX 2: Scroll horizontal solo dentro del bloque de código ===== */
+/* Si ya tienes .block-code, lo sobreescribimos suavemente */
+.block-code {
+  overflow-x: auto;       /* antes lo tenías en hidden: ahora muestra la barra horizontal */
+  overflow-y: hidden;     /* evita barra vertical doble si prism agrega padding */
+  -webkit-overflow-scrolling: touch; /* scroll suave en iOS */
+  max-width: 100%;
+  contain: inline-size;   /* el ancho interno no afecta al layout externo (cuando esté soportado) */
+}
+
+/* El <pre> NO debe añadir padding extra ni expandir el layout */
+.block-code pre[class*="language-"] {
+  margin: 0;
+  padding: 0;           /* ya lo tenías, lo reafirmamos */
+  background: none;
+  text-shadow: none;
+  overflow-x: auto;     /* asegura la barra horizontal dentro del pre */
+  max-width: 100%;
+  display: block;
+}
+
+/* El <code> mantiene el código tal cual (sin wraps) */
+.block-code pre[class*="language-"] code[class*="language-"] {
+  white-space: pre;       /* no envolver líneas: scroll horizontal */
+  word-break: normal;
+  overflow-wrap: normal;
+  max-width: 100%;
+  display: inline-block;  /* evita “min-content” raros en algunos navegadores */
+}
+
+/* ===== FIX 3: las tablas también con scroll horizontal (en cualquier ancho) ===== */
+.tutorial-block.block-text table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--gray-200);
+  margin-bottom: 1rem;
+}
+.tutorial-block.block-text table th,
+.tutorial-block.block-text table td {
+  white-space: nowrap; /* la tabla crece y aparece scroll; no rompe el layout */
+  padding: 0.6em 0.8em;
+}
+
+
 
   </style>
 {% endblock %}
