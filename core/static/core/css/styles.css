@@ -364,6 +364,7 @@ img {
     display: none;
   }
 }
+
 /* Hero Section */
 .hero {
   padding: 6rem 2rem 4rem;
@@ -427,6 +428,7 @@ img {
 .read-more:hover {
   color: var(--secondary);
 }
+
 /* Newsletter Section */
 .newsletter {
   padding: 4rem 2rem;
@@ -721,7 +723,6 @@ img {
   border-radius: var(--radius);
   font-size: 0.875rem;
 }
-
 .guia-content {
   padding: 1.5rem;
 }
@@ -755,7 +756,8 @@ img {
   color: #f59e0b;
   font-size: 0.9rem;
 }
-/* Pagination */
+
+/* Pagination (duplicada para coherencia en varias secciones) */
 .pagination {
   display: flex;
   justify-content: center;
@@ -785,6 +787,7 @@ img {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 /* Podcast Filter */
 .podcast-filter {
   max-width: 1200px;
@@ -841,6 +844,7 @@ img {
   padding: 0 1rem;
   cursor: pointer;
 }
+
 /* Podcast Grid */
 .podcast-grid {
   max-width: 1200px;
@@ -912,7 +916,8 @@ img {
   color: #f59e0b;
   font-size: 0.9rem;
 }
-/* Pagination */
+
+/* Pagination (otra sección) */
 .pagination {
   display: flex;
   justify-content: center;
@@ -942,6 +947,7 @@ img {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 /* Subscription Form Section */
 .subscription-section {
   max-width: 800px;
@@ -985,6 +991,7 @@ img {
 .subscription-form button:hover {
   background-color: var(--secondary);
 }
+
 /* Sección de Planes de Suscripción */
 .subscriptions {
   max-width: 1200px;
@@ -1036,6 +1043,7 @@ img {
 .plan .cta:hover {
   background-color: var(--secondary);
 }
+
 /* Contact Section */
 .contact-section {
   max-width: 1200px;
@@ -1085,7 +1093,8 @@ img {
 .contact-form button:hover {
   background-color: var(--secondary);
 }
-/* Contenedor principal del captcha */
+
+/* Captcha */
 .captcha-container {
   display: flex;
   flex-direction: column;
@@ -1093,8 +1102,6 @@ img {
   gap: 0.5rem;
   margin: 1.5rem 0;
 }
-
-/* Imagen de placeholder para el captcha */
 .captcha-container img {
   width: 200px;
   height: auto;
@@ -1103,8 +1110,6 @@ img {
   border-radius: var(--radius);
   margin-bottom: 0.5rem;
 }
-
-/* Campo de texto para ingresar el código */
 .captcha-container input {
   padding: 0.85rem 1rem;
   border: 1px solid var(--gray-200);
@@ -1124,31 +1129,27 @@ img {
   padding: 0.75rem;
   display: inline-block;
   width: 100%;
-  max-width: 300px;  /* Ajusta si quieres otro ancho */
+  max-width: 300px;
   background-color: #fff;
   box-shadow: var(--shadow);
   text-align: left;
-  margin: 1.5rem auto; /* Centra el widget horizontalmente */
+  margin: 1.5rem auto;
 }
-
 .recaptcha-checkbox-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-
 .recaptcha-checkbox-container input[type="checkbox"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
-
 .fake-recaptcha-label {
   font-size: 0.95rem;
   color: #444;
   cursor: pointer;
 }
-
 .recaptcha-footer {
   margin-top: 0.5rem;
   border-top: 1px solid var(--gray-200);
@@ -1159,15 +1160,14 @@ img {
   font-size: 0.75rem;
   color: #666;
 }
-
 .recaptcha-footer strong {
   font-weight: 600;
   color: #333;
 }
-
 .recaptcha-footer small {
   color: #999;
 }
+
 .logout-btn {
   padding: 0.5rem 1rem;
   background-color: var(--primary);
@@ -1178,17 +1178,15 @@ img {
   font-weight: 600;
   transition: background-color 0.3s ease;
 }
-
 .logout-btn:hover {
   background-color: var(--secondary);
 }
 
-/* Sección de Buscador Mejorado */
+/* Buscador */
 .search {
   margin: 2rem 0;
   text-align: center;
 }
-
 .search-container {
   max-width: 500px;
   margin: 0 auto;
@@ -1197,13 +1195,11 @@ img {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
-
 .search-form {
   display: flex;
   overflow: hidden;
   border-radius: var(--radius);
 }
-
 .search-form input[type="text"] {
   flex: 1;
   padding: 0.75rem 1rem;
@@ -1213,7 +1209,6 @@ img {
   border-radius: var(--radius) 0 0 var(--radius);
   outline: none;
 }
-
 .search-form button {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -1222,18 +1217,15 @@ img {
   transition: background-color 0.3s ease;
   border-radius: 0 var(--radius) var(--radius) 0;
 }
-
 .search-form button:hover {
   background-color: var(--secondary);
 }
 
-/* Contenedor para el menú de usuario */
+/* User Menu */
 .user-menu {
   position: relative;
   display: inline-block;
 }
-
-/* Botón que muestra el ícono de usuario */
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -1245,13 +1237,10 @@ img {
   transition: color 0.3s ease;
   color: var(--primary);
 }
-
 .icon-btn svg {
   width: 24px;
   height: 24px;
 }
-
-/* Menú desplegable oculto por defecto */
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -1265,13 +1254,9 @@ img {
   z-index: 1000;
   width: 150px;
 }
-
-/* Mostrar el menú cuando se active */
 .dropdown-menu.show {
   display: block;
 }
-
-/* Estilos para los elementos del menú */
 .dropdown-menu a,
 .dropdown-menu button {
   display: block;
@@ -1285,13 +1270,12 @@ img {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-
 .dropdown-menu a:hover,
 .dropdown-menu button:hover {
   background-color: var(--gray-100);
 }
 
-/* Modal para confirmación */
+/* Confirm Modal */
 .modal-content.confirm {
   margin: 10% auto;
   padding: 2rem;
@@ -1301,16 +1285,12 @@ img {
   text-align: center;
   background: var(--background);
 }
-
-/* Contenedor para ambos botones (Aceptar / Cancelar) */
 .confirm-buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
 }
-
-/* Botones de confirmación */
 .modal-content.confirm button {
   background-color: var(--primary);
   color: #fff;
@@ -1324,16 +1304,15 @@ img {
 .modal-content.confirm button:hover {
   background-color: var(--secondary);
 }
-
-/* Botón de cancelar con un color distinto (opcional) */
 .modal-content.confirm .cancel-button {
-  background-color: #cbd5e1; /* Gris claro */
+  background-color: #cbd5e1;
   color: var(--text);
 }
 .modal-content.confirm .cancel-button:hover {
-  background-color: #94a3b8; /* Gris un poco más oscuro */
+  background-color: #94a3b8;
 }
 
+/* Loading Overlay */
 #loadingOverlay {
   display: none;
   position: fixed;
@@ -1365,36 +1344,188 @@ img {
   100% { transform: rotate(360deg); }
 }
 
-/* Por defecto, mostrar el logo completo y ocultar el abreviado */
-.logo .full-logo {
-  display: inline;
-}
-.logo .short-logo {
-  display: none;
-}
-
-/* En pantallas móviles (por ejemplo, menos de 600px) se oculta el logo completo y se muestra el abreviado */
+/* Logos responsive */
+.logo .full-logo { display: inline; }
+.logo .short-logo { display: none; }
 @media (max-width: 1024px) {
-  .logo .full-logo {
-    display: none;
-  }
-  .logo .short-logo {
-    display: inline;
+  .logo .full-logo { display: none; }
+  .logo .short-logo { display: inline; }
+}
+
+/* ====== LISTAS EN EL CONTENIDO DEL TUTORIAL ====== */
+/* Sangría y espaciado base */
+.tutorial-content ul,
+.tutorial-content ol,
+.block-text ul,
+.block-text ol {
+  margin: 0 0 1rem 1.25rem;
+  padding-left: 1.25rem;
+  list-style-position: outside;
+}
+/* Cada item */
+.tutorial-content li,
+.block-text li {
+  margin: .35rem 0;
+  line-height: 1.75;
+  text-align: start;
+}
+/* Evita justify feo en listas del bloque de texto */
+.block-text ul,
+.block-text ol { text-align: start; }
+/* Listas anidadas */
+.tutorial-content li > ul,
+.tutorial-content li > ol,
+.block-text li > ul,
+.block-text li > ol { margin-top: .35rem; }
+/* Marcador */
+.tutorial-content li::marker,
+.block-text li::marker {
+  color: var(--primary);
+  font-weight: 600;
+}
+/* Aire entre párrafo y lista */
+.tutorial-content p + ul,
+.tutorial-content p + ol,
+.block-text p + ul,
+.block-text p + ol { margin-top: .75rem; }
+/* Inline code (no <pre><code>) */
+.tutorial-content :not(pre) > code,
+.block-text :not(pre) > code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: .95em;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  padding: .1em .35em;
+  border-radius: .3em;
+  white-space: break-spaces;
+  word-break: break-word;
+}
+/* Responsive listas */
+@media (max-width: 768px) {
+  .tutorial-content ul,
+  .tutorial-content ol,
+  .block-text ul,
+  .block-text ol {
+    margin-left: 1rem;
+    padding-left: 1rem;
   }
 }
 
+/* ===== FIX TIPOGRAFÍA SOLO PARA LA PÁGINA DE TUTORIAL =====
+   Usamos el id que ya tienes en el detalle: #tutorial-blocks-container
+   para no afectar tarjetas/listados que también usan .tutorial-content. */
+#tutorial-blocks-container{
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem); /* ~16–18px */
+  line-height: 1.75;
+  font-family: inherit; /* usa la Inter del body */
+  text-align: start;
+}
+#tutorial-blocks-container p,
+#tutorial-blocks-container li,
+#tutorial-blocks-container ul,
+#tutorial-blocks-container ol{
+  font-size: 1em; /* hereda de su contenedor */
+}
+/* Encabezados del tutorial */
+#tutorial-blocks-container h2{
+  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2rem);
+  line-height: 1.3;
+  margin: 1.25rem 0 .75rem;
+}
+#tutorial-blocks-container h3{
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.6rem);
+  line-height: 1.35;
+  margin: 1rem 0 .5rem;
+}
+/* Móvil: ajusta base si quieres */
+@media (max-width: 768px){
+  #tutorial-blocks-container{ font-size: 1rem; line-height: 1.65; }
+}
 
+/* =======================
+   LaTeX sin desbordes (KaTeX + MathJax)
+   Solo dentro del detalle del tutorial
+   ======================= */
 
+/* Contenedores "display" de fórmulas */
+#tutorial-blocks-container .katex-display,
+#tutorial-blocks-container mjx-container[display="true"],
+#tutorial-blocks-container mjx-container[jax="CHTML"][display="true"] {
+  max-width: 100%;
+  overflow-x: auto;          /* permite scroll horizontal si hace falta */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin: 1rem 0;
+  padding: .75rem 1rem;
+  background: var(--background);
+  border: 1px solid var(--gray-200);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+}
 
+/* El contenido interno no debe forzar el ancho del contenedor */
+#tutorial-blocks-container .katex-display > .katex {
+  display: inline-block;
+  white-space: nowrap;       /* evita saltos raros en fórmulas largas */
+  max-width: none;
+}
 
+/* MathJax v3 (CHTML y SVG) */
+#tutorial-blocks-container mjx-container[display="true"] > svg,
+#tutorial-blocks-container mjx-container[display="true"] > .MathJax {
+  display: inline-block;
+  white-space: nowrap;
+  max-width: none;
+}
 
+/* Ajuste suave en pantallas pequeñas */
+@media (max-width: 640px) {
+  #tutorial-blocks-container .katex-display,
+  #tutorial-blocks-container mjx-container[display="true"] {
+    font-size: .95rem;       /* baja un poco el tamaño para que quepa mejor */
+  }
+}
 
+/* === Justificar párrafos y listas SOLO dentro del artículo === */
+#tutorial-blocks-container p {
+  text-align: justify;
+  text-justify: inter-word;  /* reparte el espacio entre palabras */
+  hyphens: auto;             /* permite guiones suaves donde aplique */
+}
 
+/* Justifica la caja de lista (para que todas las líneas llenen el ancho) */
+#tutorial-blocks-container .tutorial-content ul,
+#tutorial-blocks-container .tutorial-content ol,
+#tutorial-blocks-container .block-text ul,
+#tutorial-blocks-container .block-text ol {
+  text-align: justify;       /* anula el 'start' anterior */
+  text-justify: inter-word;
+}
 
+/* Justifica cada ítem; deja la última línea alineada a la izquierda */
+#tutorial-blocks-container .tutorial-content li,
+#tutorial-blocks-container .block-text li {
+  text-align: justify;
+  text-align-last: left;     /* última línea no se estira (mejor legibilidad) */
+}
 
+/* Conserva marcadores bonitos sin afectar la justificación */
+#tutorial-blocks-container .tutorial-content li::marker,
+#tutorial-blocks-container .block-text li::marker {
+  color: var(--primary);
+  font-weight: 600;
+}
 
-
-
-
-
-
+/* (Opcional) En móvil puedes desactivar la justificación si ves “ríos” */
+@media (max-width: 640px) {
+  #tutorial-blocks-container p,
+  #tutorial-blocks-container .tutorial-content ul,
+  #tutorial-blocks-container .tutorial-content ol,
+  #tutorial-blocks-container .block-text ul,
+  #tutorial-blocks-container .block-text ol,
+  #tutorial-blocks-container .tutorial-content li,
+  #tutorial-blocks-container .block-text li {
+    text-align: start;
+    text-align-last: auto;
+  }
+}

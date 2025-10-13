@@ -275,7 +275,7 @@ BLEACH_ALLOWED_TAGS = [
     'progress', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'caption',
 
     # --- NUEVAS ETIQUETAS PARA FIGURAS ---
-    'figure', 'figcaption', 'dl', 'dt', 'dd','sub', 'sup',
+    'figure', 'figcaption', 'dl', 'dt', 'dd','sub', 'sup','kbd', 'mark', 'samp', 'var'
 ]
 # 2. Añadimos los atributos para las nuevas etiquetas
 BLEACH_ALLOWED_ATTRIBUTES = {
